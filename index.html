@@ -1,1559 +1,1518 @@
 <!DOCTYPE html>
 <html lang="da">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sætliste Organizer</title>
-    <style>
-        :root {
-            --primary: #2c3e50;
-            --secondary: #3498db;
-            --accent: #e74c3c;
-            --light: #ecf0f1;
-            --dark: #2c3e50;
-            --success: #27ae60;
-            --warning: #f39c12;
-            --shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            min-height: 100vh;
-            padding: 20px;
-            color: var(--dark);
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        header {
-            background: white;
-            padding: 20px 30px;
-            border-radius: 10px;
-            box-shadow: var(--shadow);
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-
-        h1 {
-            color: var(--primary);
-            font-size: 1.8em;
-        }
-
-        .header-controls {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        button {
-            background: var(--secondary);
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 0.9em;
-            transition: all 0.3s;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        button:hover {
-            background: #2980b9;
-            transform: translateY(-1px);
-        }
-
-        button.secondary {
-            background: var(--light);
-            color: var(--primary);
-        }
-
-        button.success {
-            background: var(--success);
-        }
-
-        button.warning {
-            background: var(--warning);
-        }
-
-        button.danger {
-            background: var(--accent);
-        }
-
-        .main-content {
-            display: grid;
-            grid-template-columns: 300px 1fr;
-            gap: 20px;
-        }
-
-        @media (max-width: 900px) {
-            .main-content {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .song-library {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: var(--shadow);
-            height: fit-content;
-        }
-
-        .song-library h2 {
-            color: var(--primary);
-            margin-bottom: 15px;
-            font-size: 1.3em;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .search-box {
-            width: 100%;
-            padding: 10px 15px;
-            border: 2px solid #ddd;
-            border-radius: 5px;
-            font-size: 0.9em;
-            margin-bottom: 15px;
-            transition: border-color 0.3s;
-        }
-
-        .search-box:focus {
-            outline: none;
-            border-color: var(--secondary);
-        }
-
-        .song-filters {
-            margin-bottom: 15px;
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .filter-tag {
-            background: var(--light);
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 0.8em;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .filter-tag:hover {
-            background: var(--secondary);
-            color: white;
-        }
-
-        .filter-tag.active {
-            background: var(--secondary);
-            color: white;
-        }
-
-        .song-list {
-            max-height: 500px;
-            overflow-y: auto;
-        }
-
-        .song-item {
-            background: var(--light);
-            padding: 12px 15px;
-            margin-bottom: 8px;
-            border-radius: 5px;
-            cursor: grab;
-            transition: all 0.3s;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            draggable: true;
-        }
-
-        .song-item:hover {
-            background: #dfe6e9;
-            transform: translateX(3px);
-        }
-
-        .song-item.dragging {
-            opacity: 0.5;
-            background: var(--secondary);
-            color: white;
-        }
-
-        .song-info {
-            flex: 1;
-        }
-
-        .song-title {
-            font-weight: bold;
-            font-size: 0.95em;
-            margin-bottom: 3px;
-        }
-
-        .song-meta {
-            font-size: 0.8em;
-            color: #7f8c8d;
-        }
-
-        .song-key {
-            background: var(--secondary);
-            color: white;
-            padding: 2px 6px;
-            border-radius: 3px;
-            font-size: 0.75em;
-            font-weight: bold;
-        }
-
-        .song-categories {
-            display: flex;
-            gap: 3px;
-            flex-wrap: wrap;
-            margin-top: 3px;
-        }
-
-        .song-category-tag {
-            background: var(--success);
-            color: white;
-            padding: 1px 4px;
-            border-radius: 3px;
-            font-size: 0.65em;
-        }
-
-        .song-actions {
-            display: flex;
-            gap: 5px;
-        }
-
-        .icon-btn {
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 3px;
-            font-size: 0.8em;
-            opacity: 0.6;
-            transition: opacity 0.3s;
-        }
-
-        .icon-btn:hover {
-            opacity: 1;
-        }
-
-        .sets-area {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .sets-controls {
-            background: white;
-            padding: 15px 20px;
-            border-radius: 10px;
-            box-shadow: var(--shadow);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .set-tabs {
-            display: flex;
-            gap: 5px;
-            overflow-x: auto;
-            padding-bottom: 5px;
-        }
-
-        .set-tab {
-            background: var(--light);
-            padding: 8px 15px;
-            border-radius: 5px 5px 0 0;
-            cursor: pointer;
-            transition: all 0.3s;
-            white-space: nowrap;
-        }
-
-        .set-tab .song-count {
-            background: var(--secondary);
-            color: white;
-            padding: 2px 6px;
-            border-radius: 10px;
-            font-size: 0.75em;
-            margin-left: 5px;
-        }
-
-        .set-tab:hover {
-            background: #dfe6e9;
-        }
-
-        .set-tab.active {
-            background: white;
-            color: var(--secondary);
-            font-weight: bold;
-        }
-
-        .set-tab .close-btn {
-            margin-left: 8px;
-            opacity: 0.5;
-        }
-
-        .set-tab .close-btn:hover {
-            opacity: 1;
-        }
-
-        .set-container {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: var(--shadow);
-            min-height: 400px;
-        }
-
-        .set-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-
-        .set-name {
-            font-size: 1.3em;
-            font-weight: bold;
-            color: var(--primary);
-        }
-
-        .set-name input {
-            font-size: 1.3em;
-            font-weight: bold;
-            color: var(--primary);
-            border: none;
-            background: transparent;
-            width: 100%;
-            padding: 5px;
-        }
-
-        .set-name input:focus {
-            outline: none;
-            border-bottom: 2px solid var(--secondary);
-        }
-
-        .set-song-list {
-            min-height: 200px;
-        }
-
-        .set-song-item {
-            background: var(--light);
-            padding: 12px 15px;
-            margin-bottom: 8px;
-            border-radius: 5px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: grab;
-            transition: all 0.3s;
-            draggable: true;
-        }
-
-        .set-song-item:hover {
-            background: #dfe6e9;
-        }
-
-        .set-song-item.dragging {
-            opacity: 0.5;
-            background: var(--secondary);
-            color: white;
-        }
-
-        .set-song-grip {
-            cursor: move;
-            opacity: 0.5;
-            padding: 5px;
-        }
-
-        .set-song-number {
-            font-weight: bold;
-            color: var(--secondary);
-            min-width: 25px;
-            text-align: center;
-        }
-
-        .set-song-info {
-            flex: 1;
-        }
-
-        .empty-set {
-            text-align: center;
-            padding: 40px;
-            color: #7f8c8d;
-            font-style: italic;
-        }
-
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.5);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-
-        .modal {
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            max-width: 500px;
-            width: 90%;
-            max-height: 80vh;
-            overflow-y: auto;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-        }
-
-        .modal h2 {
-            color: var(--primary);
-            margin-bottom: 20px;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 500;
-            color: var(--dark);
-        }
-
-        .form-group input,
-        .form-group select {
-            width: 100%;
-            padding: 10px 12px;
-            border: 2px solid #ddd;
-            border-radius: 5px;
-            font-size: 0.95em;
-            transition: border-color 0.3s;
-        }
-
-        .form-group input:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: var(--secondary);
-        }
-
-        .category-checkboxes {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-            margin-top: 5px;
-        }
-
-        .category-checkbox {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .category-checkbox input[type="checkbox"] {
-            width: auto;
-            margin: 0;
-        }
-
-        .modal-actions {
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        .export-options {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            margin: 20px 0;
-        }
-
-        .export-option {
-            background: var(--light);
-            padding: 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .export-option:hover {
-            background: #dfe6e9;
-        }
-
-        .export-option h3 {
-            margin-bottom: 5px;
-            color: var(--primary);
-        }
-
-        .export-option p {
-            font-size: 0.9em;
-            color: #7f8c8d;
-        }
-
-        .toast {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: var(--dark);
-            color: white;
-            padding: 15px 20px;
-            border-radius: 5px;
-            box-shadow: 0 3px 15px rgba(0,0,0,0.2);
-            transform: translateY(100px);
-            opacity: 0;
-            transition: all 0.3s;
-            z-index: 1001;
-        }
-
-        .toast.show {
-            transform: translateY(0);
-            opacity: 1;
-        }
-
-        .import-area {
-            border: 2px dashed #ddd;
-            padding: 20px;
-            text-align: center;
-            border-radius: 5px;
-            margin: 10px 0;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .import-area:hover {
-            border-color: var(--secondary);
-            background: #f8f9fa;
-        }
-
-        .import-area.dragover {
-            border-color: var(--success);
-            background: #e8f5e9;
-        }
-
-        @media (max-width: 600px) {
-            header {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            .header-controls {
-                width: 100%;
-                justify-content: flex-start;
-            }
-            .main-content {
-                grid-template-columns: 1fr;
-            }
-            .category-checkboxes {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            .modal {
-                width: 95%;
-                padding: 20px;
-            }
-        }
-
-        @media print {
-            body { background: white; }
-            .no-print { display: none; }
-            .set-container { box-shadow: none; border: 1px solid #ddd; page-break-inside: avoid; }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Setliste Organizer</title>
+  <style>
+    :root {
+      --primary: #1a2332;
+      --secondary: #1e3a8a;
+      --accent: #0f172a;
+      --light: #f8fafc;
+      --dark: #1e293b;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --border: #e2e8f0;
+      --shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: #f1f5f9;
+      min-height: 100vh;
+      padding: 20px;
+      color: var(--dark);
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    header {
+      background: white;
+      padding: 20px 30px;
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
+      border: 1px solid var(--border);
+    }
+
+    .job-title-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .job-title {
+      color: var(--primary);
+      font-size: 1.8em;
+      font-weight: 600;
+    }
+
+    .job-title input {
+      font-size: 1.8em;
+      font-weight: 600;
+      color: var(--primary);
+      border: none;
+      background: transparent;
+      padding: 5px;
+      width: 300px;
+    }
+
+    .job-title input:focus {
+      outline: none;
+      border-bottom: 2px solid var(--secondary);
+    }
+
+    .header-controls {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      background: var(--secondary);
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9em;
+      transition: all 0.3s;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-weight: 500;
+    }
+
+    button:hover {
+      background: var(--primary);
+    }
+
+    button.secondary {
+      background: var(--light);
+      color: var(--primary);
+      border: 1px solid var(--border);
+    }
+
+    button.success {
+      background: var(--success);
+    }
+
+    button.warning {
+      background: var(--warning);
+    }
+
+    button.danger {
+      background: var(--accent);
+    }
+
+    .main-content {
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      gap: 20px;
+    }
+
+    @media (max-width: 900px) {
+      .main-content {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .song-library {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: var(--shadow);
+      height: fit-content;
+    }
+
+    .song-library h2 {
+      color: var(--primary);
+      margin-bottom: 15px;
+      font-size: 1.3em;
+      font-weight: 600;
+    }
+
+    .search-box {
+      width: 100%;
+      padding: 10px 15px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 0.9em;
+      margin-bottom: 15px;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .search-box:focus {
+      outline: none;
+      border-color: var(--secondary);
+      box-shadow: 0 0 0 2px rgba(30, 58, 138, 0.1);
+    }
+
+    .song-filters {
+      margin-bottom: 15px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .filter-tag {
+      background: var(--light);
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 0.8em;
+      cursor: pointer;
+      transition: all 0.3s;
+      border: 1px solid var(--border);
+    }
+
+    .filter-tag:hover {
+      background: var(--secondary);
+      color: white;
+      border-color: var(--secondary);
+    }
+
+    .filter-tag.active {
+      background: var(--secondary);
+      color: white;
+      border-color: var(--secondary);
+    }
+
+    .song-list {
+      max-height: 500px;
+      overflow-y: auto;
+    }
+
+    .song-item {
+      background: var(--light);
+      padding: 12px 15px;
+      margin-bottom: 8px;
+      border-radius: 6px;
+      cursor: grab;
+      transition: all 0.3s;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      draggable: true;
+      border: 1px solid var(--border);
+    }
+
+    .song-item:hover {
+      background: white;
+      transform: translateX(2px);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .song-item.dragging {
+      opacity: 0.7;
+      background: var(--secondary);
+      color: white;
+      border-color: var(--secondary);
+    }
+
+    .song-info {
+      flex: 1;
+    }
+
+    .song-title {
+      font-weight: bold;
+      font-size: 0.95em;
+      margin-bottom: 3px;
+    }
+
+    .song-meta {
+      font-size: 0.8em;
+      color: #7f8c8d;
+    }
+
+    .song-key {
+      background: var(--secondary);
+      color: white;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.75em;
+      font-weight: 500;
+    }
+
+    .song-categories {
+      display: flex;
+      gap: 3px;
+      flex-wrap: wrap;
+      margin-top: 3px;
+    }
+
+    .song-category-tag {
+      background: var(--success);
+      color: white;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.7em;
+    }
+
+    .song-actions {
+      display: flex;
+      gap: 5px;
+    }
+
+    .icon-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 3px;
+      font-size: 0.8em;
+      opacity: 0.6;
+      transition: opacity 0.3s;
+    }
+
+    .icon-btn:hover {
+      opacity: 1;
+    }
+
+    .sets-area {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .sets-controls {
+      background: white;
+      padding: 15px 20px;
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      border: 1px solid var(--border);
+    }
+
+    .set-tabs {
+      display: flex;
+      gap: 5px;
+      overflow-x: auto;
+      padding-bottom: 5px;
+    }
+
+    .set-tab {
+      background: var(--light);
+      padding: 8px 15px;
+      border-radius: 6px 6px 0 0;
+      cursor: pointer;
+      transition: all 0.3s;
+      white-space: nowrap;
+      border: 1px solid var(--border);
+      border-bottom: none;
+    }
+
+    .set-tab .song-count {
+      background: var(--secondary);
+      color: white;
+      padding: 2px 6px;
+      border-radius: 10px;
+      font-size: 0.75em;
+      margin-left: 5px;
+    }
+
+    .set-tab:hover {
+      background: white;
+    }
+
+    .set-tab.active {
+      background: white;
+      color: var(--primary);
+      font-weight: 600;
+      border-bottom: 2px solid white;
+    }
+
+    .set-tab .close-btn {
+      margin-left: 8px;
+      opacity: 0.5;
+    }
+
+    .set-tab .close-btn:hover {
+      opacity: 1;
+    }
+
+    .set-container {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      min-height: 400px;
+      border: 1px solid var(--border);
+      border-top: none;
+    }
+
+    .set-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .set-name {
+      font-size: 1.2em;
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    .set-song-list {
+      min-height: 200px;
+    }
+
+    .set-song-item {
+      background: var(--light);
+      padding: 12px 15px;
+      margin-bottom: 8px;
+      border-radius: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: grab;
+      transition: all 0.3s;
+      draggable: true;
+      border: 1px solid var(--border);
+    }
+
+    .set-song-item:hover {
+      background: white;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .set-song-item.dragging {
+      opacity: 0.7;
+      background: var(--secondary);
+      color: white;
+      border-color: var(--secondary);
+    }
+
+    .set-song-grip {
+      cursor: move;
+      opacity: 0.5;
+      padding: 5px;
+    }
+
+    .set-song-number {
+      font-weight: 600;
+      color: var(--primary);
+      min-width: 25px;
+      text-align: center;
+    }
+
+    .set-song-info {
+      flex: 1;
+    }
+
+    .empty-set {
+      text-align: center;
+      padding: 40px;
+      color: #7f8c8d;
+      font-style: italic;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .modal {
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      max-width: 500px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      border: 1px solid var(--border);
+    }
+
+    .modal h2 {
+      color: var(--primary);
+      margin-bottom: 20px;
+      font-weight: 600;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 500;
+      color: var(--dark);
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 0.95em;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: var(--secondary);
+      box-shadow: 0 0 0 2px rgba(30, 58, 138, 0.1);
+    }
+
+    .category-checkboxes {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 5px;
+    }
+
+    .category-checkbox {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .category-checkbox input[type="checkbox"] {
+      width: auto;
+      margin: 0;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .export-options {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin: 20px 0;
+    }
+
+    .export-option {
+      background: var(--light);
+      padding: 15px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.3s;
+      border: 1px solid var(--border);
+    }
+
+    .export-option:hover {
+      background: white;
+      border-color: var(--secondary);
+    }
+
+    .export-option h3 {
+      margin-bottom: 5px;
+      color: var(--primary);
+    }
+
+    .export-option p {
+      font-size: 0.9em;
+      color: #7f8c8d;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: var(--primary);
+      color: white;
+      padding: 15px 20px;
+      border-radius: 6px;
+      box-shadow: 0 3px 15px rgba(0,0,0,0.15);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s;
+      z-index: 1001;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .import-area {
+      border: 2px dashed var(--border);
+      padding: 20px;
+      text-align: center;
+      border-radius: 6px;
+      margin: 10px 0;
+      cursor: pointer;
+      transition: all 0.3s;
+      background: var(--light);
+    }
+
+    .import-area:hover {
+      border-color: var(--secondary);
+      background: white;
+    }
+
+    .import-area.dragover {
+      border-color: var(--success);
+      background: rgba(16, 185, 129, 0.05);
+    }
+
+    @media (max-width: 600px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .header-controls {
+        width: 100%;
+        justify-content: flex-start;
+      }
+      .main-content {
+        grid-template-columns: 1fr;
+      }
+      .category-checkboxes {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .modal {
+        width: 95%;
+        padding: 20px;
+      }
+    }
+
+    @media print {
+      body { background: white; }
+      .no-print { display: none; }
+      .set-container { box-shadow: none; border: 1px solid #ddd; page-break-inside: avoid; }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>🎵 Sætliste Organizer</h1>
-            <div class="header-controls">
-                <button onclick="newSong()">📝 Ny Sang</button>
-                <button onclick="newSet()" class="success">➕ Nyt Sæt</button>
-                <button onclick="exportData()" class="secondary">📤 Eksport</button>
-                <button onclick="exportToPDF()" class="secondary">📄 PDF</button>
-                <button onclick="importData()" class="secondary">📥 Import</button>
-                <button onclick="saveToLocalStorage()" class="warning">💾 Gem</button>
-                <button onclick="loadFromLocalStorage()">📂 Load</button>
-            </div>
-        </header>
+  <div class="container">
+    <header>
+      <div class="job-title-container">
+        <span class="job-title" id="jobTitle">Setliste</span>
+      </div>
+      <div class="header-controls">
+        <button onclick="newSong()">Ny Sang</button>
+        <button onclick="newSet()" class="success">Nyt Saet</button>
+        <button onclick="exportData()" class="secondary">Eksport</button>
+        <button onclick="saveToLocalStorage()" class="warning">Gem</button>
+        <button onclick="loadFromLocalStorage()">Load</button>
+      </div>
+    </header>
 
-        <div class="main-content">
-            <aside class="song-library">
-                <h2>🎵 Sang Bibliotek</h2>
-                <input type="text" class="search-box" id="songSearch" placeholder="Søg sange..." oninput="filterSongs()">
-                <div class="song-filters">
-                    <span class="filter-tag active" onclick="toggleFilter('all')">Alle</span>
-                    <span class="filter-tag" onclick="toggleFilter('Rock')">Rock</span>
-                    <span class="filter-tag" onclick="toggleFilter('Pop')">Pop</span>
-                    <span class="filter-tag" onclick="toggleFilter('Dansk')">Dansk</span>
-                    <span class="filter-tag" onclick="toggleFilter('Syng med')">Syng med</span>
-                    <span class="filter-tag" onclick="toggleFilter('Røvballe')">Røvballe</span>
-                    <span class="filter-tag" onclick="toggleFilter('Disco')">Disco</span>
-                    <span class="filter-tag" onclick="toggleFilter('Hård Rock')">Hård Rock</span>
-                    <span class="filter-tag" onclick="toggleFilter('80\'er')">80'er</span>
-                    <span class="filter-tag" onclick="toggleFilter('90\'er')">90'er</span>
-                </div>
-                <div class="song-list" id="songList"></div>
-            </aside>
-
-            <main class="sets-area">
-                <div class="sets-controls">
-                    <div class="set-tabs" id="setTabs"></div>
-                    <button onclick="addCurrentSetToForScore()" class="secondary">➡ Til forScore</button>
-                </div>
-                <div class="set-container" id="currentSetContainer">
-                    <div class="set-header">
-                        <div class="set-name" id="currentSetName">Vælg et sæt</div>
-                        <div>
-                            <button onclick="renameCurrentSet()" class="secondary">📝 Omdøb</button>
-                            <button onclick="deleteCurrentSet()" class="danger">🗑️ Slet</button>
-                        </div>
-                    </div>
-                    <div class="set-song-list" id="currentSetSongs"></div>
-                    <div class="empty-set" id="emptySetMessage">Vælg et sæt for at se sange</div>
-                </div>
-            </main>
+    <div class="main-content">
+      <aside class="song-library">
+        <h2>Sang Bibliotek</h2>
+        <input type="text" class="search-box" id="songSearch" placeholder="Søg sange..." oninput="filterSongs()">
+        <div class="song-filters">
+          <span class="filter-tag active" onclick="toggleFilter('all')">Alle</span>
+          <span class="filter-tag" onclick="toggleFilter('Rock')">Rock</span>
+          <span class="filter-tag" onclick="toggleFilter('Pop')">Pop</span>
+          <span class="filter-tag" onclick="toggleFilter('Dansk')">Dansk</span>
+          <span class="filter-tag" onclick="toggleFilter('Syng med')">Syng med</span>
+          <span class="filter-tag" onclick="toggleFilter('Røvballe')">Røvballe</span>
+          <span class="filter-tag" onclick="toggleFilter('Disco')">Disco</span>
+          <span class="filter-tag" onclick="toggleFilter('Hård Rock')">Hård Rock</span>
+          <span class="filter-tag" onclick="toggleFilter('80\'er')">80'er</span>
+          <span class="filter-tag" onclick="toggleFilter('90\'er')">90'er</span>
         </div>
-    </div>
+        <div class="song-list" id="songList"></div>
+      </aside>
 
-    <div id="songModal" class="modal-overlay" style="display: none;">
-        <div class="modal">
-            <h2 id="songModalTitle">Rediger Sang</h2>
-            <form id="songForm">
-                <input type="hidden" id="songId">
-                <div class="form-group">
-                    <label>Titel</label>
-                    <input type="text" id="songTitle" required>
-                </div>
-                <div class="form-group">
-                    <label>Kunstner</label>
-                    <input type="text" id="songArtist">
-                </div>
-                <div class="form-group">
-                    <label>Toneart</label>
-                    <input type="text" id="songKey" placeholder="f.eks. F, Dm, C#m">
-                </div>
-                <div class="form-group">
-                    <label>Kategorier (vælg flere)</label>
-                    <div class="category-checkboxes" id="categoryCheckboxes">
-                        <div class="category-checkbox"><input type="checkbox" id="cat-Rock" value="Rock"><label for="cat-Rock">Rock</label></div>
-                        <div class="category-checkbox"><input type="checkbox" id="cat-Pop" value="Pop"><label for="cat-Pop">Pop</label></div>
-                        <div class="category-checkbox"><input type="checkbox" id="cat-Dansk" value="Dansk"><label for="cat-Dansk">Dansk</label></div>
-                        <div class="category-checkbox"><input type="checkbox" id="cat-Syng med" value="Syng med"><label for="cat-Syng med">Syng med</label></div>
-                        <div class="category-checkbox"><input type="checkbox" id="cat-Røvballe" value="Røvballe"><label for="cat-Røvballe">Røvballe</label></div>
-                        <div class="category-checkbox"><input type="checkbox" id="cat-Disco" value="Disco"><label for="cat-Disco">Disco</label></div>
-                        <div class="category-checkbox"><input type="checkbox" id="cat-Hård Rock" value="Hård Rock"><label for="cat-Hård Rock">Hård Rock</label></div>
-                        <div class="category-checkbox"><input type="checkbox" id="cat-80\'er" value="80'er"><label for="cat-80\'er">80'er</label></div>
-                        <div class="category-checkbox"><input type="checkbox" id="cat-90\'er" value="90'er"><label for="cat-90\'er">90'er</label></div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Noter</label>
-                    <input type="text" id="songNotes" placeholder="Ekstra information">
-                </div>
-            </form>
-            <div class="modal-actions">
-                <button type="button" onclick="closeModal('songModal')" class="secondary">Annuller</button>
-                <button type="button" onclick="saveSong()" class="success">Gem</button>
-            </div>
+      <main class="sets-area">
+        <div class="sets-controls">
+          <div class="set-tabs" id="setTabs"></div>
+          
         </div>
-    </div>
-
-    <div id="exportModal" class="modal-overlay" style="display: none;">
-        <div class="modal">
-            <h2>Eksport Sætliste</h2>
-            <p>Vælg hvordan du vil eksportere:</p>
-            <div class="export-options">
-                <div class="export-option" onclick="exportToForScore()">
-                    <h3>📁 forScore (.4SS)</h3>
-                    <p>Importer direkte til forScore appen på din iPad</p>
-                </div>
-                <div class="export-option" onclick="exportToJSON()">
-                    <h3>📋 JSON Fil</h3>
-                    <p>Gem alle data (sange + sæt) som JSON til deling</p>
-                </div>
-                <div class="export-option" onclick="exportSetAsText()">
-                    <h3>📝 Tekstfil</h3>
-                    <p>Simpel tekstliste af det aktuelle sæt</p>
-                </div>
-                <div class="export-option" onclick="exportToPDF()">
-                    <h3>📄 PDF</h3>
-                    <p>Printvenlig PDF med alle sæt</p>
-                </div>
+        <div class="set-container" id="currentSetContainer">
+          <div class="set-header">
+            <div class="set-name" id="currentSetName">Vaelg et saet</div>
+            <div>
+              
+              <button onclick="deleteCurrentSet()" class="danger">Slet</button>
             </div>
-            <div class="modal-actions">
-                <button onclick="closeModal('exportModal')" class="secondary">Luk</button>
-            </div>
+          </div>
+          <div class="set-song-list" id="currentSetSongs"></div>
+          <div class="empty-set" id="emptySetMessage">Vaelg et saet for at se sange</div>
         </div>
+      </main>
     </div>
+  </div>
 
-    <div id="importModal" class="modal-overlay" style="display: none;">
-        <div class="modal">
-            <h2>Import Data</h2>
-            <p>Træk en JSON-fil herind eller klik for at vælge:</p>
-            <div class="import-area" id="importArea" onclick="document.getElementById('fileInput').click()">
-                <p>📁 Klik for at vælge fil eller træk herind</p>
-                <input type="file" id="fileInput" accept=".json" style="display: none;" onchange="handleFileImport(event)">
-            </div>
-            <div class="modal-actions">
-                <button onclick="closeModal('importModal')" class="secondary">Luk</button>
-            </div>
+  <div id="songModal" class="modal-overlay" style="display: none;">
+    <div class="modal">
+      <h2 id="songModalTitle">Rediger Sang</h2>
+      <form id="songForm">
+        <input type="hidden" id="songId">
+        <div class="form-group">
+          <label>Titel</label>
+          <input type="text" id="songTitle" required>
         </div>
+        <div class="form-group">
+          <label>Kunstner</label>
+          <input type="text" id="songArtist">
+        </div>
+        <div class="form-group">
+          <label>Toneart</label>
+          <input type="text" id="songKey" placeholder="f.eks. F, Dm, C#m">
+        </div>
+        <div class="form-group">
+          <label>Kategorier (vælg flere)</label>
+          <div class="category-checkboxes" id="categoryCheckboxes">
+            <div class="category-checkbox"><input type="checkbox" id="cat-Rock" value="Rock"><label for="cat-Rock">Rock</label></div>
+            <div class="category-checkbox"><input type="checkbox" id="cat-Pop" value="Pop"><label for="cat-Pop">Pop</label></div>
+            <div class="category-checkbox"><input type="checkbox" id="cat-Dansk" value="Dansk"><label for="cat-Dansk">Dansk</label></div>
+            <div class="category-checkbox"><input type="checkbox" id="cat-Syng med" value="Syng med"><label for="cat-Syng med">Syng med</label></div>
+            <div class="category-checkbox"><input type="checkbox" id="cat-Røvballe" value="Røvballe"><label for="cat-Røvballe">Røvballe</label></div>
+            <div class="category-checkbox"><input type="checkbox" id="cat-Disco" value="Disco"><label for="cat-Disco">Disco</label></div>
+            <div class="category-checkbox"><input type="checkbox" id="cat-Hård Rock" value="Hård Rock"><label for="cat-Hård Rock">Hård Rock</label></div>
+            <div class="category-checkbox"><input type="checkbox" id="cat-80\'er" value="80'er"><label for="cat-80\'er">80'er</label></div>
+            <div class="category-checkbox"><input type="checkbox" id="cat-90\'er" value="90'er"><label for="cat-90\'er">90'er</label></div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Noter</label>
+          <input type="text" id="songNotes" placeholder="Ekstra information">
+        </div>
+      </form>
+      <div class="modal-actions">
+        <button type="button" onclick="closeModal('songModal')" class="secondary">Annuller</button>
+        <button type="button" onclick="saveSong()" class="success">Gem</button>
+      </div>
     </div>
+  </div>
 
-    <div id="toast" class="toast"></div>
+  <div id="exportModal" class="modal-overlay" style="display: none;">
+    <div class="modal">
+      <h2>Eksport Sætliste</h2>
+      <p>Vælg hvordan du vil eksportere:</p>
+      <div class="export-options">
+        <div class="export-option" onclick="exportToForScore()">
+          <h3>📁 forScore (.4SS)</h3>
+          <p>Importer direkte til forScore appen på din iPad</p>
+        </div>
+        <div class="export-option" onclick="exportToJSON()">
+          <h3>📋 JSON Fil</h3>
+          <p>Gem alle data (sange + sæt) som JSON til deling</p>
+        </div>
+        <div class="export-option" onclick="exportSetAsText()">
+          <h3>📝 Tekstfil</h3>
+          <p>Simpel tekstliste af det aktuelle sæt</p>
+        </div>
+        <div class="export-option" onclick="exportToPDF()">
+          <h3>PDF</h3>
+          <p>Printvenlig PDF med alle sæt</p>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button onclick="closeModal('exportModal')" class="secondary">Luk</button>
+      </div>
+    </div>
+  </div>
 
-    <script>
-        // ========== DATA STRUCTURE ==========
-        let songs = [];
-        let sets = [];
-        let currentSetId = null;
-        let activeFilter = 'all';
-        let currentDragOverTarget = null;
-        let draggedSongId = null;
-        let draggedFromSetId = null;
+  <div id="importModal" class="modal-overlay" style="display: none;">
+    <div class="modal">
+      <h2>Import Data</h2>
+      <p>Træk en JSON-fil herind eller klik for at vælge:</p>
+      <div class="import-area" id="importArea" onclick="document.getElementById('fileInput').click()">
+        <p>📁 Klik for at vælge fil eller træk herind</p>
+        <input type="file" id="fileInput" accept=".json" style="display: none;" onchange="handleFileImport(event)">
+      </div>
+      <div class="modal-actions">
+        <button onclick="closeModal('importModal')" class="secondary">Luk</button>
+      </div>
+    </div>
+  </div>
 
-        // ========== CATEGORIES ==========
-        const allCategories = ['Rock', 'Pop', 'Dansk', 'Syng med', 'Røvballe', 'Disco', 'Hård Rock', '80\'er', '90\'er'];
+  <div id="toast" class="toast"></div>
 
-        // ========== INITIAL DATA ==========
-        const initialSongs = [
-            // Første sæt - mappet til nye kategorier
-            { id: '1', title: 'Jeg Tager Imod', key: 'Dm', artist: 'Thomas Helmig', categories: ['Dansk', 'Pop'] },
-            { id: '2', title: 'Love Is In The Air', key: 'C', artist: 'John Paul Young', categories: ['Pop', '80\'er'] },
-            { id: '3', title: 'Pretty Woman', key: 'A', artist: 'Roy Orbison', categories: ['Rock', 'Pop'] },
-            { id: '4', title: 'The Way You Make Me Feel', key: 'A', artist: 'Michael Jackson', categories: ['Pop', '80\'er'] },
-            { id: '5', title: 'Øde Ø', key: 'G', artist: 'Rasmus Seebach', categories: ['Dansk', 'Pop'] },
-            { id: '6', title: 'Mustang Sally', key: 'C', artist: 'Wilson Picket', categories: ['Rock', 'Disco'] },
-            { id: '7', title: 'Can’t Take My Eyes Off Of You', key: 'D', artist: 'Frankie Valli', categories: ['Pop'] },
-            { id: '8', title: 'Johnny B. Goode', key: 'A', artist: 'Chuck Berry', categories: ['Rock', 'Hård Rock'] },
-            { id: '9', title: 'Rabalderstræde', key: 'D', artist: 'Gasolin', categories: ['Dansk', 'Rock'] },
-            { id: '10', title: 'Abracadabra', key: 'Am', artist: 'The Steve Miller Band', categories: ['Rock', '80\'er'] },
-            { id: '11', title: 'What A Life', key: 'Am', artist: 'Scarlet Pleasure', categories: ['Pop', 'Dansk'] },
-            { id: '12', title: 'STOR MAND', key: 'F', artist: 'Tobias Rahim & Rasmus Odbjerg', categories: ['Dansk', 'Pop'] },
-            { id: '13', title: 'Kun For Mig', key: 'Am', artist: 'Medina', categories: ['Dansk', 'Pop'] },
+  <script>
+    // ========== DATA STRUCTURE ==========
+    let songs = [];
+    let sets = [];
+    let currentSetId = null;
+    let activeFilter = 'all';
+    let currentDragOverTarget = null;
+    let draggedSongId = null;
+    let draggedFromSetId = null;
 
-            // Andet sæt
-            { id: '14', title: 'On A Long Lonely Night', key: 'G', artist: 'Sko/Torp', categories: ['Dansk', 'Rock'] },
-            { id: '15', title: 'Mr. Swing King', key: 'C', artist: 'Gnags', categories: ['Dansk', 'Rock'] },
-            { id: '16', title: 'I Feel Good', key: 'Bb', artist: 'James Brown', categories: ['Disco'] },
-            { id: '17', title: 'Bag Duggede Ruder - Lanternen', key: 'C', artist: 'TV2', categories: ['Dansk', 'Rock'] },
-            { id: '18', title: 'Play That Funky Music', key: 'E', artist: 'Wild Cherry', categories: ['Disco'] },
-            { id: '19', title: 'Det er Mig Der Står Herude Og Banker på', key: 'A', artist: 'Thomas Helmig', categories: ['Dansk', 'Pop'] },
-            { id: '20', title: 'For Evigt', key: 'C', artist: 'Volbeat', categories: ['Dansk', 'Hård Rock'] },
-            { id: '21', title: 'Kiss', key: 'A', artist: 'Prince', categories: ['Pop', 'Disco'] },
-            { id: '22', title: 'Det Bedste til Mig og Mine Venner', key: 'F', artist: 'Gasolin', categories: ['Dansk', 'Rock'] },
-            { id: '23', title: 'Sweet Home Alabama', key: 'D', artist: 'Lynyrd Skynyrd', categories: ['Rock'] },
-            { id: '24', title: 'Midt Om Natten', key: 'Dm', artist: 'Kim Larsen', categories: ['Dansk', 'Rock'] },
-            { id: '25', title: 'Save Tonight', key: 'Am', artist: 'Eagle Eye Cherry', categories: ['Pop', '90\'er'] },
+    // ========== CATEGORIES ==========
+    const allCategories = ['Rock', 'Pop', 'Dansk', 'Syng med', 'Røvballe', 'Disco', 'Hård Rock', '80\'er', '90\'er'];
 
-            // Ekstra Numre
-            { id: '26', title: 'Kom Tilbage Nu', key: 'A', artist: 'Danseorkestret', categories: ['Dansk'] },
+    // ========== INITIAL DATA ==========
+    const initialSongs = [
+      // Første sæt - mappet til nye kategorier
+      { id: '1', title: 'Jeg Tager Imod', key: 'Dm', artist: 'Thomas Helmig', categories: ['Dansk', 'Pop'] },
+      { id: '2', title: 'Love Is In The Air', key: 'C', artist: 'John Paul Young', categories: ['Pop', '80\'er'] },
+      { id: '3', title: 'Pretty Woman', key: 'A', artist: 'Roy Orbison', categories: ['Rock', 'Pop'] },
+      { id: '4', title: 'The Way You Make Me Feel', key: 'A', artist: 'Michael Jackson', categories: ['Pop', '80\'er'] },
+      { id: '5', title: 'Øde Ø', key: 'G', artist: 'Rasmus Seebach', categories: ['Dansk', 'Pop'] },
+      { id: '6', title: 'Mustang Sally', key: 'C', artist: 'Wilson Picket', categories: ['Rock', 'Disco'] },
+      { id: '7', title: 'Can’t Take My Eyes Off Of You', key: 'D', artist: 'Frankie Valli', categories: ['Pop'] },
+      { id: '8', title: 'Johnny B. Goode', key: 'A', artist: 'Chuck Berry', categories: ['Rock', 'Hård Rock'] },
+      { id: '9', title: 'Rabalderstræde', key: 'D', artist: 'Gasolin', categories: ['Dansk', 'Rock'] },
+      { id: '10', title: 'Abracadabra', key: 'Am', artist: 'The Steve Miller Band', categories: ['Rock', '80\'er'] },
+      { id: '11', title: 'What A Life', key: 'Am', artist: 'Scarlet Pleasure', categories: ['Pop', 'Dansk'] },
+      { id: '12', title: 'STOR MAND', key: 'F', artist: 'Tobias Rahim & Rasmus Odbjerg', categories: ['Dansk', 'Pop'] },
+      { id: '13', title: 'Kun For Mig', key: 'Am', artist: 'Medina', categories: ['Dansk', 'Pop'] },
 
-            // Syng med
-            { id: '27', title: 'Proud Mary', key: 'D', artist: 'Ike & Tina Turner', categories: ['Rock', 'Syng med'] },
-            { id: '28', title: 'Summer of 69', key: 'H', artist: 'Bryan Adams', categories: ['Rock', 'Syng med'] },
-            { id: '29', title: 'Mona Mona', key: 'D', artist: 'Søren Krag Jacobsen', categories: ['Dansk', 'Syng med'] },
-            { id: '30', title: 'Kvinde Min', key: 'Dm', artist: 'Gasolin', categories: ['Dansk', 'Syng med'] },
-            { id: '31', title: 'Jutlandia', key: 'A', artist: 'Kim Larsen', categories: ['Dansk', 'Syng med'] },
-            { id: '32', title: 'Nu Hvor Du har Brændt mig af', key: 'D', artist: 'Thomas Helmig', categories: ['Dansk', 'Syng med'] },
-            { id: '33', title: 'Tarzan Mama Mia', key: 'C', artist: 'Kim Larsen', categories: ['Dansk', 'Syng med'] },
-            { id: '34', title: 'All My Love', key: 'E', artist: 'Rocazino', categories: ['Dansk', 'Syng med'] },
-            { id: '35', title: 'Du ligner Din Mor', key: 'E', artist: 'Benjamin Hav', categories: ['Dansk', 'Syng med'] },
-            { id: '36', title: 'Blame It On The Boogie', key: 'Bb', artist: 'The Jacksons', categories: ['Disco', 'Syng med'] },
+      // Andet sæt
+      { id: '14', title: 'On A Long Lonely Night', key: 'G', artist: 'Sko/Torp', categories: ['Dansk', 'Rock'] },
+      { id: '15', title: 'Mr. Swing King', key: 'C', artist: 'Gnags', categories: ['Dansk', 'Rock'] },
+      { id: '16', title: 'I Feel Good', key: 'Bb', artist: 'James Brown', categories: ['Disco'] },
+      { id: '17', title: 'Bag Duggede Ruder - Lanternen', key: 'C', artist: 'TV2', categories: ['Dansk', 'Rock'] },
+      { id: '18', title: 'Play That Funky Music', key: 'E', artist: 'Wild Cherry', categories: ['Disco'] },
+      { id: '19', title: 'Det er Mig Der Står Herude Og Banker på', key: 'A', artist: 'Thomas Helmig', categories: ['Dansk', 'Pop'] },
+      { id: '20', title: 'For Evigt', key: 'C', artist: 'Volbeat', categories: ['Dansk', 'Hård Rock'] },
+      { id: '21', title: 'Kiss', key: 'A', artist: 'Prince', categories: ['Pop', 'Disco'] },
+      { id: '22', title: 'Det Bedste til Mig og Mine Venner', key: 'F', artist: 'Gasolin', categories: ['Dansk', 'Rock'] },
+      { id: '23', title: 'Sweet Home Alabama', key: 'D', artist: 'Lynyrd Skynyrd', categories: ['Rock'] },
+      { id: '24', title: 'Midt Om Natten', key: 'Dm', artist: 'Kim Larsen', categories: ['Dansk', 'Rock'] },
+      { id: '25', title: 'Save Tonight', key: 'Am', artist: 'Eagle Eye Cherry', categories: ['Pop', '90\'er'] },
 
-            // Flere numre
-            { id: '37', title: 'Signed Sealed Delivered I am Yours', key: 'E', artist: 'Stevie Wonder', categories: ['Pop', 'Disco'] },
-            { id: '38', title: 'Flowers', key: 'Gm', artist: 'Miley Cyrus', categories: ['Pop'] },
-            { id: '39', title: 'Love Yourself', key: 'E', artist: 'Justin Bieber', categories: ['Pop'] },
-            { id: '40', title: 'Cant Feel My Face', key: 'Am', artist: 'The Weeknd', categories: ['Pop'] },
-            { id: '41', title: 'Crazy', key: 'Gm', artist: 'Gnarls Barkley', categories: ['Pop'] },
-            { id: '42', title: 'To Mennesker På En Strand', key: 'G', artist: 'John Mogensen', categories: ['Dansk'] },
-            { id: '43', title: 'Vilde Kaniner', key: 'Em', artist: 'Gnags', categories: ['Dansk', 'Rock'] },
-            { id: '44', title: 'Sultans Of Swing', key: 'Dm', artist: 'Dire Straits', categories: ['Rock'] },
-            { id: '45', title: 'September', key: 'A', artist: 'Earth Wind & Fire', categories: ['Disco'] },
-            { id: '46', title: 'Satisfaction', key: 'E', artist: 'Rolling Stones', categories: ['Rock', 'Hård Rock'] },
-            { id: '47', title: 'Feel It Still', key: 'C#m', artist: 'Portugal. The Man', categories: ['Pop'] },
-            { id: '48', title: 'Saw her standing there', key: 'E', artist: 'The Beatles', categories: ['Rock'] },
-            { id: '49', title: 'Lets Dance', key: 'Bbm', artist: 'David Bowie', categories: ['Pop', 'Disco'] },
-            { id: '50', title: 'Money For Nothing', key: 'Gm', artist: 'Dire Straits', categories: ['Rock'] },
-            { id: '51', title: 'As It Was', key: 'A start D', artist: 'Harry Styles', categories: ['Pop'] },
-            { id: '52', title: 'Lay Down Sally', key: 'A', artist: 'Eric Clapton', categories: ['Rock'] },
-            { id: '53', title: 'Get Lucky', key: 'A', artist: 'Daft Punk', categories: ['Disco', 'Pop'] },
-            { id: '54', title: 'Muchi Bar', key: 'B', artist: 'Tobias Rahim', categories: ['Dansk', 'Røvballe'] },
-            { id: '55', title: 'Blurred Lines', key: 'G', artist: 'Robin Thicke', categories: ['Pop', 'Disco'] },
+      // Ekstra Numre
+      { id: '26', title: 'Kom Tilbage Nu', key: 'A', artist: 'Danseorkestret', categories: ['Dansk'] },
 
-            // Slow and Dirty -> mappet til passende kategorier
-            { id: '56', title: 'What a Wonderful World', key: 'F', artist: 'Louis Armstrong', categories: ['Pop'] },
-            { id: '57', title: 'Dont Know Why', key: 'C', artist: 'Norah Jones', categories: ['Pop'] },
-            { id: '58', title: 'Aint No Sunshine', key: 'Am', artist: 'Bill Withers', categories: ['Pop'] },
-            { id: '59', title: 'With Or Without You', key: 'D', artist: 'U2', categories: ['Rock'] },
-            { id: '60', title: 'Help The Poor', key: 'Dm', artist: 'Eric Clapton & B.B. King', categories: ['Rock'] },
-            { id: '61', title: 'I Shot The Sheriff', key: 'Gm', artist: 'Bob Marley', categories: ['Rock'] },
-            { id: '62', title: 'Lovely Day', key: 'E', artist: 'Bill Withers', categories: ['Pop'] },
-            { id: '63', title: 'Just The Way You Are', key: 'D', artist: 'Billy Joel', categories: ['Pop'] },
-            { id: '64', title: 'Lets Stay Together', key: 'F', artist: 'Bill Withers', categories: ['Pop'] },
-            { id: '65', title: 'I Cant Make You Love Me', key: 'G - start C', artist: 'Bonnie Raitt', categories: ['Pop'] },
-            { id: '66', title: 'Your Body Is A Wonderland', key: 'E', artist: 'John Mayer', categories: ['Pop'] },
-            { id: '67', title: 'Call Me The Breeze', key: 'F#', artist: 'J.J. Cale', categories: ['Rock'] },
+      // Syng med
+      { id: '27', title: 'Proud Mary', key: 'D', artist: 'Ike & Tina Turner', categories: ['Rock', 'Syng med'] },
+      { id: '28', title: 'Summer of 69', key: 'H', artist: 'Bryan Adams', categories: ['Rock', 'Syng med'] },
+      { id: '29', title: 'Mona Mona', key: 'D', artist: 'Søren Krag Jacobsen', categories: ['Dansk', 'Syng med'] },
+      { id: '30', title: 'Kvinde Min', key: 'Dm', artist: 'Gasolin', categories: ['Dansk', 'Syng med'] },
+      { id: '31', title: 'Jutlandia', key: 'A', artist: 'Kim Larsen', categories: ['Dansk', 'Syng med'] },
+      { id: '32', title: 'Nu Hvor Du har Brændt mig af', key: 'D', artist: 'Thomas Helmig', categories: ['Dansk', 'Syng med'] },
+      { id: '33', title: 'Tarzan Mama Mia', key: 'C', artist: 'Kim Larsen', categories: ['Dansk', 'Syng med'] },
+      { id: '34', title: 'All My Love', key: 'E', artist: 'Rocazino', categories: ['Dansk', 'Syng med'] },
+      { id: '35', title: 'Du ligner Din Mor', key: 'E', artist: 'Benjamin Hav', categories: ['Dansk', 'Syng med'] },
+      { id: '36', title: 'Blame It On The Boogie', key: 'Bb', artist: 'The Jacksons', categories: ['Disco', 'Syng med'] },
 
-            // Nye sange - Flere numre
-            { id: '68', title: 'On Broadway', key: 'G', artist: 'George Benson', categories: ['Pop', 'Disco'] },
-            { id: '69', title: 'Over my shoulder', key: 'D', artist: 'Mike and The Mechanics', categories: ['Pop'] },
-            { id: '70', title: 'Faith', key: 'H', artist: 'George Michael', categories: ['Pop', '80\'er'] },
-            { id: '71', title: 'Tip of my tongue', key: 'H', artist: 'Diesel', categories: ['Rock'] },
-            { id: '72', title: 'So lonely', key: 'E', artist: 'Police', categories: ['Rock'] },
-            { id: '73', title: 'Walking on sunshine', key: 'F', artist: 'Katrina and the Waves', categories: ['Pop', '80\'er'] },
-            { id: '74', title: 'Ahr der', key: 'E', artist: 'Mc Einar', categories: ['Dansk', 'Røvballe'] },
-            { id: '75', title: 'Den jeg elsker', key: 'D', artist: 'Thomas Helmig og Søs Fenger', categories: ['Dansk', 'Pop'] },
-            { id: '76', title: 'Long train running', key: 'Em', artist: 'The Doobie Brothers', categories: ['Rock'] },
-            { id: '77', title: 'Flying', key: 'D', artist: 'Nice Little Penguins', categories: ['Pop'] },
-            { id: '78', title: 'Breakfast at tiffanys', key: 'D', artist: 'Deep Blue Something', categories: ['Pop', '90\'er'] },
-            { id: '79', title: 'Stupid man', key: 'F', artist: 'Thomas Helmig', categories: ['Dansk', 'Pop'] },
-            { id: '80', title: 'Lady', key: 'Am', artist: 'Modjo', categories: ['Pop', 'Disco'] },
-            { id: '81', title: 'Help', key: 'A', artist: 'The Beatles', categories: ['Rock'] },
-            { id: '82', title: 'Lanternen', key: 'C/A', artist: 'TV2', categories: ['Dansk', 'Rock'] },
-            { id: '83', title: 'Sing it Back', key: 'Em', artist: 'Moloko', categories: ['Pop', 'Disco'] },
-            { id: '84', title: 'Sunny', key: 'Em', artist: 'Bobby Hebb', categories: ['Pop'] },
-            { id: '85', title: 'Take on me', key: 'A', artist: 'Aha', categories: ['Pop', '80\'er'] },
-            { id: '86', title: 'Gorgie Porgie', key: 'Em', artist: 'Toto', categories: ['Rock'] },
-            { id: '87', title: 'My girl', key: 'C', artist: 'The Temptations', categories: ['Pop', 'Disco'] },
-            { id: '88', title: 'Mrs Robinson', key: 'F#7/A', artist: 'Simon and Garfunkel', categories: ['Pop', 'Rock'] },
-            { id: '89', title: 'De første kærester på månen', key: 'G', artist: 'TV2', categories: ['Dansk', 'Rock'] },
-            { id: '90', title: 'Happy together', key: 'F#m', artist: 'The Turtles', categories: ['Pop', '80\'er'] },
-            { id: '91', title: 'Walk on by', key: 'Em', artist: 'Dione Warwick', categories: ['Pop'] },
-            { id: '92', title: 'Dont worry be happy', key: 'C', artist: 'Bobby McFerrin', categories: ['Pop'] },
-            { id: '93', title: 'I feel for you', key: 'F#', artist: 'Prince', categories: ['Pop', 'Disco'] },
-            { id: '94', title: 'It wont be long', key: 'E', artist: 'The Beatles', categories: ['Rock'] },
-            { id: '95', title: 'Change the world', key: 'E', artist: 'Eric Clapton', categories: ['Rock'] },
-            { id: '96', title: 'I will survive', key: 'Dm', artist: 'Gloria Gaynor', categories: ['Disco', 'Pop'] },
-            { id: '97', title: 'Walk of life', key: 'E', artist: 'Dire Straits', categories: ['Rock'] },
-            { id: '98', title: 'Midnight Hour', key: 'C', artist: 'Wilson Picket', categories: ['Disco'] },
-            { id: '99', title: 'The joker', key: 'F', artist: 'Steve Miller Band', categories: ['Rock'] },
-            { id: '100', title: 'I am still standing', key: 'A/Am', artist: 'Elton John', categories: ['Pop'] },
-            { id: '101', title: 'Ticket to ride', key: 'A', artist: 'The Beatles', categories: ['Rock'] },
-            { id: '102', title: 'It aint over till its over', key: 'C#', artist: 'Lenny Kravitz', categories: ['Rock', 'Hård Rock'] },
-            { id: '103', title: '1999', key: 'F', artist: 'Prince', categories: ['Pop', 'Disco'] },
-            { id: '104', title: 'I got a Woman', key: 'A', artist: 'Ray Charles', categories: ['Pop'] },
-            { id: '105', title: 'Start me up', key: 'F', artist: 'Rolling Stones', categories: ['Rock', 'Hård Rock'] },
-            { id: '106', title: 'Master Blaster', key: 'Am', artist: 'Stevie Wonder', categories: ['Pop', 'Disco'] },
-            { id: '107', title: '7 Years', key: 'Em', artist: 'Lucas Graham', categories: ['Pop'] },
-            { id: '108', title: 'Cake by the Ocean', key: 'Em', artist: 'DNCE', categories: ['Pop', 'Disco'] },
-            { id: '109', title: 'Shape of you', key: 'C#m', artist: 'Ed Sheeran', categories: ['Pop'] },
-            { id: '110', title: 'Cream', key: 'Bb', artist: 'Prince', categories: ['Rock'] },
-            { id: '111', title: 'Cant stop the feeling', key: 'C', artist: 'Justin Timberlake', categories: ['Pop'] },
-            { id: '112', title: 'Unchain my heart', key: 'Am', artist: 'Ray Charles', categories: ['Pop'] },
-            { id: '113', title: 'Rock with you', key: 'Dm', artist: 'Michael Jackson', categories: ['Disco', 'Pop'] },
+      // Flere numre
+      { id: '37', title: 'Signed Sealed Delivered I am Yours', key: 'E', artist: 'Stevie Wonder', categories: ['Pop', 'Disco'] },
+      { id: '38', title: 'Flowers', key: 'Gm', artist: 'Miley Cyrus', categories: ['Pop'] },
+      { id: '39', title: 'Love Yourself', key: 'E', artist: 'Justin Bieber', categories: ['Pop'] },
+      { id: '40', title: 'Cant Feel My Face', key: 'Am', artist: 'The Weeknd', categories: ['Pop'] },
+      { id: '41', title: 'Crazy', key: 'Gm', artist: 'Gnarls Barkley', categories: ['Pop'] },
+      { id: '42', title: 'To Mennesker På En Strand', key: 'G', artist: 'John Mogensen', categories: ['Dansk'] },
+      { id: '43', title: 'Vilde Kaniner', key: 'Em', artist: 'Gnags', categories: ['Dansk', 'Rock'] },
+      { id: '44', title: 'Sultans Of Swing', key: 'Dm', artist: 'Dire Straits', categories: ['Rock'] },
+      { id: '45', title: 'September', key: 'A', artist: 'Earth Wind & Fire', categories: ['Disco'] },
+      { id: '46', title: 'Satisfaction', key: 'E', artist: 'Rolling Stones', categories: ['Rock', 'Hård Rock'] },
+      { id: '47', title: 'Feel It Still', key: 'C#m', artist: 'Portugal. The Man', categories: ['Pop'] },
+      { id: '48', title: 'Saw her standing there', key: 'E', artist: 'The Beatles', categories: ['Rock'] },
+      { id: '49', title: 'Lets Dance', key: 'Bbm', artist: 'David Bowie', categories: ['Pop', 'Disco'] },
+      { id: '50', title: 'Money For Nothing', key: 'Gm', artist: 'Dire Straits', categories: ['Rock'] },
+      { id: '51', title: 'As It Was', key: 'A start D', artist: 'Harry Styles', categories: ['Pop'] },
+      { id: '52', title: 'Lay Down Sally', key: 'A', artist: 'Eric Clapton', categories: ['Rock'] },
+      { id: '53', title: 'Get Lucky', key: 'A', artist: 'Daft Punk', categories: ['Disco', 'Pop'] },
+      { id: '54', title: 'Muchi Bar', key: 'B', artist: 'Tobias Rahim', categories: ['Dansk', 'Røvballe'] },
+      { id: '55', title: 'Blurred Lines', key: 'G', artist: 'Robin Thicke', categories: ['Pop', 'Disco'] },
 
-            // Nye sange - Slow and Dirty mappet til nye kategorier
-            { id: '114', title: 'The Girl From Ipanema', key: 'F', artist: 'Jobim', categories: ['Pop'] },
-            { id: '115', title: 'Corcovado', key: 'Am', artist: 'Jobim', categories: ['Pop'] },
-            { id: '116', title: 'Fields Of Gold', key: 'C', artist: 'Sting', categories: ['Pop'] },
-            { id: '117', title: 'Shape Of My Heart', key: 'F#m', artist: 'Sting', categories: ['Pop'] },
-            { id: '118', title: 'Vem Vet', key: 'Am', artist: 'Lisa Ekdahl', categories: ['Pop'] },
-            { id: '119', title: 'Calling You', key: 'G', artist: 'Bagdad Cafe', categories: ['Pop'] },
-            { id: '120', title: 'Its Probably Me', key: 'Em', artist: 'Sting & Eric Clapton', categories: ['Pop'] },
-            { id: '121', title: 'Cocain', key: 'Em', artist: 'J.J. Cale', categories: ['Rock'] },
-            { id: '122', title: 'Fever', key: 'Cm', artist: 'Elvis', categories: ['Rock'] },
-            { id: '123', title: 'Fallen', key: 'E', artist: 'Lauren Wood', categories: ['Pop'] },
-            { id: '124', title: '50 Ways To Leave Your Lover', key: 'Em', artist: 'Paul Simon', categories: ['Pop'] },
-            { id: '125', title: 'Ebony And Ivory', key: 'G/start D11', artist: 'Paul McCartney & Stevie Wonder', categories: ['Pop'] },
-            { id: '126', title: 'Dont Be Cruel', key: 'C', artist: 'Elvis', categories: ['Rock'] },
-            { id: '127', title: 'Careless Whisper', key: 'Dm', artist: 'Wham', categories: ['Pop', '80\'er'] },
-            { id: '128', title: 'Father Figure', key: 'A', artist: 'George Michael', categories: ['Pop', '80\'er'] },
-            { id: '129', title: 'Tears In Heaven', key: 'A', artist: 'Eric Clapton', categories: ['Rock', 'Pop'] },
-            { id: '130', title: 'They Call Me The Breeze', key: 'F#', artist: 'J.J. Cale', categories: ['Rock'] },
-            { id: '131', title: 'Who Says', key: 'D', artist: 'John Mayer', categories: ['Pop'] },
-            { id: '132', title: 'You Can Call Me Al', key: 'F', artist: 'Paul Simon', categories: ['Pop'] }
-        ];
+      // Slow and Dirty -> mappet til passende kategorier
+      { id: '56', title: 'What a Wonderful World', key: 'F', artist: 'Louis Armstrong', categories: ['Pop'] },
+      { id: '57', title: 'Dont Know Why', key: 'C', artist: 'Norah Jones', categories: ['Pop'] },
+      { id: '58', title: 'Aint No Sunshine', key: 'Am', artist: 'Bill Withers', categories: ['Pop'] },
+      { id: '59', title: 'With Or Without You', key: 'D', artist: 'U2', categories: ['Rock'] },
+      { id: '60', title: 'Help The Poor', key: 'Dm', artist: 'Eric Clapton & B.B. King', categories: ['Rock'] },
+      { id: '61', title: 'I Shot The Sheriff', key: 'Gm', artist: 'Bob Marley', categories: ['Rock'] },
+      { id: '62', title: 'Lovely Day', key: 'E', artist: 'Bill Withers', categories: ['Pop'] },
+      { id: '63', title: 'Just The Way You Are', key: 'D', artist: 'Billy Joel', categories: ['Pop'] },
+      { id: '64', title: 'Lets Stay Together', key: 'F', artist: 'Bill Withers', categories: ['Pop'] },
+      { id: '65', title: 'I Cant Make You Love Me', key: 'G - start C', artist: 'Bonnie Raitt', categories: ['Pop'] },
+      { id: '66', title: 'Your Body Is A Wonderland', key: 'E', artist: 'John Mayer', categories: ['Pop'] },
+      { id: '67', title: 'Call Me The Breeze', key: 'F#', artist: 'J.J. Cale', categories: ['Rock'] },
 
-        const initialSets = [
-            { id: 'set1', name: 'Første sæt', songIds: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13'] },
-            { id: 'set2', name: 'Andet sæt', songIds: ['14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25'] }
-        ];
+      // Nye sange - Flere numre
+      { id: '68', title: 'On Broadway', key: 'G', artist: 'George Benson', categories: ['Pop', 'Disco'] },
+      { id: '69', title: 'Over my shoulder', key: 'D', artist: 'Mike and The Mechanics', categories: ['Pop'] },
+      { id: '70', title: 'Faith', key: 'H', artist: 'George Michael', categories: ['Pop', '80\'er'] },
+      { id: '71', title: 'Tip of my tongue', key: 'H', artist: 'Diesel', categories: ['Rock'] },
+      { id: '72', title: 'So lonely', key: 'E', artist: 'Police', categories: ['Rock'] },
+      { id: '73', title: 'Walking on sunshine', key: 'F', artist: 'Katrina and the Waves', categories: ['Pop', '80\'er'] },
+      { id: '74', title: 'Ahr der', key: 'E', artist: 'Mc Einar', categories: ['Dansk', 'Røvballe'] },
+      { id: '75', title: 'Den jeg elsker', key: 'D', artist: 'Thomas Helmig og Søs Fenger', categories: ['Dansk', 'Pop'] },
+      { id: '76', title: 'Long train running', key: 'Em', artist: 'The Doobie Brothers', categories: ['Rock'] },
+      { id: '77', title: 'Flying', key: 'D', artist: 'Nice Little Penguins', categories: ['Pop'] },
+      { id: '78', title: 'Breakfast at tiffanys', key: 'D', artist: 'Deep Blue Something', categories: ['Pop', '90\'er'] },
+      { id: '79', title: 'Stupid man', key: 'F', artist: 'Thomas Helmig', categories: ['Dansk', 'Pop'] },
+      { id: '80', title: 'Lady', key: 'Am', artist: 'Modjo', categories: ['Pop', 'Disco'] },
+      { id: '81', title: 'Help', key: 'A', artist: 'The Beatles', categories: ['Rock'] },
+      { id: '82', title: 'Lanternen', key: 'C/A', artist: 'TV2', categories: ['Dansk', 'Rock'] },
+      { id: '83', title: 'Sing it Back', key: 'Em', artist: 'Moloko', categories: ['Pop', 'Disco'] },
+      { id: '84', title: 'Sunny', key: 'Em', artist: 'Bobby Hebb', categories: ['Pop'] },
+      { id: '85', title: 'Take on me', key: 'A', artist: 'Aha', categories: ['Pop', '80\'er'] },
+      { id: '86', title: 'Gorgie Porgie', key: 'Em', artist: 'Toto', categories: ['Rock'] },
+      { id: '87', title: 'My girl', key: 'C', artist: 'The Temptations', categories: ['Pop', 'Disco'] },
+      { id: '88', title: 'Mrs Robinson', key: 'F#7/A', artist: 'Simon and Garfunkel', categories: ['Pop', 'Rock'] },
+      { id: '89', title: 'De første kærester på månen', key: 'G', artist: 'TV2', categories: ['Dansk', 'Rock'] },
+      { id: '90', title: 'Happy together', key: 'F#m', artist: 'The Turtles', categories: ['Pop', '80\'er'] },
+      { id: '91', title: 'Walk on by', key: 'Em', artist: 'Dione Warwick', categories: ['Pop'] },
+      { id: '92', title: 'Dont worry be happy', key: 'C', artist: 'Bobby McFerrin', categories: ['Pop'] },
+      { id: '93', title: 'I feel for you', key: 'F#', artist: 'Prince', categories: ['Pop', 'Disco'] },
+      { id: '94', title: 'It wont be long', key: 'E', artist: 'The Beatles', categories: ['Rock'] },
+      { id: '95', title: 'Change the world', key: 'E', artist: 'Eric Clapton', categories: ['Rock'] },
+      { id: '96', title: 'I will survive', key: 'Dm', artist: 'Gloria Gaynor', categories: ['Disco', 'Pop'] },
+      { id: '97', title: 'Walk of life', key: 'E', artist: 'Dire Straits', categories: ['Rock'] },
+      { id: '98', title: 'Midnight Hour', key: 'C', artist: 'Wilson Picket', categories: ['Disco'] },
+      { id: '99', title: 'The joker', key: 'F', artist: 'Steve Miller Band', categories: ['Rock'] },
+      { id: '100', title: 'I am still standing', key: 'A/Am', artist: 'Elton John', categories: ['Pop'] },
+      { id: '101', title: 'Ticket to ride', key: 'A', artist: 'The Beatles', categories: ['Rock'] },
+      { id: '102', title: 'It aint over till its over', key: 'C#', artist: 'Lenny Kravitz', categories: ['Rock', 'Hård Rock'] },
+      { id: '103', title: '1999', key: 'F', artist: 'Prince', categories: ['Pop', 'Disco'] },
+      { id: '104', title: 'I got a Woman', key: 'A', artist: 'Ray Charles', categories: ['Pop'] },
+      { id: '105', title: 'Start me up', key: 'F', artist: 'Rolling Stones', categories: ['Rock', 'Hård Rock'] },
+      { id: '106', title: 'Master Blaster', key: 'Am', artist: 'Stevie Wonder', categories: ['Pop', 'Disco'] },
+      { id: '107', title: '7 Years', key: 'Em', artist: 'Lucas Graham', categories: ['Pop'] },
+      { id: '108', title: 'Cake by the Ocean', key: 'Em', artist: 'DNCE', categories: ['Pop', 'Disco'] },
+      { id: '109', title: 'Shape of you', key: 'C#m', artist: 'Ed Sheeran', categories: ['Pop'] },
+      { id: '110', title: 'Cream', key: 'Bb', artist: 'Prince', categories: ['Rock'] },
+      { id: '111', title: 'Cant stop the feeling', key: 'C', artist: 'Justin Timberlake', categories: ['Pop'] },
+      { id: '112', title: 'Unchain my heart', key: 'Am', artist: 'Ray Charles', categories: ['Pop'] },
+      { id: '113', title: 'Rock with you', key: 'Dm', artist: 'Michael Jackson', categories: ['Disco', 'Pop'] },
 
-        // ========== INITIALIZATION ==========
-        function init() {
-            const savedSongs = localStorage.getItem('setlistSongs');
-            const savedSets = localStorage.getItem('setlistSets');
-            
-            if (savedSongs && savedSets) {
-                songs = JSON.parse(savedSongs);
-                sets = JSON.parse(savedSets);
-            } else {
-                songs = JSON.parse(JSON.stringify(initialSongs));
-                sets = JSON.parse(JSON.stringify(initialSets));
-            }
-            
-            if (sets.length > 0) {
-                currentSetId = sets[0].id;
-            }
-            
-            renderAll();
-            setupDragAndDrop();
-            setupImportDragAndDrop();
+      // Nye sange - Slow and Dirty mappet til nye kategorier
+      { id: '114', title: 'The Girl From Ipanema', key: 'F', artist: 'Jobim', categories: ['Pop'] },
+      { id: '115', title: 'Corcovado', key: 'Am', artist: 'Jobim', categories: ['Pop'] },
+      { id: '116', title: 'Fields Of Gold', key: 'C', artist: 'Sting', categories: ['Pop'] },
+      { id: '117', title: 'Shape Of My Heart', key: 'F#m', artist: 'Sting', categories: ['Pop'] },
+      { id: '118', title: 'Vem Vet', key: 'Am', artist: 'Lisa Ekdahl', categories: ['Pop'] },
+      { id: '119', title: 'Calling You', key: 'G', artist: 'Bagdad Cafe', categories: ['Pop'] },
+      { id: '120', title: 'Its Probably Me', key: 'Em', artist: 'Sting & Eric Clapton', categories: ['Pop'] },
+      { id: '121', title: 'Cocain', key: 'Em', artist: 'J.J. Cale', categories: ['Rock'] },
+      { id: '122', title: 'Fever', key: 'Cm', artist: 'Elvis', categories: ['Rock'] },
+      { id: '123', title: 'Fallen', key: 'E', artist: 'Lauren Wood', categories: ['Pop'] },
+      { id: '124', title: '50 Ways To Leave Your Lover', key: 'Em', artist: 'Paul Simon', categories: ['Pop'] },
+      { id: '125', title: 'Ebony And Ivory', key: 'G/start D11', artist: 'Paul McCartney & Stevie Wonder', categories: ['Pop'] },
+      { id: '126', title: 'Dont Be Cruel', key: 'C', artist: 'Elvis', categories: ['Rock'] },
+      { id: '127', title: 'Careless Whisper', key: 'Dm', artist: 'Wham', categories: ['Pop', '80\'er'] },
+      { id: '128', title: 'Father Figure', key: 'A', artist: 'George Michael', categories: ['Pop', '80\'er'] },
+      { id: '129', title: 'Tears In Heaven', key: 'A', artist: 'Eric Clapton', categories: ['Rock', 'Pop'] },
+      { id: '130', title: 'They Call Me The Breeze', key: 'F#', artist: 'J.J. Cale', categories: ['Rock'] },
+      { id: '131', title: 'Who Says', key: 'D', artist: 'John Mayer', categories: ['Pop'] },
+      { id: '132', title: 'You Can Call Me Al', key: 'F', artist: 'Paul Simon', categories: ['Pop'] }
+    ];
+
+    const initialSets = [
+      { id: 'set1', name: 'Første sæt', songIds: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13'] },
+      { id: 'set2', name: 'Andet sæt', songIds: ['14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25'] }
+    ];
+
+    // ========== INITIALIZATION ==========
+    function init() {
+      const savedSongs = localStorage.getItem('setlistSongs');
+      const savedSets = localStorage.getItem('setlistSets');
+      
+      if (savedSongs && savedSets) {
+        songs = JSON.parse(savedSongs);
+        sets = JSON.parse(savedSets);
+      } else {
+        songs = JSON.parse(JSON.stringify(initialSongs));
+        sets = JSON.parse(JSON.stringify(initialSets));
+      }
+      
+      if (sets.length > 0) {
+        currentSetId = sets[0].id;
+      }
+      
+      renderAll();
+      setupDragAndDrop();
+      setupImportDragAndDrop();
+    }
+
+    // ========== RENDERING ==========
+    function renderAll() {
+      renderSongList();
+      renderSetTabs();
+      renderCurrentSet();
+    }
+
+    function renderSongList() {
+      const songListEl = document.getElementById('songList');
+      const searchTerm = document.getElementById('songSearch').value.toLowerCase();
+      
+      let filteredSongs = songs.filter(song => {
+        const matchesSearch = !searchTerm || 
+          song.title.toLowerCase().includes(searchTerm) ||
+          song.artist.toLowerCase().includes(searchTerm) ||
+          (song.key && song.key.toLowerCase().includes(searchTerm));
+        
+        if (activeFilter === 'all') {
+          return matchesSearch;
         }
+        
+        // Check if song has any of the active filter categories
+        return matchesSearch && song.categories && song.categories.includes(activeFilter);
+      });
+      
+      if (filteredSongs.length === 0) {
+        songListEl.innerHTML = '<div class="empty-set">Ingen sange fundet</div>';
+        return;
+      }
+      
+      songListEl.innerHTML = filteredSongs.map(song => `
+        <div class="song-item" draggable="true" data-id="${song.id}" ondblclick="editSong('${song.id}')">
+          <div class="song-info">
+            <div class="song-title">${escapeHtml(song.title)}</div>
+            <div class="song-meta">
+              ${song.artist ? escapeHtml(song.artist) : ''}
+              ${song.key ? `<span class="song-key">${escapeHtml(song.key)}</span>` : ''}
+            </div>
+            ${song.categories && song.categories.length > 0 ? `
+            <div class="song-categories">
+              ${song.categories.map(cat => `<span class="song-category-tag">${escapeHtml(cat)}</span>`).join('')}
+            </div>
+            ` : ''}
+          </div>
+          <div class="song-actions">
+            <button class="icon-btn" onclick="event.stopPropagation(); editSong('${song.id}')">✏️</button>
+            <button class="icon-btn" onclick="event.stopPropagation(); deleteSong('${song.id}')">🗑️</button>
+          </div>
+        </div>
+      `).join('');
+    }
 
-        // ========== RENDERING ==========
-        function renderAll() {
-            renderSongList();
-            renderSetTabs();
+    function renderSetTabs() {
+      const tabsEl = document.getElementById('setTabs');
+      tabsEl.innerHTML = sets.map(set => `
+        <div class="set-tab ${set.id === currentSetId ? 'active' : ''}" onclick="switchSet('${set.id}')">
+          ${escapeHtml(set.name)} <span class="song-count">(${set.songIds.length})</span>
+          <span class="close-btn" onclick="event.stopPropagation(); deleteSet('${set.id}')">×</span>
+        </div>
+      `).join('');
+    }
+
+    function renderCurrentSet() {
+      if (!currentSetId) {
+        document.getElementById('currentSetName').textContent = 'Vaelg et saet';
+        document.getElementById('currentSetSongs').innerHTML = '';
+        document.getElementById('emptySetMessage').style.display = 'block';
+        return;
+      }
+      
+      const set = sets.find(s => s.id === currentSetId);
+      if (!set) return;
+      
+      document.getElementById('currentSetName').innerHTML = `
+        <input type="text" id="renameSetInput" value="${escapeHtml(set.name)}" 
+            onblur="finishRenameSet()" onkeypress="if(event.key==='Enter') finishRenameSet()">
+      `;
+      
+      const songsEl = document.getElementById('currentSetSongs');
+      const emptyEl = document.getElementById('emptySetMessage');
+      
+      if (set.songIds.length === 0) {
+        songsEl.innerHTML = '';
+        emptyEl.style.display = 'block';
+        return;
+      }
+      
+      emptyEl.style.display = 'none';
+      songsEl.innerHTML = set.songIds.map((songId, index) => {
+        const song = songs.find(s => s.id === songId);
+        if (!song) return '';
+        return `
+          <div class="set-song-item" draggable="true" data-id="${song.id}" data-set-id="${set.id}">
+            <div class="set-song-grip">☰</div>
+            <div class="set-song-number">${index + 1}.</div>
+            <div class="set-song-info">
+              <div class="song-title">${escapeHtml(song.title)}</div>
+              <div class="song-meta">
+                ${song.artist ? escapeHtml(song.artist) : ''}
+                ${song.key ? `<span class="song-key">${escapeHtml(song.key)}</span>` : ''}
+              </div>
+              ${song.categories && song.categories.length > 0 ? `
+              <div class="song-categories">
+                ${song.categories.map(cat => `<span class="song-category-tag">${escapeHtml(cat)}</span>`).join('')}
+              </div>
+              ` : ''}
+            </div>
+            <div class="song-actions">
+              <button class="icon-btn" onclick="event.stopPropagation(); removeFromSet('${set.id}', '${song.id}')">🗑️</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // ========== SET MANAGEMENT ==========
+    function newSet() {
+      const setNumber = sets.length + 1;
+      const name = setNumber + '. Saet';
+      const newSet = { id: 'set' + Date.now(), name: name, songIds: [] };
+      sets.push(newSet);
+      currentSetId = newSet.id;
+      renderAll();
+      showToast('Saet oprettet');
+    }
+
+    function switchSet(setId) {
+      currentSetId = setId;
+      renderAll();
+    }
+
+    function deleteSet(setId) {
+      if (sets.length <= 1) {
+        showToast('Du skal have mindst et saet', 'error');
+        return;
+      }
+      if (confirm('Er du sikker paa du vil slette dette saet?')) {
+        sets = sets.filter(s => s.id !== setId);
+        if (currentSetId === setId) currentSetId = sets[0].id;
+        renderAll();
+        showToast('Saet slettet');
+      }
+    }
+
+    function deleteCurrentSet() {
+      if (!currentSetId) return;
+      deleteSet(currentSetId);
+    }
+
+    // ========== SONG MANAGEMENT ==========
+    function newSong() {
+      document.getElementById('songModalTitle').textContent = 'Ny Sang';
+      document.getElementById('songId').value = '';
+      document.getElementById('songTitle').value = '';
+      document.getElementById('songArtist').value = '';
+      document.getElementById('songKey').value = '';
+      document.getElementById('songNotes').value = '';
+      // Uncheck all category checkboxes
+      allCategories.forEach(cat => {
+        const safeId = cat.replace(/'/g, '\\\'');
+        document.getElementById(`cat-${safeId}`).checked = false;
+      });
+      document.getElementById('songModal').style.display = 'flex';
+    }
+
+    function editSong(songId) {
+      const song = songs.find(s => s.id === songId);
+      if (!song) return;
+      document.getElementById('songModalTitle').textContent = 'Rediger Sang';
+      document.getElementById('songId').value = song.id;
+      document.getElementById('songTitle').value = song.title;
+      document.getElementById('songArtist').value = song.artist || '';
+      document.getElementById('songKey').value = song.key || '';
+      document.getElementById('songNotes').value = song.notes || '';
+      // Set category checkboxes
+      allCategories.forEach(cat => {
+        const safeId = cat.replace(/'/g, '\\\'');
+        document.getElementById(`cat-${safeId}`).checked = song.categories && song.categories.includes(cat);
+      });
+      document.getElementById('songModal').style.display = 'flex';
+    }
+
+    function saveSong() {
+      const id = document.getElementById('songId').value;
+      const title = document.getElementById('songTitle').value.trim();
+      const artist = document.getElementById('songArtist').value.trim();
+      const key = document.getElementById('songKey').value.trim();
+      const notes = document.getElementById('songNotes').value.trim();
+      
+      // Get selected categories
+      const categories = allCategories.filter(cat => {
+        const safeId = cat.replace(/'/g, '\\\'');
+        return document.getElementById(`cat-${safeId}`).checked;
+      });
+      
+      if (!title) {
+        showToast('Titel er påkrævet', 'error');
+        return;
+      }
+      
+      if (id) {
+        const song = songs.find(s => s.id === id);
+        if (song) {
+          song.title = title;
+          song.artist = artist || null;
+          song.key = key || null;
+          song.categories = categories.length > 0 ? categories : null;
+          song.notes = notes || null;
+        }
+      } else {
+        const newSong = {
+          id: 'song' + Date.now(),
+          title,
+          artist: artist || null,
+          key: key || null,
+          categories: categories.length > 0 ? categories : null,
+          notes: notes || null
+        };
+        songs.push(newSong);
+      }
+      
+      closeModal('songModal');
+      renderAll();
+      showToast('Sang gemt');
+    }
+
+    function deleteSong(songId) {
+      if (confirm('Er du sikker på du vil slette denne sang?')) {
+        sets.forEach(set => {
+          set.songIds = set.songIds.filter(id => id !== songId);
+        });
+        songs = songs.filter(s => s.id !== songId);
+        renderAll();
+        showToast('Sang slettet');
+      }
+    }
+
+    function removeFromSet(setId, songId) {
+      const set = sets.find(s => s.id === setId);
+      if (set) {
+        set.songIds = set.songIds.filter(id => id !== songId);
+        renderCurrentSet();
+        showToast('Sang fjernet fra saet');
+      }
+    }
+
+    // ========== FILTERING ==========
+    function toggleFilter(filter) {
+      activeFilter = filter;
+      document.querySelectorAll('.filter-tag').forEach(tag => tag.classList.remove('active'));
+      event.target.classList.add('active');
+      renderSongList();
+    }
+
+    function filterSongs() {
+      renderSongList();
+    }
+
+    // ========== DRAG AND DROP ==========
+    function setupDragAndDrop() {
+      document.addEventListener('dragstart', (e) => {
+        if (e.target.classList.contains('song-item')) {
+          e.target.classList.add('dragging');
+          e.dataTransfer.setData('text/plain', e.target.dataset.id);
+          e.dataTransfer.setData('fromSet', '');
+          e.dataTransfer.effectAllowed = 'copy';
+          draggedSongId = e.target.dataset.id;
+          draggedFromSetId = '';
+        }
+        if (e.target.classList.contains('set-song-item')) {
+          e.target.classList.add('dragging');
+          e.dataTransfer.setData('text/plain', e.target.dataset.id);
+          e.dataTransfer.setData('fromSet', e.target.dataset.setId);
+          e.dataTransfer.effectAllowed = 'move';
+          draggedSongId = e.target.dataset.id;
+          draggedFromSetId = e.target.dataset.setId;
+        }
+      });
+
+      document.addEventListener('dragend', (e) => {
+        if (e.target.classList.contains('song-item') || e.target.classList.contains('set-song-item')) {
+          e.target.classList.remove('dragging');
+        }
+        currentDragOverTarget = null;
+        draggedSongId = null;
+        draggedFromSetId = null;
+        clearAllDragOverBorders();
+      });
+
+      const setSongsContainer = document.getElementById('currentSetSongs');
+
+      setSongsContainer.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = draggedFromSetId === currentSetId ? 'move' : 'copy';
+        
+        const target = e.target.closest('.set-song-item');
+        
+        clearAllDragOverBorders();
+        
+        if (target && target.dataset.id !== draggedSongId) {
+          currentDragOverTarget = target.dataset.id;
+          target.style.borderTop = '2px dashed var(--secondary)';
+        } else if (!target && e.target === setSongsContainer) {
+          currentDragOverTarget = null;
+        }
+      });
+
+      setSongsContainer.addEventListener('dragleave', (e) => {
+        if (e.relatedTarget === null || !setSongsContainer.contains(e.relatedTarget)) {
+          clearAllDragOverBorders();
+          currentDragOverTarget = null;
+        }
+      });
+
+      setSongsContainer.addEventListener('drop', (e) => {
+        e.preventDefault();
+        clearAllDragOverBorders();
+        
+        const songId = e.dataTransfer.getData('text/plain');
+        const fromSetId = e.dataTransfer.getData('fromSet');
+        
+        if (!currentSetId) return;
+        
+        const currentSet = sets.find(s => s.id === currentSetId);
+        if (!currentSet) return;
+        
+        if (fromSetId && fromSetId !== currentSetId) {
+          const fromSet = sets.find(s => s.id === fromSetId);
+          if (fromSet) {
+            fromSet.songIds = fromSet.songIds.filter(id => id !== songId);
+            if (!currentSet.songIds.includes(songId)) {
+              currentSet.songIds.push(songId);
+            }
+            renderAll();
+            showToast('Sang flyttet');
+          }
+        } else if (fromSetId && fromSetId === currentSetId) {
+          reorderInSet(songId, currentDragOverTarget);
+        } else {
+          if (!currentSet.songIds.includes(songId)) {
+            currentSet.songIds.push(songId);
             renderCurrentSet();
+            showToast('Sang tilfojet');
+          }
         }
+        
+        currentDragOverTarget = null;
+        draggedSongId = null;
+        draggedFromSetId = null;
+      });
+    }
 
-        function renderSongList() {
-            const songListEl = document.getElementById('songList');
-            const searchTerm = document.getElementById('songSearch').value.toLowerCase();
-            
-            let filteredSongs = songs.filter(song => {
-                const matchesSearch = !searchTerm || 
-                    song.title.toLowerCase().includes(searchTerm) ||
-                    song.artist.toLowerCase().includes(searchTerm) ||
-                    (song.key && song.key.toLowerCase().includes(searchTerm));
-                
-                if (activeFilter === 'all') {
-                    return matchesSearch;
-                }
-                
-                // Check if song has any of the active filter categories
-                return matchesSearch && song.categories && song.categories.includes(activeFilter);
-            });
-            
-            if (filteredSongs.length === 0) {
-                songListEl.innerHTML = '<div class="empty-set">Ingen sange fundet</div>';
-                return;
-            }
-            
-            songListEl.innerHTML = filteredSongs.map(song => `
-                <div class="song-item" draggable="true" data-id="${song.id}" ondblclick="editSong('${song.id}')">
-                    <div class="song-info">
-                        <div class="song-title">${escapeHtml(song.title)}</div>
-                        <div class="song-meta">
-                            ${song.artist ? escapeHtml(song.artist) : ''}
-                            ${song.key ? `<span class="song-key">${escapeHtml(song.key)}</span>` : ''}
-                        </div>
-                        ${song.categories && song.categories.length > 0 ? `
-                        <div class="song-categories">
-                            ${song.categories.map(cat => `<span class="song-category-tag">${escapeHtml(cat)}</span>`).join('')}
-                        </div>
-                        ` : ''}
-                    </div>
-                    <div class="song-actions">
-                        <button class="icon-btn" onclick="event.stopPropagation(); editSong('${song.id}')">✏️</button>
-                        <button class="icon-btn" onclick="event.stopPropagation(); deleteSong('${song.id}')">🗑️</button>
-                    </div>
-                </div>
-            `).join('');
-        }
+    function clearAllDragOverBorders() {
+      const items = document.querySelectorAll('.set-song-item');
+      items.forEach(item => {
+        item.style.borderTop = '';
+      });
+    }
 
-        function renderSetTabs() {
-            const tabsEl = document.getElementById('setTabs');
-            tabsEl.innerHTML = sets.map(set => `
-                <div class="set-tab ${set.id === currentSetId ? 'active' : ''}" onclick="switchSet('${set.id}')">
-                    ${escapeHtml(set.name)} <span class="song-count">(${set.songIds.length})</span>
-                    <span class="close-btn" onclick="event.stopPropagation(); deleteSet('${set.id}')">×</span>
-                </div>
-            `).join('');
-        }
+    function reorderInSet(songId, targetId) {
+      if (!targetId || !currentSetId || songId === targetId) return;
+      
+      const set = sets.find(s => s.id === currentSetId);
+      if (!set) return;
+      
+      const songIndex = set.songIds.indexOf(songId);
+      const targetIndex = set.songIds.indexOf(targetId);
+      
+      if (songIndex !== -1 && targetIndex !== -1 && songIndex !== targetIndex) {
+        set.songIds.splice(songIndex, 1);
+        set.songIds.splice(targetIndex, 0, songId);
+        renderCurrentSet();
+      }
+    }
 
-        function renderCurrentSet() {
-            if (!currentSetId) {
-                document.getElementById('currentSetName').textContent = 'Vælg et sæt';
-                document.getElementById('currentSetSongs').innerHTML = '';
-                document.getElementById('emptySetMessage').style.display = 'block';
-                return;
-            }
-            
-            const set = sets.find(s => s.id === currentSetId);
-            if (!set) return;
-            
-            document.getElementById('currentSetName').innerHTML = `
-                <input type="text" id="renameSetInput" value="${escapeHtml(set.name)}" 
-                       onblur="finishRenameSet()" onkeypress="if(event.key==='Enter') finishRenameSet()">
-            `;
-            
-            const songsEl = document.getElementById('currentSetSongs');
-            const emptyEl = document.getElementById('emptySetMessage');
-            
-            if (set.songIds.length === 0) {
-                songsEl.innerHTML = '';
-                emptyEl.style.display = 'block';
-                return;
-            }
-            
-            emptyEl.style.display = 'none';
-            songsEl.innerHTML = set.songIds.map((songId, index) => {
-                const song = songs.find(s => s.id === songId);
-                if (!song) return '';
-                return `
-                    <div class="set-song-item" draggable="true" data-id="${song.id}" data-set-id="${set.id}">
-                        <div class="set-song-grip">☰</div>
-                        <div class="set-song-number">${index + 1}.</div>
-                        <div class="set-song-info">
-                            <div class="song-title">${escapeHtml(song.title)}</div>
-                            <div class="song-meta">
-                                ${song.artist ? escapeHtml(song.artist) : ''}
-                                ${song.key ? `<span class="song-key">${escapeHtml(song.key)}</span>` : ''}
-                            </div>
-                            ${song.categories && song.categories.length > 0 ? `
-                            <div class="song-categories">
-                                ${song.categories.map(cat => `<span class="song-category-tag">${escapeHtml(cat)}</span>`).join('')}
-                            </div>
-                            ` : ''}
-                        </div>
-                        <div class="song-actions">
-                            <button class="icon-btn" onclick="event.stopPropagation(); removeFromSet('${set.id}', '${song.id}')">🗑️</button>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
+    // ========== EXPORT ==========
+    function exportData() {
+      document.getElementById('exportModal').style.display = 'flex';
+    }
 
-        // ========== SET MANAGEMENT ==========
-        function newSet() {
-            const name = prompt('Indtast sætnavn:', 'Nyt sæt');
-            if (!name) return;
-            const newSet = { id: 'set' + Date.now(), name: name, songIds: [] };
-            sets.push(newSet);
-            currentSetId = newSet.id;
-            renderAll();
-            showToast('Sæt oprettet');
-        }
-
-        function switchSet(setId) {
-            currentSetId = setId;
-            renderAll();
-        }
-
-        function renameCurrentSet() {
-            const set = sets.find(s => s.id === currentSetId);
-            if (!set) return;
-            const input = document.createElement('input');
-            input.type = 'text';
-            input.value = set.name;
-            input.id = 'renameSetInput';
-            input.onblur = finishRenameSet;
-            input.onkeypress = (e) => { if (e.key === 'Enter') finishRenameSet(); };
-            document.getElementById('currentSetName').innerHTML = '';
-            document.getElementById('currentSetName').appendChild(input);
-            input.focus();
-        }
-
-        function finishRenameSet() {
-            const input = document.getElementById('renameSetInput');
-            if (!input) return;
-            const newName = input.value.trim();
-            if (!newName) return;
-            const set = sets.find(s => s.id === currentSetId);
-            if (set) {
-                set.name = newName;
-                renderAll();
-                showToast('Sæt omdøbt');
-            }
-        }
-
-        function deleteSet(setId) {
-            if (sets.length <= 1) {
-                showToast('Du skal have mindst ét sæt', 'error');
-                return;
-            }
-            if (confirm('Er du sikker på du vil slette dette sæt?')) {
-                sets = sets.filter(s => s.id !== setId);
-                if (currentSetId === setId) currentSetId = sets[0].id;
-                renderAll();
-                showToast('Sæt slettet');
-            }
-        }
-
-        function deleteCurrentSet() {
-            if (!currentSetId) return;
-            deleteSet(currentSetId);
-        }
-
-        // ========== SONG MANAGEMENT ==========
-        function newSong() {
-            document.getElementById('songModalTitle').textContent = 'Ny Sang';
-            document.getElementById('songId').value = '';
-            document.getElementById('songTitle').value = '';
-            document.getElementById('songArtist').value = '';
-            document.getElementById('songKey').value = '';
-            document.getElementById('songNotes').value = '';
-            // Uncheck all category checkboxes
-            allCategories.forEach(cat => {
-                const safeId = cat.replace(/'/g, '\\\'');
-                document.getElementById(`cat-${safeId}`).checked = false;
-            });
-            document.getElementById('songModal').style.display = 'flex';
-        }
-
-        function editSong(songId) {
-            const song = songs.find(s => s.id === songId);
-            if (!song) return;
-            document.getElementById('songModalTitle').textContent = 'Rediger Sang';
-            document.getElementById('songId').value = song.id;
-            document.getElementById('songTitle').value = song.title;
-            document.getElementById('songArtist').value = song.artist || '';
-            document.getElementById('songKey').value = song.key || '';
-            document.getElementById('songNotes').value = song.notes || '';
-            // Set category checkboxes
-            allCategories.forEach(cat => {
-                const safeId = cat.replace(/'/g, '\\\'');
-                document.getElementById(`cat-${safeId}`).checked = song.categories && song.categories.includes(cat);
-            });
-            document.getElementById('songModal').style.display = 'flex';
-        }
-
-        function saveSong() {
-            const id = document.getElementById('songId').value;
-            const title = document.getElementById('songTitle').value.trim();
-            const artist = document.getElementById('songArtist').value.trim();
-            const key = document.getElementById('songKey').value.trim();
-            const notes = document.getElementById('songNotes').value.trim();
-            
-            // Get selected categories
-            const categories = allCategories.filter(cat => {
-                const safeId = cat.replace(/'/g, '\\\'');
-                return document.getElementById(`cat-${safeId}`).checked;
-            });
-            
-            if (!title) {
-                showToast('Titel er påkrævet', 'error');
-                return;
-            }
-            
-            if (id) {
-                const song = songs.find(s => s.id === id);
-                if (song) {
-                    song.title = title;
-                    song.artist = artist || null;
-                    song.key = key || null;
-                    song.categories = categories.length > 0 ? categories : null;
-                    song.notes = notes || null;
-                }
-            } else {
-                const newSong = {
-                    id: 'song' + Date.now(),
-                    title,
-                    artist: artist || null,
-                    key: key || null,
-                    categories: categories.length > 0 ? categories : null,
-                    notes: notes || null
-                };
-                songs.push(newSong);
-            }
-            
-            closeModal('songModal');
-            renderAll();
-            showToast('Sang gemt');
-        }
-
-        function deleteSong(songId) {
-            if (confirm('Er du sikker på du vil slette denne sang?')) {
-                sets.forEach(set => {
-                    set.songIds = set.songIds.filter(id => id !== songId);
-                });
-                songs = songs.filter(s => s.id !== songId);
-                renderAll();
-                showToast('Sang slettet');
-            }
-        }
-
-        function removeFromSet(setId, songId) {
-            const set = sets.find(s => s.id === setId);
-            if (set) {
-                set.songIds = set.songIds.filter(id => id !== songId);
-                renderCurrentSet();
-                showToast('Sang fjernet fra sæt');
-            }
-        }
-
-        // ========== FILTERING ==========
-        function toggleFilter(filter) {
-            activeFilter = filter;
-            document.querySelectorAll('.filter-tag').forEach(tag => tag.classList.remove('active'));
-            event.target.classList.add('active');
-            renderSongList();
-        }
-
-        function filterSongs() {
-            renderSongList();
-        }
-
-        // ========== DRAG AND DROP ==========
-        function setupDragAndDrop() {
-            document.addEventListener('dragstart', (e) => {
-                if (e.target.classList.contains('song-item')) {
-                    e.target.classList.add('dragging');
-                    e.dataTransfer.setData('text/plain', e.target.dataset.id);
-                    e.dataTransfer.setData('fromSet', '');
-                    e.dataTransfer.effectAllowed = 'copy';
-                    draggedSongId = e.target.dataset.id;
-                    draggedFromSetId = '';
-                }
-                if (e.target.classList.contains('set-song-item')) {
-                    e.target.classList.add('dragging');
-                    e.dataTransfer.setData('text/plain', e.target.dataset.id);
-                    e.dataTransfer.setData('fromSet', e.target.dataset.setId);
-                    e.dataTransfer.effectAllowed = 'move';
-                    draggedSongId = e.target.dataset.id;
-                    draggedFromSetId = e.target.dataset.setId;
-                }
-            });
-
-            document.addEventListener('dragend', (e) => {
-                if (e.target.classList.contains('song-item') || e.target.classList.contains('set-song-item')) {
-                    e.target.classList.remove('dragging');
-                }
-                currentDragOverTarget = null;
-                draggedSongId = null;
-                draggedFromSetId = null;
-                clearAllDragOverBorders();
-            });
-
-            const setSongsContainer = document.getElementById('currentSetSongs');
-
-            setSongsContainer.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                e.dataTransfer.dropEffect = draggedFromSetId === currentSetId ? 'move' : 'copy';
-                
-                const target = e.target.closest('.set-song-item');
-                
-                clearAllDragOverBorders();
-                
-                if (target && target.dataset.id !== draggedSongId) {
-                    currentDragOverTarget = target.dataset.id;
-                    target.style.borderTop = '2px dashed var(--secondary)';
-                } else if (!target && e.target === setSongsContainer) {
-                    currentDragOverTarget = null;
-                }
-            });
-
-            setSongsContainer.addEventListener('dragleave', (e) => {
-                if (e.relatedTarget === null || !setSongsContainer.contains(e.relatedTarget)) {
-                    clearAllDragOverBorders();
-                    currentDragOverTarget = null;
-                }
-            });
-
-            setSongsContainer.addEventListener('drop', (e) => {
-                e.preventDefault();
-                clearAllDragOverBorders();
-                
-                const songId = e.dataTransfer.getData('text/plain');
-                const fromSetId = e.dataTransfer.getData('fromSet');
-                
-                if (!currentSetId) return;
-                
-                const currentSet = sets.find(s => s.id === currentSetId);
-                if (!currentSet) return;
-                
-                if (fromSetId && fromSetId !== currentSetId) {
-                    const fromSet = sets.find(s => s.id === fromSetId);
-                    if (fromSet) {
-                        fromSet.songIds = fromSet.songIds.filter(id => id !== songId);
-                        if (!currentSet.songIds.includes(songId)) {
-                            currentSet.songIds.push(songId);
-                        }
-                        renderAll();
-                        showToast('Sang flyttet');
-                    }
-                } else if (fromSetId && fromSetId === currentSetId) {
-                    reorderInSet(songId, currentDragOverTarget);
-                } else {
-                    if (!currentSet.songIds.includes(songId)) {
-                        currentSet.songIds.push(songId);
-                        renderCurrentSet();
-                        showToast('Sang tilføjet');
-                    }
-                }
-                
-                currentDragOverTarget = null;
-                draggedSongId = null;
-                draggedFromSetId = null;
-            });
-        }
-
-        function clearAllDragOverBorders() {
-            const items = document.querySelectorAll('.set-song-item');
-            items.forEach(item => {
-                item.style.borderTop = '';
-            });
-        }
-
-        function reorderInSet(songId, targetId) {
-            if (!targetId || !currentSetId || songId === targetId) return;
-            
-            const set = sets.find(s => s.id === currentSetId);
-            if (!set) return;
-            
-            const songIndex = set.songIds.indexOf(songId);
-            const targetIndex = set.songIds.indexOf(targetId);
-            
-            if (songIndex !== -1 && targetIndex !== -1 && songIndex !== targetIndex) {
-                set.songIds.splice(songIndex, 1);
-                set.songIds.splice(targetIndex, 0, songId);
-                renderCurrentSet();
-            }
-        }
-
-        // ========== EXPORT ==========
-        function exportData() {
-            document.getElementById('exportModal').style.display = 'flex';
-        }
-
-        function exportToForScore() {
-            closeModal('exportModal');
-            if (!currentSetId) {
-                showToast('Vælg et sæt først', 'error');
-                return;
-            }
-            const set = sets.find(s => s.id === currentSetId);
-            if (!set) return;
-            let xml = `<?xml version="1.0" encoding="UTF-8" ?>
+    function exportToForScore() {
+      closeModal('exportModal');
+      if (!currentSetId) {
+        showToast('Vaelg et saet først', 'error');
+        return;
+      }
+      const set = sets.find(s => s.id === currentSetId);
+      if (!set) return;
+      let xml = `<?xml version="1.0" encoding="UTF-8" ?>
 <forScore kind="setlist" version="1.0" title="${escapeXml(set.name)}">
 `;
-            set.songIds.forEach(songId => {
-                const song = songs.find(s => s.id === songId);
-                if (song) {
-                    const title = `${song.title} - ${song.artist}`;
-                    const path = `${escapeXml(song.title)}.pdf`;
-                    xml += `    <score title="${escapeXml(title)}" path="${path}" />
+      set.songIds.forEach(songId => {
+        const song = songs.find(s => s.id === songId);
+        if (song) {
+          const title = `${song.title} - ${song.artist}`;
+          const path = `${escapeXml(song.title)}.pdf`;
+          xml += `  <score title="${escapeXml(title)}" path="${path}" />
 `;
-                }
-            });
-            xml += `</forScore>`;
-            const blob = new Blob([xml], { type: 'application/xml' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `${sanitizeFilename(set.name)}.4ss`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            showToast('forScore fil downloadet!');
         }
+      });
+      xml += `</forScore>`;
+      const blob = new Blob([xml], { type: 'application/xml' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${sanitizeFilename(set.name)}.4ss`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast('forScore fil downloadet!');
+    }
 
-        function exportToJSON() {
-            closeModal('exportModal');
-            const data = { songs, sets, version: '1.0', exported: new Date().toISOString() };
-            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'saetliste-eksport.json';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            showToast('JSON fil downloadet!');
+    function exportToJSON() {
+      closeModal('exportModal');
+      const data = { songs, sets, version: '1.0', exported: new Date().toISOString() };
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'saetliste-eksport.json';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast('JSON fil downloadet!');
+    }
+
+    function exportSetAsText() {
+      closeModal('exportModal');
+      if (!currentSetId) {
+        showToast('Vaelg et saet først', 'error');
+        return;
+      }
+      const set = sets.find(s => s.id === currentSetId);
+      if (!set) return;
+      let text = `${set.name}\n`;
+      text += '='.repeat(set.name.length) + '\n\n';
+      set.songIds.forEach((songId, index) => {
+        const song = songs.find(s => s.id === songId);
+        if (song) {
+          text += `${index + 1}. ${song.title}`;
+          if (song.artist) text += ` - ${song.artist}`;
+          if (song.key) text += ` (${song.key})`;
+          text += '\n';
         }
+      });
+      const blob = new Blob([text], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${sanitizeFilename(set.name)}.txt`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast('Tekstfil downloadet!');
+    }
 
-        function exportSetAsText() {
-            closeModal('exportModal');
-            if (!currentSetId) {
-                showToast('Vælg et sæt først', 'error');
-                return;
-            }
-            const set = sets.find(s => s.id === currentSetId);
-            if (!set) return;
-            let text = `${set.name}\n`;
-            text += '='.repeat(set.name.length) + '\n\n';
-            set.songIds.forEach((songId, index) => {
-                const song = songs.find(s => s.id === songId);
-                if (song) {
-                    text += `${index + 1}. ${song.title}`;
-                    if (song.artist) text += ` - ${song.artist}`;
-                    if (song.key) text += ` (${song.key})`;
-                    text += '\n';
-                }
-            });
-            const blob = new Blob([text], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `${sanitizeFilename(set.name)}.txt`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            showToast('Tekstfil downloadet!');
-        }
+    // ========== IMPORT ==========
+    function importData() {
+      document.getElementById('importModal').style.display = 'flex';
+    }
 
-        function addCurrentSetToForScore() {
-            exportToForScore();
-        }
-
-        // ========== PDF EXPORT ==========
-        function exportToPDF() {
-            closeModal('exportModal');
-            if (sets.length === 0) {
-                showToast('Ingen sæt at eksportere', 'error');
-                return;
-            }
-            let html = `<!DOCTYPE html>
-<html lang="da"><head><meta charset="UTF-8"><title>Sætliste - ${new Date().toLocaleDateString('da-DK')}</title>
-<style>
-body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; color: #333; background: white; }
-h1 { text-align: center; color: #2c3e50; margin-bottom: 30px; border-bottom: 2px solid #3498db; padding-bottom: 10px; }
-h2 { color: #2c3e50; border-bottom: 1px solid #ddd; padding-bottom: 5px; margin: 25px 0 10px 0; page-break-after: avoid; }
-.set-container { margin-bottom: 25px; page-break-inside: avoid; }
-.song { padding: 8px 0; border-bottom: 1px solid #eee; display: flex; align-items: center; gap: 10px; }
-.song:last-child { border-bottom: none; }
-.no { font-weight: bold; color: #3498db; min-width: 20px; }
-.key { background: #3498db; color: white; padding: 2px 5px; border-radius: 3px; font-size: 0.75em; }
-.artist { color: #666; font-style: italic; }
-.categories { font-size: 0.75em; color: #999; }
-.category-tag { background: #27ae60; color: white; padding: 1px 4px; border-radius: 3px; font-size: 0.7em; margin-right: 3px; }
-.timestamp { text-align: center; margin-top: 30px; font-size: 0.8em; color: #999; }
-@media print { body { margin: 0; padding: 15px; } .set-container { page-break-inside: avoid; } }
-</style></head><body><h1>Sætliste</h1>
-`;
-            sets.forEach(set => {
-                const setSongs = set.songIds.map(id => songs.find(s => s.id === id)).filter(s => s);
-                if (setSongs.length === 0) return;
-                html += `<div class="set-container"><h2>${escapeHtml(set.name)} (${setSongs.length} sange)</h2>
-`;
-                setSongs.forEach((song, index) => {
-                    html += `<div class="song"><span class="no">${index + 1}.</span><span class="title">${escapeHtml(song.title)}</span>
-${song.artist ? `<span class="artist">- ${escapeHtml(song.artist)}</span>` : ''}
-${song.key ? `<span class="key">${escapeHtml(song.key)}</span>` : ''}
-${song.categories && song.categories.length > 0 ? `<span class="categories">${song.categories.map(c => `<span class="category-tag">${escapeHtml(c)}</span>`).join('')}</span>` : ''}</div>`;
-                });
-                html += `</div>`;
-            });
-            html += `<div class="timestamp">Genereret: ${new Date().toLocaleString('da-DK')}</div></body></html>`;
-            const w = window.open('', '_blank');
-            w.document.write(html);
-            w.document.close();
-            setTimeout(() => { w.print(); }, 250);
-            showToast('PDF forberedt til print!');
-        }
-
-        // ========== IMPORT ==========
-        function importData() {
-            document.getElementById('importModal').style.display = 'flex';
-        }
-
-        function setupImportDragAndDrop() {
-            const importArea = document.getElementById('importArea');
-            importArea.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                importArea.classList.add('dragover');
-            });
-            importArea.addEventListener('dragleave', () => {
-                importArea.classList.remove('dragover');
-            });
-            importArea.addEventListener('drop', (e) => {
-                e.preventDefault();
-                importArea.classList.remove('dragover');
-                if (e.dataTransfer.files.length > 0) {
-                    const file = e.dataTransfer.files[0];
-                    if (file.type === 'application/json' || file.name.endsWith('.json')) {
-                        const reader = new FileReader();
-                        reader.onload = (event) => { handleImportData(event.target.result); };
-                        reader.readAsText(file);
-                    }
-                }
-            });
-        }
-
-        function handleFileImport(event) {
-            const file = event.target.files[0];
-            if (!file) return;
+    function setupImportDragAndDrop() {
+      const importArea = document.getElementById('importArea');
+      importArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        importArea.classList.add('dragover');
+      });
+      importArea.addEventListener('dragleave', () => {
+        importArea.classList.remove('dragover');
+      });
+      importArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        importArea.classList.remove('dragover');
+        if (e.dataTransfer.files.length > 0) {
+          const file = e.dataTransfer.files[0];
+          if (file.type === 'application/json' || file.name.endsWith('.json')) {
             const reader = new FileReader();
             reader.onload = (event) => { handleImportData(event.target.result); };
             reader.readAsText(file);
-            event.target.value = '';
-            closeModal('importModal');
+          }
         }
+      });
+    }
 
-        function handleImportData(data) {
-            try {
-                const imported = JSON.parse(data);
-                if (imported.songs && imported.sets) {
-                    songs = imported.songs;
-                    sets = imported.sets;
-                    currentSetId = sets.length > 0 ? sets[0].id : null;
-                    renderAll();
-                    showToast('Data importeret!');
-                } else {
-                    showToast('Ugyldigt format', 'error');
-                }
-            } catch (e) {
-                showToast('Fejl ved import: ' + e.message, 'error');
-            }
+    function handleFileImport(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (event) => { handleImportData(event.target.result); };
+      reader.readAsText(file);
+      event.target.value = '';
+      closeModal('importModal');
+    }
+
+    function handleImportData(data) {
+      try {
+        const imported = JSON.parse(data);
+        if (imported.songs && imported.sets) {
+          songs = imported.songs;
+          sets = imported.sets;
+          jobTitle = imported.jobTitle || 'Setliste';
+          currentSetId = sets.length > 0 ? sets[0].id : null;
+          document.getElementById('jobTitleDisplay').textContent = jobTitle;
+          renderAll();
+          showToast('Data importeret!');
+        } else {
+          showToast('Ugyldigt format', 'error');
         }
+      } catch (e) {
+        showToast('Fejl ved import: ' + e.message, 'error');
+      }
+    }
 
-        // ========== LOCAL STORAGE ==========
-        function saveToLocalStorage() {
-            localStorage.setItem('setlistSongs', JSON.stringify(songs));
-            localStorage.setItem('setlistSets', JSON.stringify(sets));
-            showToast('Data gemt i browser!');
-        }
+    // ========== LOCAL STORAGE ==========
+    function saveToLocalStorage() {
+      localStorage.setItem('setlistSongs', JSON.stringify(songs));
+      localStorage.setItem('setlistSets', JSON.stringify(sets));
+      localStorage.setItem('setlistJobTitle', jobTitle);
+      showToast('Data gemt i browser!');
+    }
 
-        function loadFromLocalStorage() {
-            const savedSongs = localStorage.getItem('setlistSongs');
-            const savedSets = localStorage.getItem('setlistSets');
-            if (savedSongs && savedSets) {
-                songs = JSON.parse(savedSongs);
-                sets = JSON.parse(savedSets);
-                currentSetId = sets.length > 0 ? sets[0].id : null;
-                renderAll();
-                showToast('Data indlæst!');
-            } else {
-                showToast('Ingen gemt data fundet', 'error');
-            }
-        }
+    function loadFromLocalStorage() {
+      const savedSongs = localStorage.getItem('setlistSongs');
+      const savedSets = localStorage.getItem('setlistSets');
+      const savedJobTitle = localStorage.getItem('setlistJobTitle');
+      if (savedSongs && savedSets) {
+        songs = JSON.parse(savedSongs);
+        sets = JSON.parse(savedSets);
+        jobTitle = savedJobTitle || 'Setliste';
+        currentSetId = sets.length > 0 ? sets[0].id : null;
+        document.getElementById('jobTitleDisplay').textContent = jobTitle;
+        renderAll();
+        showToast('Data indlæst!');
+      } else {
+        showToast('Ingen gemt data fundet', 'error');
+      }
+    }
 
-        // ========== MODAL HELPERS ==========
-        function closeModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
-        }
+    // ========== MODAL HELPERS ==========
+    function closeModal(modalId) {
+      document.getElementById(modalId).style.display = 'none';
+    }
 
-        // ========== UTILITY ==========
-        function showToast(message, type = 'success') {
-            const toast = document.getElementById('toast');
-            toast.textContent = message;
-            toast.className = 'toast show';
-            setTimeout(() => { toast.className = 'toast'; }, 3000);
-        }
+    // ========== UTILITY ==========
+    function showToast(message, type = 'success') {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.className = 'toast show';
+      setTimeout(() => { toast.className = 'toast'; }, 3000);
+    }
 
-        function escapeHtml(text) {
-            if (!text) return '';
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
+    function escapeHtml(text) {
+      if (!text) return '';
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
 
-        function escapeXml(text) {
-            if (!text) return '';
-            return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;');
-        }
+    function escapeXml(text) {
+      if (!text) return '';
+      return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;');
+    }
 
-        function sanitizeFilename(name) {
-            return name.replace(/[^a-zA-Z0-9_\-\s\.]/g, '_').replace(/\s+/g, '_').substring(0, 50);
-        }
+    function sanitizeFilename(name) {
+      return name.replace(/[^a-zA-Z0-9_\-\s\.]/g, '_').replace(/\s+/g, '_').substring(0, 50);
+    }
 
-        // ========== START ==========
-        window.onload = init;
-    </script>
+    // ========== START ==========
+    window.onload = init;
+  </script>
 </body>
 </html>
