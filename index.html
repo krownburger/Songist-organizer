@@ -672,7 +672,7 @@
       </div>
       <div class="header-controls">
         <button onclick="newSong()">Ny Sang</button>
-        <button onclick="newSet()" class="success">Nyt Saet</button>
+        
         <button onclick="exportData()" class="secondary">Eksport</button>
         <button onclick="saveToLocalStorage()" class="warning">Gem</button>
         <button onclick="loadFromLocalStorage()">Load</button>
@@ -1107,40 +1107,12 @@
     }
 
     // ========== SET MANAGEMENT ==========
-    function newSet() {
-      const setNumber = sets.length + 1;
-      const name = setNumber + '. Saet';
-      const newSet = { id: 'set' + Date.now(), name: name, songIds: [] };
-      sets.push(newSet);
-      currentSetId = newSet.id;
-      renderAll();
-      showToast('Saet oprettet');
-    }
-
-    function switchSet(setId) {
+function switchSet(setId) {
       currentSetId = setId;
       renderAll();
     }
 
-    function deleteSet(setId) {
-      if (sets.length <= 1) {
-        showToast('Du skal have mindst et saet', 'error');
-        return;
-      }
-      if (confirm('Er du sikker paa du vil slette dette saet?')) {
-        sets = sets.filter(s => s.id !== setId);
-        if (currentSetId === setId) currentSetId = sets[0].id;
-        renderAll();
-        showToast('Saet slettet');
-      }
-    }
-
-    function deleteCurrentSet() {
-      if (!currentSetId) return;
-      deleteSet(currentSetId);
-    }
-
-    function editJobTitle() {
+function editJobTitle() {
       const newTitle = prompt('Indtast jobnavn:', jobTitle);
       if (newTitle && newTitle.trim()) {
         jobTitle = newTitle.trim();
