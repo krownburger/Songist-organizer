@@ -726,6 +726,9 @@
         let sets = [];
         let currentSetId = null;
         let activeFilter = 'all';
+        let currentDragOverTarget = null;
+        let draggedSongId = null;
+        let draggedFromSetId = null;
 
         // ========== CATEGORIES ==========
         const allCategories = ['Rock', 'Pop', 'Dansk', 'Syng med', 'Røvballe', 'Disco', 'Hård Rock', '80\'er', '90\'er'];
@@ -1199,13 +1202,18 @@
                 if (e.target.classList.contains('song-item')) {
                     e.target.classList.add('dragging');
                     e.dataTransfer.setData('text/plain', e.target.dataset.id);
+                    e.dataTransfer.setData('fromSet', '');
                     e.dataTransfer.effectAllowed = 'copy';
+                    draggedSongId = e.target.dataset.id;
+                    draggedFromSetId = '';
                 }
                 if (e.target.classList.contains('set-song-item')) {
                     e.target.classList.add('dragging');
                     e.dataTransfer.setData('text/plain', e.target.dataset.id);
                     e.dataTransfer.setData('fromSet', e.target.dataset.setId);
                     e.dataTransfer.effectAllowed = 'move';
+                    draggedSongId = e.target.dataset.id;
+                    draggedFromSetId = e.target.dataset.setId;
                 }
             });
 
@@ -1213,23 +1221,52 @@
                 if (e.target.classList.contains('song-item') || e.target.classList.contains('set-song-item')) {
                     e.target.classList.remove('dragging');
                 }
+                currentDragOverTarget = null;
+                draggedSongId = null;
+                draggedFromSetId = null;
+                clearAllDragOverBorders();
             });
 
-            document.getElementById('currentSetSongs').addEventListener('dragover', (e) => {
+            const setSongsContainer = document.getElementById('currentSetSongs');
+
+            setSongsContainer.addEventListener('dragover', (e) => {
                 e.preventDefault();
-                e.dataTransfer.dropEffect = 'copy';
+                e.dataTransfer.dropEffect = draggedFromSetId === currentSetId ? 'move' : 'copy';
+                
+                const target = e.target.closest('.set-song-item');
+                
+                clearAllDragOverBorders();
+                
+                if (target && target.dataset.id !== draggedSongId) {
+                    currentDragOverTarget = target.dataset.id;
+                    target.style.borderTop = '2px dashed var(--secondary)';
+                } else if (!target && e.target === setSongsContainer) {
+                    currentDragOverTarget = null;
+                }
             });
 
-            document.getElementById('currentSetSongs').addEventListener('drop', (e) => {
+            setSongsContainer.addEventListener('dragleave', (e) => {
+                if (e.relatedTarget === null || !setSongsContainer.contains(e.relatedTarget)) {
+                    clearAllDragOverBorders();
+                    currentDragOverTarget = null;
+                }
+            });
+
+            setSongsContainer.addEventListener('drop', (e) => {
                 e.preventDefault();
+                clearAllDragOverBorders();
+                
                 const songId = e.dataTransfer.getData('text/plain');
                 const fromSetId = e.dataTransfer.getData('fromSet');
+                
                 if (!currentSetId) return;
+                
+                const currentSet = sets.find(s => s.id === currentSetId);
+                if (!currentSet) return;
                 
                 if (fromSetId && fromSetId !== currentSetId) {
                     const fromSet = sets.find(s => s.id === fromSetId);
-                    const currentSet = sets.find(s => s.id === currentSetId);
-                    if (fromSet && currentSet) {
+                    if (fromSet) {
                         fromSet.songIds = fromSet.songIds.filter(id => id !== songId);
                         if (!currentSet.songIds.includes(songId)) {
                             currentSet.songIds.push(songId);
@@ -1238,42 +1275,37 @@
                         showToast('Sang flyttet');
                     }
                 } else if (fromSetId && fromSetId === currentSetId) {
-                    reorderInSet(e, songId);
+                    reorderInSet(songId, currentDragOverTarget);
                 } else {
-                    const currentSet = sets.find(s => s.id === currentSetId);
-                    if (currentSet && !currentSet.songIds.includes(songId)) {
+                    if (!currentSet.songIds.includes(songId)) {
                         currentSet.songIds.push(songId);
                         renderCurrentSet();
                         showToast('Sang tilføjet');
                     }
                 }
-            });
-
-            document.getElementById('currentSetSongs').addEventListener('dragover', (e) => {
-                e.preventDefault();
-                const target = e.target.closest('.set-song-item');
-                if (target) target.style.borderTop = '2px dashed var(--secondary)';
-            });
-
-            document.getElementById('currentSetSongs').addEventListener('dragleave', (e) => {
-                const target = e.target.closest('.set-song-item');
-                if (target) target.style.borderTop = '';
-            });
-
-            document.getElementById('currentSetSongs').addEventListener('drop', (e) => {
-                e.preventDefault();
-                const target = e.target.closest('.set-song-item');
-                if (target) target.style.borderTop = '';
+                
+                currentDragOverTarget = null;
+                draggedSongId = null;
+                draggedFromSetId = null;
             });
         }
 
-        function reorderInSet(e, songId) {
-            const target = e.target.closest('.set-song-item');
-            if (!target || !currentSetId) return;
+        function clearAllDragOverBorders() {
+            const items = document.querySelectorAll('.set-song-item');
+            items.forEach(item => {
+                item.style.borderTop = '';
+            });
+        }
+
+        function reorderInSet(songId, targetId) {
+            if (!targetId || !currentSetId || songId === targetId) return;
+            
             const set = sets.find(s => s.id === currentSetId);
             if (!set) return;
+            
             const songIndex = set.songIds.indexOf(songId);
-            const targetIndex = set.songIds.indexOf(target.dataset.id);
+            const targetIndex = set.songIds.indexOf(targetId);
+            
             if (songIndex !== -1 && targetIndex !== -1 && songIndex !== targetIndex) {
                 set.songIds.splice(songIndex, 1);
                 set.songIds.splice(targetIndex, 0, songId);
