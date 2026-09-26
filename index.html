@@ -15,6 +15,75 @@
       --warning: #f59e0b;
       --border: #e2e8f0;
       --shadow: 0 1px 3px rgba(0,0,0,0.1);
+      --bg-primary: #f1f5f9;
+      --bg-secondary: #ffffff;
+      --text-primary: #1e293b;
+      --text-secondary: #64748b;
+    }
+
+    .dark-mode {
+      --primary: #6366f1;
+      --secondary: #818cf8;
+      --accent: #ef4444;
+      --light: #1e293b;
+      --dark: #f1f5f9;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --border: #334155;
+      --shadow: 0 1px 3px rgba(0,0,0,0.3);
+      --bg-primary: #0f172a;
+      --bg-secondary: #1e293b;
+      --text-primary: #f1f5f9;
+      --text-secondary: #94a3b8;
+    }
+
+    .dark-mode body {
+      background: var(--bg-primary);
+      color: var(--text-primary);
+    }
+
+    .dark-mode header,
+    .dark-mode .song-library,
+    .dark-mode .set-container,
+    .dark-mode .sets-controls,
+    .dark-mode .modal {
+      background: var(--bg-secondary);
+      border-color: var(--border);
+    }
+
+    .dark-mode .song-item,
+    .dark-mode .set-song-item {
+      background: var(--bg-primary);
+      border-color: var(--border);
+    }
+
+    .dark-mode .song-item:hover,
+    .dark-mode .set-song-item:hover {
+      background: var(--bg-secondary);
+    }
+
+    .dark-mode .search-box {
+      background: var(--bg-primary);
+      border-color: var(--border);
+      color: var(--text-primary);
+    }
+
+    .dark-mode button.secondary {
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      border-color: var(--border);
+    }
+
+    .dark-mode .filter-tag {
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      border-color: var(--border);
+    }
+
+    .dark-mode .filter-tag:hover,
+    .dark-mode .filter-tag.active {
+      background: var(--secondary);
+      color: white;
     }
 
     * {
@@ -615,6 +684,7 @@
       <div class="job-title-container">
         <span class="job-title" id="jobTitleDisplay">Setliste</span>
         <button onclick="editJobTitle()" class="secondary" style="margin-left: 10px;">Rediger</button>
+        <button onclick="toggleTheme()" class="secondary" style="margin-left: 10px;">Tema</button>
       </div>
       <div class="header-controls">
         <button onclick="newSong()">Ny Sang</button>
@@ -1043,14 +1113,9 @@
                 ${song.artist ? escapeHtml(song.artist) : ''}
                 ${song.key ? `<span class="song-key">${escapeHtml(song.key)}</span>` : ''}
               </div>
-              ${song.categories && song.categories.length > 0 ? `
-              <div class="song-categories">
-                ${song.categories.map(cat => `<span class="song-category-tag">${escapeHtml(cat)}</span>`).join('')}
-              </div>
-              ` : ''}
             </div>
             <div class="song-actions">
-              <button class="icon-btn" onclick="event.stopPropagation(); removeFromSet('${set.id}', '${song.id}')">🗑️</button>
+              <button class="icon-btn" onclick="event.stopPropagation(); removeFromSet('${set.id}', '${song.id}')">X</button>
             </div>
           </div>
         `;
@@ -1089,6 +1154,26 @@
     function deleteCurrentSet() {
       if (!currentSetId) return;
       deleteSet(currentSetId);
+    }
+
+    function editJobTitle() {
+      const newTitle = prompt('Indtast jobnavn:', jobTitle);
+      if (newTitle && newTitle.trim()) {
+        jobTitle = newTitle.trim();
+        document.getElementById('jobTitleDisplay').textContent = jobTitle;
+        showToast('Jobnavn gemt');
+      }
+    }
+
+    function toggleTheme() {
+      const html = document.documentElement;
+      if (html.classList.contains('dark-mode')) {
+        html.classList.remove('dark-mode');
+        localStorage.setItem('theme', 'light');
+      } else {
+        html.classList.add('dark-mode');
+        localStorage.setItem('theme', 'dark');
+      }
     }
 
     // ========== SONG MANAGEMENT ==========
