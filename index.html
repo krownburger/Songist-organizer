@@ -6,6 +6,22 @@
   <title>Setliste Organizer</title>
   <style>
     :root {
+      --primary: #1a2332;
+      --secondary: #1e3a8a;
+      --accent: #0f172a;
+      --light: #f8fafc;
+      --dark: #1e293b;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --border: #e2e8f0;
+      --shadow: 0 1px 3px rgba(0,0,0,0.1);
+      --bg-primary: #f1f5f9;
+      --bg-secondary: #ffffff;
+      --text-primary: #1e293b;
+      --text-secondary: #64748b;
+    }
+
+    .dark-mode {
       --primary: #6366f1;
       --secondary: #818cf8;
       --accent: #ef4444;
@@ -21,51 +37,51 @@
       --text-secondary: #94a3b8;
     }
 
-    body {
+    .dark-mode body {
       background: var(--bg-primary);
       color: var(--text-primary);
     }
 
-    header,
-    .song-library,
-    .set-container,
-    .sets-controls,
-    .modal {
+    .dark-mode header,
+    .dark-mode .song-library,
+    .dark-mode .set-container,
+    .dark-mode .sets-controls,
+    .dark-mode .modal {
       background: var(--bg-secondary);
       border-color: var(--border);
     }
 
-    .song-item,
-    .set-song-item {
+    .dark-mode .song-item,
+    .dark-mode .set-song-item {
       background: var(--bg-primary);
       border-color: var(--border);
     }
 
-    .song-item:hover,
-    .set-song-item:hover {
+    .dark-mode .song-item:hover,
+    .dark-mode .set-song-item:hover {
       background: var(--bg-secondary);
     }
 
-    .search-box {
+    .dark-mode .search-box {
       background: var(--bg-primary);
       border-color: var(--border);
       color: var(--text-primary);
     }
 
-    button.secondary {
+    .dark-mode button.secondary {
       background: var(--bg-primary);
       color: var(--text-primary);
       border-color: var(--border);
     }
 
-    .filter-tag {
+    .dark-mode .filter-tag {
       background: var(--bg-primary);
       color: var(--text-primary);
       border-color: var(--border);
     }
 
-    .filter-tag:hover,
-    .filter-tag.active {
+    .dark-mode .filter-tag:hover,
+    .dark-mode .filter-tag.active {
       background: var(--secondary);
       color: white;
     }
@@ -81,7 +97,7 @@
       background: #f1f5f9;
       min-height: 100vh;
       padding: 20px;
-      color: var(--text-primary);
+      color: var(--dark);
     }
 
     .container {
@@ -517,7 +533,7 @@
       display: block;
       margin-bottom: 5px;
       font-weight: 500;
-      color: var(--text-primary);
+      color: var(--dark);
     }
 
     .form-group input,
@@ -668,7 +684,7 @@
       <div class="job-title-container">
         <span class="job-title" id="jobTitleDisplay">Setliste</span>
         <button onclick="editJobTitle()" class="secondary" style="margin-left: 10px;">Rediger</button>
-        
+        <button onclick="toggleTheme()" class="secondary" style="margin-left: 10px;">Tema</button>
       </div>
       <div class="header-controls">
         <button onclick="newSong()">Ny Sang</button>
@@ -708,7 +724,7 @@
             <div class="set-name" id="currentSetName">Vaelg et saet</div>
             <div>
               
-              <button onclick="deleteCurrentSet()" class="danger">Slet</button>
+              
             </div>
           </div>
           <div class="set-song-list" id="currentSetSongs"></div>
@@ -1121,6 +1137,16 @@ function editJobTitle() {
       }
     }
 
+    function toggleTheme() {
+      const html = document.documentElement;
+      if (html.classList.contains('dark-mode')) {
+        html.classList.remove('dark-mode');
+        localStorage.setItem('theme', 'light');
+      } else {
+        html.classList.add('dark-mode');
+        localStorage.setItem('theme', 'dark');
+      }
+    }
 
     // ========== SONG MANAGEMENT ==========
     function newSong() {
