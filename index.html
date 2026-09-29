@@ -874,7 +874,7 @@
         </div>
         <div class="form-group">
           <label>Sangtekst</label>
-          <textarea id="songLyrics" rows="8" placeholder="Indsæt sangteksten her..."></textarea>
+          <textarea id="songLyrics" rows="8" placeholder="Indsæt sangteksten her... Brug **tekst** omkring omkvæd for fed skrift"></textarea>
         </div>
       </form>
       <div class="modal-actions">
@@ -1581,9 +1581,17 @@ ${setSections}
       if (!song) return;
       document.getElementById('lyricsTitle').textContent = song.title;
       document.getElementById('lyricsArtist').textContent = song.artist || '';
-      document.getElementById('lyricsBody').textContent = song.lyrics || '';
+      document.getElementById('lyricsBody').innerHTML = formatLyrics(song.lyrics || '');
       document.getElementById('lyricsOverlay').style.display = 'block';
       document.getElementById('lyricsOverlay').scrollTop = 0;
+    }
+
+    function formatLyrics(text) {
+      const escaped = text
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+      return escaped.replace(/\*\*([^\n]+?)\*\*/g, '<strong>$1</strong>');
     }
 
     function closeLyrics() {
