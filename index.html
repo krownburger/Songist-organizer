@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="da">
+<html lang="da" class="dark-mode">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Setliste Organizer</title>
+  <title>Sætliste Organizer</title>
   <style>
     :root {
       --primary: #1a2332;
@@ -682,7 +682,7 @@
   <div class="container">
     <header>
       <div class="job-title-container">
-        <span class="job-title" id="jobTitleDisplay">Setliste</span>
+        <span class="job-title" id="jobTitleDisplay">Sætliste</span>
         <button onclick="editJobTitle()" class="secondary" style="margin-left: 10px;">Rediger</button>
         <button onclick="toggleTheme()" class="secondary" style="margin-left: 10px;">Tema</button>
       </div>
@@ -825,7 +825,7 @@
     // ========== DATA STRUCTURE ==========
     let songs = [];
     let sets = [];
-    let jobTitle = 'Setliste';
+    let jobTitle = 'Sætliste';
     let currentSetId = null;
     let activeFilter = 'all';
     let currentDragOverTarget = null;
@@ -1148,6 +1148,13 @@ function editJobTitle() {
         localStorage.setItem('theme', 'dark');
       }
     }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'light') {
+        document.documentElement.classList.remove('dark-mode');
+      }
+    });
 
     // ========== SONG MANAGEMENT ==========
     function newSong() {
@@ -1476,7 +1483,7 @@ function editJobTitle() {
       }).join('');
       const today = new Date().toLocaleDateString('da-DK');
       const html = `<!DOCTYPE html>
-<html lang="da">
+<html lang="da" class="dark-mode">
 <head>
 <meta charset="UTF-8">
 <title>${escapeHtml(jobTitle)}</title>
@@ -1568,7 +1575,7 @@ ${setSections}
         if (imported.songs && imported.sets) {
           songs = imported.songs;
           sets = imported.sets;
-          jobTitle = imported.jobTitle || 'Setliste';
+          jobTitle = imported.jobTitle || 'Sætliste';
           currentSetId = sets.length > 0 ? sets[0].id : null;
           document.getElementById('jobTitleDisplay').textContent = jobTitle;
           renderAll();
@@ -1596,7 +1603,7 @@ ${setSections}
       if (savedSongs && savedSets) {
         songs = JSON.parse(savedSongs);
         sets = JSON.parse(savedSets);
-        jobTitle = savedJobTitle || 'Setliste';
+        jobTitle = savedJobTitle || 'Sætliste';
         currentSetId = sets.length > 0 ? sets[0].id : null;
         document.getElementById('jobTitleDisplay').textContent = jobTitle;
         renderAll();
