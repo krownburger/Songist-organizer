@@ -1473,13 +1473,8 @@ function editJobTitle() {
         const key = song.key ? escapeHtml(song.key) : '';
         return `<tr><td class="num">${index + 1}.</td><td>${escapeHtml(song.title)}</td><td>${escapeHtml(song.artist || '')}</td><td class="key">${key}</td></tr>`;
       }).join('');
-      const win = window.open('', '_blank');
-      if (!win) {
-        showToast('Tillad popups for at eksportere PDF', 'error');
-        return;
-      }
       const today = new Date().toLocaleDateString('da-DK');
-      win.document.write(`<!DOCTYPE html>
+      const html = `<!DOCTYPE html>
 <html lang="da">
 <head>
 <meta charset="UTF-8">
@@ -1503,8 +1498,24 @@ function editJobTitle() {
 <table>${rows}</table>
 <script>window.onload = function() { window.focus(); window.print(); };<\/script>
 </body>
-</html>`);
-      win.document.close();
+</html>`;
+      const iframe = document.createElement('iframe');
+      iframe.style.position = 'fixed';
+      iframe.style.right = '0';
+      iframe.style.bottom = '0';
+      iframe.style.width = '0';
+      iframe.style.height = '0';
+      iframe.style.border = '0';
+      document.body.appendChild(iframe);
+      const doc = iframe.contentWindow.document;
+      doc.open();
+      doc.write(html);
+      doc.close();
+      setTimeout(() => {
+        iframe.contentWindow.focus();
+        iframe.contentWindow.print();
+        setTimeout(() => document.body.removeChild(iframe), 1000);
+      }, 250);
       showToast('PDF-eksport klar - vaelg "Gem som PDF" i udskriftsdialogen');
     }
 
