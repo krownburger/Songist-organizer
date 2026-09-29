@@ -1591,7 +1591,7 @@ ${setSections}
         .replace(/&/g, '&amp;')
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;');
-      return escaped.replace(/\*\*([^\n]+?)\*\*/g, '<strong>$1</strong>');
+      return escaped.replace(/\*\*([\s\S]+?)\*\*/g, '<strong>$1</strong>');
     }
 
     function closeLyrics() {

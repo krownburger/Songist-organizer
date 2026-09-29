@@ -56,14 +56,14 @@ Johnny B. Goode
       { id: '32', title: 'Nu Hvor Du har Brændt mig af', key: 'D', artist: 'Thomas Helmig', categories: ['Dansk', 'Syng med'] },
       { id: '33', title: 'Tarzan Mama Mia', key: 'C', artist: 'Kim Larsen', categories: ['Dansk', 'Syng med'] },
       { id: '34', title: 'All My Love', key: 'E', artist: 'Rocazino', categories: ['Dansk', 'Syng med'] },
-      { id: '35', title: 'Du ligner Din Mor', key: 'E', artist: 'Benjamin Hav', categories: ['Dansk', 'Syng med'], lyrics: `**Jeg vil' lig' kom' forbi**
-**Og sig' at baby, du har den (Baby du har den)**
-**Du har hele pakken (Uh-uh)**
-**Smilet er stort**
-**Livet gik to små skridt**
-**Og du blev flotter' med årene (Flotter' med årene)**
-**Så kommer tårene (Uh-uh)**
-**Du ligner din mor**
+      { id: '35', title: 'Du ligner Din Mor', key: 'E', artist: 'Benjamin Hav', categories: ['Dansk', 'Syng med'], lyrics: `**Jeg vil' lig' kom' forbi
+Og sig' at baby, du har den (Baby du har den)
+Du har hele pakken (Uh-uh)
+Smilet er stort
+Livet gik to små skridt
+Og du blev flotter' med årene (Flotter' med årene)
+Så kommer tårene (Uh-uh)
+Du ligner din mor**
 
 Jeg tænker på årene, de var sgu korte
 Du havd' en drøm, lad os se, om du når det
