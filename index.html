@@ -794,8 +794,7 @@
         <button onclick="newSong()">Ny Sang</button>
         
         <button onclick="exportData()" class="secondary">Eksport</button>
-        <button onclick="saveToLocalStorage()" class="warning">Gem</button>
-        <button onclick="loadFromLocalStorage()">Load</button>        <button onclick="startPerformanceMode()" class="success">Færdig</button>
+        <button onclick="reloadFromSongsJs()" class="secondary">Indlæs songs.js</button>        <button onclick="startPerformanceMode()" class="success">Færdig</button>
       </div>
     </header>
 
@@ -969,16 +968,27 @@
     // initialSongs/initialSets indlæses fra songs.js
 
     // ========== INITIALIZATION ==========
+    let songsJsLoadedAt = null;
+
+    function isLocalDataNewer() {
+      const savedAt = localStorage.getItem('setlistSavedAt');
+      if (savedAt && songsJsLoadedAt && new Date(savedAt) > new Date(songsJsLoadedAt)) return true;
+      return false;
+    }
+
+    function loadFromSongsJs() {
+      songs = JSON.parse(JSON.stringify(initialSongs));
+      sets = JSON.parse(JSON.stringify(initialSets));
+      jobTitle = localStorage.getItem('setlistJobTitle') || 'Sætliste';
+    }
+
     function init() {
-      const savedSongs = localStorage.getItem('setlistSongs');
-      const savedSets = localStorage.getItem('setlistSets');
-      
-      if (savedSongs && savedSets) {
-        songs = JSON.parse(savedSongs);
-        sets = JSON.parse(savedSets);
-      } else {
-        songs = JSON.parse(JSON.stringify(initialSongs));
-        sets = JSON.parse(JSON.stringify(initialSets));
+      loadFromSongsJs();
+      songsJsLoadedAt = new Date().toISOString();
+
+      if (isLocalDataNewer()) {
+        songs = JSON.parse(localStorage.getItem('setlistSongs'));
+        sets = JSON.parse(localStorage.getItem('setlistSets'));
       }
       
       if (sets.length > 0) {
@@ -1652,25 +1662,20 @@ ${setSections}
       localStorage.setItem('setlistSongs', JSON.stringify(songs));
       localStorage.setItem('setlistSets', JSON.stringify(sets));
       localStorage.setItem('setlistJobTitle', jobTitle);
-      showToast('Data gemt i browser!');
+      localStorage.setItem('setlistSavedAt', new Date().toISOString());
     }
 
-    function loadFromLocalStorage() {
-      const savedSongs = localStorage.getItem('setlistSongs');
-      const savedSets = localStorage.getItem('setlistSets');
-      const savedJobTitle = localStorage.getItem('setlistJobTitle');
-      if (savedSongs && savedSets) {
-        songs = JSON.parse(savedSongs);
-        sets = JSON.parse(savedSets);
-        jobTitle = savedJobTitle || 'Sætliste';
-        currentSetId = sets.length > 0 ? sets[0].id : null;
-        document.getElementById('jobTitleDisplay').textContent = jobTitle;
-        renderAll();
-        showToast('Data indlæst!');
-      } else {
-        showToast('Ingen gemt data fundet', 'error');
-      }
+    function reloadFromSongsJs() {
+      localStorage.removeItem('setlistSongs');
+      localStorage.removeItem('setlistSets');
+      localStorage.removeItem('setlistSavedAt');
+      init();
+      document.getElementById('jobTitleDisplay').textContent = jobTitle;
+      renderAll();
+      showToast('Data indlæst fra songs.js');
     }
+
+
 
     // ========== MODAL HELPERS ==========
     function closeModal(modalId) {
