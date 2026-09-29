@@ -676,6 +676,86 @@
       .no-print { display: none; }
       .set-container { box-shadow: none; border: 1px solid #ddd; page-break-inside: avoid; }
     }
+
+    #performanceMode {
+      position: fixed;
+      inset: 0;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      z-index: 1000;
+      overflow-y: auto;
+      padding: 20px;
+    }
+    .perf-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 900px;
+      margin: 0 auto 24px;
+      font-size: 24px;
+      font-weight: bold;
+    }
+    .perf-sets {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .perf-set h3 {
+      margin-bottom: 10px;
+      font-size: 18px;
+      color: var(--text-secondary);
+    }
+    .perf-song {
+      display: flex;
+      gap: 12px;
+      align-items: baseline;
+      padding: 10px 14px;
+      margin-bottom: 6px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 15px;
+    }
+    .perf-song:hover {
+      background: var(--secondary);
+      color: white;
+    }
+    .perf-song .num { color: var(--text-secondary); min-width: 28px; }
+    .perf-song:hover .num { color: #ddd; }
+    .perf-song .key { margin-left: auto; color: var(--text-secondary); font-size: 13px; }
+    .perf-song:hover .key { color: #ddd; }
+    .perf-song.no-lyrics { opacity: 0.6; cursor: default; }
+    .perf-song.no-lyrics:hover { background: var(--bg-secondary); color: var(--text-primary); }
+    #lyricsOverlay {
+      position: fixed;
+      inset: 0;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      z-index: 1100;
+      overflow-y: auto;
+    }
+    .lyrics-close {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      z-index: 1200;
+    }
+    .lyrics-content {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 60px 24px 80px;
+    }
+    .lyrics-content h2 { margin-bottom: 4px; }
+    .lyrics-artist { color: var(--text-secondary); margin-bottom: 28px; font-size: 16px; }
+    .lyrics-content pre {
+      font-family: inherit;
+      font-size: 20px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+    }
   </style>
 </head>
 <body>
@@ -691,7 +771,7 @@
         
         <button onclick="exportData()" class="secondary">Eksport</button>
         <button onclick="saveToLocalStorage()" class="warning">Gem</button>
-        <button onclick="loadFromLocalStorage()">Load</button>
+        <button onclick="loadFromLocalStorage()">Load</button>        <button onclick="startPerformanceMode()" class="success">Færdig</button>
       </div>
     </header>
 
@@ -769,6 +849,10 @@
           <label>Noter</label>
           <input type="text" id="songNotes" placeholder="Ekstra information">
         </div>
+        <div class="form-group">
+          <label>Sangtekst</label>
+          <textarea id="songLyrics" rows="8" placeholder="Indsæt sangteksten her..."></textarea>
+        </div>
       </form>
       <div class="modal-actions">
         <button type="button" onclick="closeModal('songModal')" class="secondary">Annuller</button>
@@ -821,6 +905,23 @@
 
   <div id="toast" class="toast"></div>
 
+  <div id="performanceMode" style="display: none;">
+    <div class="perf-header">
+      <span id="perfJobTitle"></span>
+      <button onclick="exitPerformanceMode()" class="secondary">Tilbage til redigering</button>
+    </div>
+    <div id="perfSets"></div>
+  </div>
+
+  <div id="lyricsOverlay" style="display: none;">
+    <button class="lyrics-close" onclick="closeLyrics()">✕ Luk</button>
+    <div class="lyrics-content">
+      <h2 id="lyricsTitle"></h2>
+      <div id="lyricsArtist" class="lyrics-artist"></div>
+      <pre id="lyricsBody"></pre>
+    </div>
+  </div>
+
   <script>
     // ========== DATA STRUCTURE ==========
     let songs = [];
@@ -845,7 +946,21 @@
       { id: '5', title: 'Øde Ø', key: 'G', artist: 'Rasmus Seebach', categories: ['Dansk', 'Pop'] },
       { id: '6', title: 'Mustang Sally', key: 'C', artist: 'Wilson Picket', categories: ['Rock', 'Disco'] },
       { id: '7', title: 'Can’t Take My Eyes Off Of You', key: 'D', artist: 'Frankie Valli', categories: ['Pop'] },
-      { id: '8', title: 'Johnny B. Goode', key: 'A', artist: 'Chuck Berry', categories: ['Rock', 'Hård Rock'] },
+      { id: '8', title: 'Johnny B. Goode', key: 'A', artist: 'Chuck Berry', categories: ['Rock', 'Hård Rock'], lyrics: `Deep down in Louisiana close to New Orleans
+Way back up in the woods among the evergreens
+There stood a log cabin made of earth and wood
+Where lived a country boy named Johnny B. Goode
+Who never ever learned to read or write so well
+But he could play a guitar just like a-ringing a bell
+
+Go go, go Johnny go, go!
+Go Johnny go, go!
+Go Johnny go, go!
+Go Johnny go, go!
+Go Johnny go!
+Johnny B. Goode
+
+(TEST-TEKST - erstat med den rigtige tekst under Rediger Sang)` },
       { id: '9', title: 'Rabalderstræde', key: 'D', artist: 'Gasolin', categories: ['Dansk', 'Rock'] },
       { id: '10', title: 'Abracadabra', key: 'Am', artist: 'The Steve Miller Band', categories: ['Rock', '80\'er'] },
       { id: '11', title: 'What A Life', key: 'Am', artist: 'Scarlet Pleasure', categories: ['Pop', 'Dansk'] },
@@ -1164,6 +1279,7 @@ function editJobTitle() {
       document.getElementById('songArtist').value = '';
       document.getElementById('songKey').value = '';
       document.getElementById('songNotes').value = '';
+      document.getElementById('songLyrics').value = '';
       // Uncheck all category checkboxes
       allCategories.forEach(cat => {
         const safeId = cat.replace(/'/g, '\\\'');
@@ -1181,6 +1297,7 @@ function editJobTitle() {
       document.getElementById('songArtist').value = song.artist || '';
       document.getElementById('songKey').value = song.key || '';
       document.getElementById('songNotes').value = song.notes || '';
+      document.getElementById('songLyrics').value = song.lyrics || '';
       // Set category checkboxes
       allCategories.forEach(cat => {
         const safeId = cat.replace(/'/g, '\\\'');
@@ -1195,6 +1312,7 @@ function editJobTitle() {
       const artist = document.getElementById('songArtist').value.trim();
       const key = document.getElementById('songKey').value.trim();
       const notes = document.getElementById('songNotes').value.trim();
+      const lyrics = document.getElementById('songLyrics').value.trim();
       
       // Get selected categories
       const categories = allCategories.filter(cat => {
@@ -1215,6 +1333,7 @@ function editJobTitle() {
           song.key = key || null;
           song.categories = categories.length > 0 ? categories : null;
           song.notes = notes || null;
+          song.lyrics = lyrics || null;
         }
       } else {
         const newSong = {
@@ -1223,7 +1342,8 @@ function editJobTitle() {
           artist: artist || null,
           key: key || null,
           categories: categories.length > 0 ? categories : null,
-          notes: notes || null
+          notes: notes || null,
+          lyrics: lyrics || null
         };
         songs.push(newSong);
       }
@@ -1530,6 +1650,63 @@ ${setSections}
     function escapeHtml(str) {
       return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     }
+
+    // ========== PERFORMANCE MODE ==========
+    function startPerformanceMode() {
+      if (sets.length === 0 || sets.every(s => s.songIds.length === 0)) {
+        showToast('Tilføj sange til sættene først', 'error');
+        return;
+      }
+      document.getElementById('perfJobTitle').textContent = jobTitle;
+      const perfSetsEl = document.getElementById('perfSets');
+      perfSetsEl.innerHTML = sets.map(set => `
+        <div class="perf-set">
+          <h3>${escapeHtml(set.name)}</h3>
+          ${set.songIds.map((songId, index) => {
+            const song = songs.find(s => s.id === songId);
+            if (!song) return '';
+            const hasLyrics = !!song.lyrics;
+            return `<div class="perf-song${hasLyrics ? '' : ' no-lyrics'}" onclick="${hasLyrics ? `showLyrics('${song.id}')` : ''}">
+              <span class="num">${index + 1}.</span>
+              <span class="title">${escapeHtml(song.title)}</span>
+              ${song.key ? `<span class="key">${escapeHtml(song.key)}</span>` : ''}
+            </div>`;
+          }).join('')}
+        </div>
+      `).join('');
+      document.getElementById('performanceMode').style.display = 'block';
+      document.body.style.overflow = 'hidden';
+    }
+
+    function exitPerformanceMode() {
+      document.getElementById('performanceMode').style.display = 'none';
+      document.getElementById('lyricsOverlay').style.display = 'none';
+      document.body.style.overflow = '';
+    }
+
+    function showLyrics(songId) {
+      const song = songs.find(s => s.id === songId);
+      if (!song) return;
+      document.getElementById('lyricsTitle').textContent = song.title;
+      document.getElementById('lyricsArtist').textContent = song.artist || '';
+      document.getElementById('lyricsBody').textContent = song.lyrics || '';
+      document.getElementById('lyricsOverlay').style.display = 'block';
+      document.getElementById('lyricsOverlay').scrollTop = 0;
+    }
+
+    function closeLyrics() {
+      document.getElementById('lyricsOverlay').style.display = 'none';
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        if (document.getElementById('lyricsOverlay').style.display !== 'none') {
+          closeLyrics();
+        } else if (document.getElementById('performanceMode').style.display !== 'none') {
+          exitPerformanceMode();
+        }
+      }
+    });
 
     // ========== IMPORT ==========
     function importData() {
