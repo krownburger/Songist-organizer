@@ -825,6 +825,7 @@
     // ========== DATA STRUCTURE ==========
     let songs = [];
     let sets = [];
+    let jobTitle = 'Setliste';
     let currentSetId = null;
     let activeFilter = 'all';
     let currentDragOverTarget = null;
@@ -1456,6 +1457,70 @@ function editJobTitle() {
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
       showToast('Tekstfil downloadet!');
+    }
+
+    function exportToPDF() {
+      closeModal('exportModal');
+      if (!currentSetId) {
+        showToast('Vaelg et saet først', 'error');
+        return;
+      }
+      const set = sets.find(s => s.id === currentSetId);
+      if (!set) return;
+      const rows = set.songIds.map((songId, index) => {
+        const song = songs.find(s => s.id === songId);
+        if (!song) return '';
+        const key = song.key ? escapeHtml(song.key) : '';
+        return `<tr><td class="num">${index + 1}.</td><td>${escapeHtml(song.title)}</td><td>${escapeHtml(song.artist || '')}</td><td class="key">${key}</td></tr>`;
+      }).join('');
+      const today = new Date().toLocaleDateString('da-DK');
+      const html = `<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<title>${escapeHtml(jobTitle)} - ${escapeHtml(set.name)}</title>
+<style>
+  @page { size: A4; margin: 15mm; }
+  body { font-family: Arial, Helvetica, sans-serif; color: #000; margin: 0; padding: 20px; }
+  h1 { font-size: 24px; margin: 0 0 4px; }
+  h2 { font-size: 18px; margin: 0 0 16px; color: #333; }
+  .date { font-size: 12px; color: #666; margin-bottom: 20px; }
+  table { width: 100%; border-collapse: collapse; }
+  td { padding: 6px 8px; border-bottom: 1px solid #ccc; font-size: 14px; }
+  td.num { width: 36px; color: #666; }
+  td.key { width: 50px; text-align: right; color: #333; }
+</style>
+</head>
+<body>
+<h1>${escapeHtml(jobTitle)}</h1>
+<h2>${escapeHtml(set.name)}</h2>
+<div class="date">${today}</div>
+<table>${rows}</table>
+<script>window.onload = function() { window.focus(); window.print(); };<\/script>
+</body>
+</html>`;
+      const iframe = document.createElement('iframe');
+      iframe.style.position = 'fixed';
+      iframe.style.right = '0';
+      iframe.style.bottom = '0';
+      iframe.style.width = '0';
+      iframe.style.height = '0';
+      iframe.style.border = '0';
+      document.body.appendChild(iframe);
+      const doc = iframe.contentWindow.document;
+      doc.open();
+      doc.write(html);
+      doc.close();
+      setTimeout(() => {
+        iframe.contentWindow.focus();
+        iframe.contentWindow.print();
+        setTimeout(() => document.body.removeChild(iframe), 1000);
+      }, 250);
+      showToast('PDF-eksport klar - vaelg "Gem som PDF" i udskriftsdialogen');
+    }
+
+    function escapeHtml(str) {
+      return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     }
 
     // ========== IMPORT ==========
