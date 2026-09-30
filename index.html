@@ -712,8 +712,14 @@
       align-items: center;
       max-width: 900px;
       margin: 0 auto 24px;
-      font-size: 24px;
+    }
+    .perf-header span {
+      font-size: 32px;
       font-weight: bold;
+    }
+    .perf-header button {
+      font-size: 0.9em;
+      font-weight: normal;
     }
     .perf-sets {
       display: grid;
@@ -725,7 +731,8 @@
 
     @media (max-width: 900px) {
       .perf-sets { grid-template-columns: 1fr; max-width: 600px; }
-      .perf-header { max-width: 600px; font-size: 20px; flex-wrap: wrap; gap: 10px; }
+      .perf-header { max-width: 600px; flex-wrap: wrap; gap: 10px; }
+      .perf-header span { font-size: 24px; }
     }
     @media (max-width: 600px) {
       .perf-sets { gap: 16px; }
