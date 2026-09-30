@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tjekliste – manglende tekster</title>
+  <style>
+    :root {
+      --bg-primary: #0f172a;
+      --bg-secondary: #1e293b;
+      --border: #334155;
+      --text-primary: #f1f5f9;
+      --text-secondary: #94a3b8;
+      --primary: #6366f1;
+      --success: #22c55e;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      padding: 20px;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    h1 { font-size: 22px; margin-bottom: 4px; }
+    .status { color: var(--text-secondary); margin-bottom: 20px; font-size: 14px; }
+    .controls { margin-bottom: 16px; display: flex; gap: 10px; }
+    .controls button {
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      border: 1px solid var(--border);
+      padding: 8px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .controls button:hover { border-color: var(--primary); }
+    ul { list-style: none; }
+    li {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      border-radius: 6px;
+      user-select: none;
+    }
+    li:hover { background: var(--bg-secondary); }
+    li .box {
+      width: 22px;
+      height: 22px;
+      border: 2px solid var(--border);
+      border-radius: 5px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      color: var(--success);
+    }
+    li.checked .box { border-color: var(--success); }
+    li .title { font-size: 15px; }
+    li.checked .title { text-decoration: line-through; color: var(--text-secondary); }
+    li .artist { color: var(--text-secondary); font-size: 13px; }
+    li .tag {
+      margin-left: auto;
+      font-size: 11px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      padding: 2px 8px;
+      border-radius: 10px;
+      color: var(--text-secondary);
+    }
+    .done-tag { color: var(--success); border-color: var(--success); }
+  </style>
+</head>
+<body>
+  <h1>Tjekliste – sange der mangler tekst</h1>
+  <div class="status" id="status"></div>
+  <div class="controls">
+    <button onclick="clearChecked()">Nulstil afkrydsninger</button>
+  </div>
+  <ul id="list"></ul>
+  <script src="songs.js"></script>
+  <script>
+    let checked = JSON.parse(localStorage.getItem('tekstTjekliste') || '{}');
+
+    function save() {
+      localStorage.setItem('tekstTjekliste', JSON.stringify(checked));
+    }
+
+    function render() {
+      const missing = initialSongs.filter(s => !s.lyrics || !s.lyrics.trim());
+      const doneCount = missing.filter(s => checked[s.id]).length;
+      document.getElementById('status').textContent =
+        `${doneCount} af ${missing.length} behandlet – ${missing.length - doneCount} tilbage`;
+      const listEl = document.getElementById('list');
+      listEl.innerHTML = missing.map(song => `
+        <li class="${checked[song.id] ? 'checked' : ''}" onclick="toggle('${song.id}')">
+          <span class="box">${checked[song.id] ? '✓' : ''}</span>
+          <span class="title">${escapeHtml(song.title)}</span>
+          <span class="artist">${escapeHtml(song.artist || '')}</span>
+          <span class="tag ${checked[song.id] ? 'done-tag' : ''}">${checked[song.id] ? 'Sendt' : 'Mangler'}</span>
+        </li>
+      `).join('');
+    }
+
+    function toggle(id) {
+      checked[id] = !checked[id];
+      save();
+      render();
+    }
+
+    function clearChecked() {
+      checked = {};
+      save();
+      render();
+    }
+
+    function escapeHtml(str) {
+      return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    render();
+  </script>
+</body>
+</html>
