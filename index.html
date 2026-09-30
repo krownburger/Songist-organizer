@@ -1087,10 +1087,7 @@ ${song.bpm ? `<span class="song-bpm">${escapeHtml(String(song.bpm))} BPM</span>`
       const set = sets.find(s => s.id === currentSetId);
       if (!set) return;
       
-      document.getElementById('currentSetName').innerHTML = `
-        <input type="text" id="renameSetInput" value="${escapeHtml(set.name)}" 
-            onblur="finishRenameSet()" onkeypress="if(event.key==='Enter') finishRenameSet()">
-      `;
+      document.getElementById('currentSetName').textContent = set.name;
       
       const songsEl = document.getElementById('currentSetSongs');
       const emptyEl = document.getElementById('emptySetMessage');
