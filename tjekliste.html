@@ -123,7 +123,11 @@
       return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     }
 
+    if (typeof initialSongs === 'undefined') {
+      document.getElementById('status').textContent =
+        'Fejl: songs.js blev ikke indlæst. Sørg for at tjekliste.html ligger i samme mappe som songs.js og hent den nyeste version fra repoet.';
+      return;
+    }
     render();
-  </script>
 </body>
 </html>
