@@ -140,7 +140,8 @@ const initialSongs = [
     "categories": [
       "Dansk",
       "Pop"
-    ]
+    ],
+    "lyrics": "Jeg' i Jylland, brænder Cali-weed\nMin' tanker kører om en Evergreen, uh-ah\nVi teamer op om godt halvanden time\nPå Grønnegade med et dollargrin, uh-ah\n\n*Du siger du ruller op, hvis jeg rister*\n*Imens morgenerne bli'r til nætter*\n*Alle er blå, blå silhuetter*\n*Jeg vil bare gå endnu længere med dig*\n\n**Driver langs åen, jeg ser månen bli'r blokeret af dig**\n**Ned' på Den Sidste er vi de første til at gå vores vej**\n**Ta'r dig ind, ta'r dig nu, ta'r dig sommeren ud**\n**Ja, jeg gi'r dig mit hjerte i Aarhus**\n**Har aldrig danset med en stor mand**\n**En stor mand som dig**\n\nOg ja, jeg føler at jeg ejer byen\nSom Pablo Escobar i Medellin, uh-ah\nMed vinderenergi på Bellevue\nHvor smukke mennesker gi'r mig deja vu, uh-ah\n\n*Du siger du ruller op, hvis jeg rister*\n*Imens morgenerne bli'r til nætter*\n*Alle er blå, blå silhuetter*\n*Jeg vil bare gå endnu længere med dig*\n\n**Driver langs åen, jeg ser månen bli'r blokeret af dig**\n**Ned' på Den Sidste er vi de første til at gå vores vej**\n**Ta'r dig ind, ta'r dig nu, ta'r dig sommeren ud**\n**Ja, jeg gi'r dig mit hjerte i Aarhus**\n**Har aldrig danset med en stor mand**\n**En stor mand som dig**\n\nDer' mange tårer i byen og corny smil\nSer dig gå alene rundt\nDu ved ikke hvad du tænker på, nej - Men du gør at jeg\nHar det som en gigolo der' på vej til peng' lige nu\n\n**Driver langs åen, jeg ser månen bli'r blokeret af dig**\n**Ned' på Den Sidste er vi de første til at gå vores vej**\n**Ta'r dig ind, ta'r dig nu, ta'r dig sommeren ud**\n**Ja, jeg gi'r dig mit hjerte i Aarhus**\n**Har aldrig danset med en stor mand - En stor mand som dig**"
   },
   {
     "id": "13",
