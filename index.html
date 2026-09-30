@@ -317,6 +317,15 @@
       font-weight: 500;
     }
 
+    .song-bpm {
+      background: #e67e22;
+      color: white;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.75em;
+      font-weight: 500;
+    }
+
     .song-categories {
       display: flex;
       gap: 3px;
@@ -855,6 +864,10 @@
           <input type="text" id="songKey" placeholder="f.eks. F, Dm, C#m">
         </div>
         <div class="form-group">
+          <label>BPM</label>
+          <input type="number" id="songBpm" min="0" placeholder="f.eks. 120">
+        </div>
+        <div class="form-group">
           <label>Kategorier (vælg flere)</label>
           <div class="category-checkboxes" id="categoryCheckboxes">
             <div class="category-checkbox"><input type="checkbox" id="cat-Rock" value="Rock"><label for="cat-Rock">Rock</label></div>
@@ -1037,6 +1050,7 @@
             <div class="song-meta">
               ${song.artist ? escapeHtml(song.artist) : ''}
               ${song.key ? `<span class="song-key">${escapeHtml(song.key)}</span>` : ''}
+${song.bpm ? `<span class="song-bpm">${escapeHtml(String(song.bpm))} BPM</span>` : ''}
             </div>
             ${song.categories && song.categories.length > 0 ? `
             <div class="song-categories">
@@ -1100,6 +1114,7 @@
               <div class="song-meta">
                 ${song.artist ? escapeHtml(song.artist) : ''}
                 ${song.key ? `<span class="song-key">${escapeHtml(song.key)}</span>` : ''}
+${song.bpm ? `<span class="song-bpm">${escapeHtml(String(song.bpm))} BPM</span>` : ''}
               </div>
             </div>
             <div class="song-actions">
@@ -1150,6 +1165,7 @@ function editJobTitle() {
       document.getElementById('songTitle').value = '';
       document.getElementById('songArtist').value = '';
       document.getElementById('songKey').value = '';
+      document.getElementById('songBpm').value = '';
       document.getElementById('songNotes').value = '';
       document.getElementById('songLyrics').value = '';
       // Uncheck all category checkboxes
@@ -1168,6 +1184,7 @@ function editJobTitle() {
       document.getElementById('songTitle').value = song.title;
       document.getElementById('songArtist').value = song.artist || '';
       document.getElementById('songKey').value = song.key || '';
+      document.getElementById('songBpm').value = song.bpm || '';
       document.getElementById('songNotes').value = song.notes || '';
       document.getElementById('songLyrics').value = song.lyrics || '';
       // Set category checkboxes
@@ -1183,6 +1200,7 @@ function editJobTitle() {
       const title = document.getElementById('songTitle').value.trim();
       const artist = document.getElementById('songArtist').value.trim();
       const key = document.getElementById('songKey').value.trim();
+      const bpm = parseInt(document.getElementById('songBpm').value, 10);
       const notes = document.getElementById('songNotes').value.trim();
       const lyrics = document.getElementById('songLyrics').value.trim();
       
@@ -1203,6 +1221,7 @@ function editJobTitle() {
           song.title = title;
           song.artist = artist || null;
           song.key = key || null;
+          song.bpm = !isNaN(bpm) && bpm > 0 ? bpm : null;
           song.categories = categories.length > 0 ? categories : null;
           song.notes = notes || null;
           song.lyrics = lyrics || null;
@@ -1213,6 +1232,7 @@ function editJobTitle() {
           title,
           artist: artist || null,
           key: key || null,
+          bpm: !isNaN(bpm) && bpm > 0 ? bpm : null,
           categories: categories.length > 0 ? categories : null,
           notes: notes || null,
           lyrics: lyrics || null
@@ -1463,6 +1483,7 @@ function editJobTitle() {
           text += `${index + 1}. ${song.title}`;
           if (song.artist) text += ` - ${song.artist}`;
           if (song.key) text += ` (${song.key})`;
+          if (song.bpm) text += ` [${song.bpm} BPM]`;
           text += '\n';
         }
       });
@@ -1489,7 +1510,8 @@ function editJobTitle() {
           const song = songs.find(s => s.id === songId);
           if (!song) return '';
           const key = song.key ? escapeHtml(song.key) : '';
-          return `<tr><td class="num">${index + 1}.</td><td>${escapeHtml(song.title)}</td><td>${escapeHtml(song.artist || '')}</td><td class="key">${key}</td></tr>`;
+          const bpm = song.bpm ? escapeHtml(String(song.bpm)) : '';
+          return `<tr><td class="num">${index + 1}.</td><td>${escapeHtml(song.title)}</td><td>${escapeHtml(song.artist || '')}</td><td class="key">${key}</td><td class="key">${bpm}</td></tr>`;
         }).join('');
         return `<section><h2>${escapeHtml(set.name)}</h2><table>${rows}</table></section>`;
       }).join('');
@@ -1562,6 +1584,7 @@ ${setSections}
               <span class="num">${index + 1}.</span>
               <span class="title">${escapeHtml(song.title)}</span>
               ${song.key ? `<span class="key">${escapeHtml(song.key)}</span>` : ''}
+              ${song.bpm ? `<span class="key">${escapeHtml(String(song.bpm))} BPM</span>` : ''}
             </div>`;
           }).join('')}
         </div>
