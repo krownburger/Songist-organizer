@@ -81,7 +81,8 @@ const initialSongs = [
     "artist": "Frankie Valli",
     "categories": [
       "Pop"
-    ]
+    ],
+    "lyrics": "You're just too good to be true.\nCan't take my eyes off you.\nYou'd be like Heaven to touch.\nI wanna hold you so much.\nAt long last love has arrived\nAnd I thank God I'm alive.\nYou're just too good to be true.\nCan't take my eyes off you.\n\nPardon the way that I stare.\nThere's nothing else to compare.\nThe sight of you leaves me weak.\nThere are no words left to speak,\nBut if you feel like I feel,\nPlease let me know that it's real.\nYou're just too good to be true.\nCan't take my eyes off you.\n\n**I love you, baby,\nAnd if it's quite alright,\nI need you, baby,\nTo warm a lonely night.\nI love you, baby.\nTrust in me when I say:\nOh, pretty baby,\nDon't bring me down, I pray.\nOh, pretty baby, now that I found you, stay\nAnd let me love you, baby.\nLet me love you.**\n\nYou're just too good to be true.\nCan't take my eyes off you.\nYou'd be like Heaven to touch.\nI wanna hold you so much.\nAt long last love has arrived\nAnd I thank God I'm alive.\nYou're just too good to be true.\nCan't take my eyes off you.\n\n**I love you baby...**"
   },
   {
     "id": "8",
@@ -1542,6 +1543,7 @@ const initialSongs = [
     "bpm": 104
   }
 ];
+
 const initialSets = [
   {
     "id": "set1",
