@@ -779,6 +779,25 @@
       right: 16px;
       z-index: 1200;
     }
+    .lyrics-next-zone {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 25%;
+      height: 100%;
+      z-index: 1150;
+      cursor: pointer;
+    }
+    .lyrics-next-hint {
+      position: absolute;
+      top: 50%;
+      right: 14px;
+      transform: translateY(-50%);
+      font-size: 42px;
+      color: var(--text-secondary);
+      opacity: 0.25;
+      font-family: serif;
+    }
     .lyrics-content {
       max-width: 800px;
       margin: 0 auto;
@@ -958,6 +977,9 @@
 
   <div id="lyricsOverlay" style="display: none;">
     <button class="lyrics-close" onclick="closeLyrics()">✕ Luk</button>
+    <div id="perfNextZone" class="lyrics-next-zone" style="display: none;" onclick="perfNextSong(event)" title="Næste sang">
+      <span class="lyrics-next-hint">›</span>
+    </div>
     <div class="lyrics-content">
       <h2 id="lyricsTitle"></h2>
       <div id="lyricsArtist" class="lyrics-artist"></div>
@@ -1565,6 +1587,8 @@ ${setSections}
       return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     }
 
+    let perfSongOrder = [];
+    let currentPerfIndex = -1;
     // ========== PERFORMANCE MODE ==========
     function startPerformanceMode() {
       if (sets.length === 0 || sets.every(s => s.songIds.length === 0)) {
@@ -1572,6 +1596,7 @@ ${setSections}
         return;
       }
       document.getElementById('perfJobTitle').textContent = jobTitle;
+      perfSongOrder = sets.flatMap(set => set.songIds);
       const perfSetsEl = document.getElementById('perfSets');
       perfSetsEl.innerHTML = sets.map(set => `
         <div class="perf-set">
@@ -1580,7 +1605,7 @@ ${setSections}
             const song = songs.find(s => s.id === songId);
             if (!song) return '';
             const hasLyrics = !!song.lyrics;
-            return `<div class="perf-song${hasLyrics ? '' : ' no-lyrics'}" onclick="${hasLyrics ? `showLyrics('${song.id}')` : ''}">
+            return `<div class="perf-song${hasLyrics ? '' : ' no-lyrics'}" onclick="${hasLyrics ? `showLyrics('${song.id}', true)` : ''}">
               <span class="num">${index + 1}.</span>
               <span class="title">${escapeHtml(song.title)}</span>
               ${song.bpm ? `<span class="bpm">${escapeHtml(String(song.bpm))} BPM</span>` : ''}
@@ -1599,14 +1624,27 @@ ${setSections}
       document.body.style.overflow = '';
     }
 
-    function showLyrics(songId) {
+    function showLyrics(songId, fromPerf = false) {
       const song = songs.find(s => s.id === songId);
       if (!song) return;
+      currentPerfIndex = fromPerf ? perfSongOrder.indexOf(songId) : -1;
+      document.getElementById('perfNextZone').style.display = fromPerf ? 'block' : 'none';
       document.getElementById('lyricsTitle').textContent = song.title;
       document.getElementById('lyricsArtist').textContent = song.artist || '';
       document.getElementById('lyricsBody').innerHTML = formatLyrics(song.lyrics || '');
       document.getElementById('lyricsOverlay').style.display = 'block';
       document.getElementById('lyricsOverlay').scrollTop = 0;
+    }
+    function perfNextSong(event) {
+      if (event) event.stopPropagation();
+      for (let i = currentPerfIndex + 1; i < perfSongOrder.length; i++) {
+        const song = songs.find(s => s.id === perfSongOrder[i]);
+        if (song && song.lyrics && song.lyrics.trim()) {
+          showLyrics(song.id, true);
+          return;
+        }
+      }
+      showToast('Ikke flere sange med tekst', 'error');
     }
 
     function formatLyrics(text) {
