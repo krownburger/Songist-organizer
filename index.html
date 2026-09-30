@@ -729,7 +729,7 @@
     @media (max-width: 600px) {
       .perf-sets { gap: 16px; }
       .perf-song { font-size: 16px; padding: 12px 14px; }
-      .perf-song .key { font-size: 13px; }
+      .perf-song .key, .perf-song .bpm { font-size: 12px; }
       .lyrics-content { padding: 70px 16px 60px; }
       .lyrics-content pre { font-size: 18px; }
       .lyrics-content h2 { font-size: 24px; }
@@ -758,8 +758,10 @@
     }
     .perf-song .num { color: var(--text-secondary); min-width: 28px; }
     .perf-song:hover .num { color: #ddd; }
-    .perf-song .key { margin-left: auto; color: var(--text-secondary); font-size: 13px; }
-    .perf-song:hover .key { color: #ddd; }
+    .perf-song span:nth-of-type(3) { margin-left: auto; }
+    .perf-song .bpm { min-width: 64px; text-align: right; color: var(--text-secondary); font-size: 13px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .perf-song .key { min-width: 42px; text-align: right; color: var(--text-secondary); font-size: 13px; white-space: nowrap; }
+    .perf-song:hover .key, .perf-song:hover .bpm { color: #ddd; }
     .perf-song.no-lyrics { opacity: 0.6; cursor: default; }
     .perf-song.no-lyrics:hover { background: var(--bg-secondary); color: var(--text-primary); }
     #lyricsOverlay {
@@ -1583,7 +1585,7 @@ ${setSections}
             return `<div class="perf-song${hasLyrics ? '' : ' no-lyrics'}" onclick="${hasLyrics ? `showLyrics('${song.id}')` : ''}">
               <span class="num">${index + 1}.</span>
               <span class="title">${escapeHtml(song.title)}</span>
-              ${song.bpm ? `<span class="key">${escapeHtml(String(song.bpm))} BPM</span>` : ''}
+              ${song.bpm ? `<span class="bpm">${escapeHtml(String(song.bpm))} BPM</span>` : ''}
               ${song.key ? `<span class="key">${escapeHtml(song.key)}</span>` : ''}
             </div>`;
           }).join('')}
