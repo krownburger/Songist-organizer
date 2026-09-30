@@ -5,6 +5,7 @@ const initialSongs = [
     "id": "1",
     "title": "Jeg Tager Imod",
     "key": "Dm",
+    "bpm": 120,
     "artist": "Thomas Helmig",
     "categories": [
       "Dansk",
@@ -16,6 +17,7 @@ const initialSongs = [
     "id": "2",
     "title": "Love Is In The Air",
     "key": "C",
+    "bpm": 118,
     "artist": "John Paul Young",
     "categories": [
       "Pop",
@@ -27,6 +29,7 @@ const initialSongs = [
     "id": "3",
     "title": "Pretty Woman",
     "key": "A",
+    "bpm": 120,
     "artist": "Roy Orbison",
     "categories": [
       "Rock",
@@ -38,6 +41,7 @@ const initialSongs = [
     "id": "4",
     "title": "The Way You Make Me Feel",
     "key": "A",
+    "bpm": 113,
     "artist": "Michael Jackson",
     "categories": [
       "Pop",
@@ -49,6 +53,7 @@ const initialSongs = [
     "id": "5",
     "title": "Øde Ø",
     "key": "G",
+    "bpm": 116,
     "artist": "Rasmus Seebach",
     "categories": [
       "Dansk",
@@ -60,6 +65,7 @@ const initialSongs = [
     "id": "6",
     "title": "Mustang Sally",
     "key": "C",
+    "bpm": 130,
     "artist": "Wilson Picket",
     "categories": [
       "Rock",
@@ -71,6 +77,7 @@ const initialSongs = [
     "id": "7",
     "title": "Can’t Take My Eyes Off Of You",
     "key": "D",
+    "bpm": 111,
     "artist": "Frankie Valli",
     "categories": [
       "Pop"
@@ -85,12 +92,14 @@ const initialSongs = [
       "Rock",
       "Hård Rock"
     ],
+    "bpm": 168,
     "lyrics": "Deep down Louisiana close to New Orleans\nWay back up in the woods among the evergreens\nThere stood a log cabin made of earth and wood\nWhere lived a country boy named Johnny B. Goode\nWho never ever learned to read or write so well\nBut he could play the guitar just like a ringing a bell\n\n**Go go**\n\n**Go Johnny go go go...**\n\nHe used to carry his guitar in a gunny sack\nGo sit beneath the tree by the railroad track\nOh, the engineers would see him sitting in the shade\nStrumming with the rhythm that the drivers made\nPeople passing by they would stop and say\nOh my that little country boy could play\n\n**Go go**\n\n**Go Johnny go go go...**\n\nHis mother told him \"Someday you will be a man,\nAnd you will be the leader of a big old band.\nMany people coming from miles around\nTo hear you play your music when the sun go down\nMaybe someday your name will be in lights\nSaying Johnny B. Goode tonight.\"\n\n**Go go**\n\n**Go Johnny go go...**"
   },
   {
     "id": "9",
     "title": "Rabalderstræde",
     "key": "D",
+    "bpm": 132,
     "artist": "Gasolin",
     "categories": [
       "Dansk",
@@ -102,6 +111,7 @@ const initialSongs = [
     "id": "10",
     "title": "Abracadabra",
     "key": "Am",
+    "bpm": 128,
     "artist": "The Steve Miller Band",
     "categories": [
       "Rock",
@@ -113,6 +123,7 @@ const initialSongs = [
     "id": "11",
     "title": "What A Life",
     "key": "Am",
+    "bpm": 114,
     "artist": "Scarlet Pleasure",
     "categories": [
       "Pop",
@@ -124,6 +135,7 @@ const initialSongs = [
     "id": "12",
     "title": "STOR MAND",
     "key": "F",
+    "bpm": 146,
     "artist": "Tobias Rahim & Rasmus Odbjerg",
     "categories": [
       "Dansk",
@@ -134,6 +146,7 @@ const initialSongs = [
     "id": "13",
     "title": "Kun For Mig",
     "key": "Am",
+    "bpm": 125,
     "artist": "Medina",
     "categories": [
       "Dansk",
@@ -145,6 +158,7 @@ const initialSongs = [
     "id": "14",
     "title": "On A Long Lonely Night",
     "key": "G",
+    "bpm": 112,
     "artist": "Sko/Torp",
     "categories": [
       "Dansk",
@@ -156,6 +170,7 @@ const initialSongs = [
     "id": "15",
     "title": "Mr. Swing King",
     "key": "C",
+    "bpm": 144,
     "artist": "Gnags",
     "categories": [
       "Dansk",
@@ -167,6 +182,7 @@ const initialSongs = [
     "id": "16",
     "title": "I Feel Good",
     "key": "Bb",
+    "bpm": 108,
     "artist": "James Brown",
     "categories": [
       "Disco"
@@ -177,6 +193,7 @@ const initialSongs = [
     "id": "17",
     "title": "Bag Duggede Ruder - Lanternen",
     "key": "C",
+    "bpm": 133,
     "artist": "TV2",
     "categories": [
       "Dansk",
@@ -188,6 +205,7 @@ const initialSongs = [
     "id": "18",
     "title": "Play That Funky Music",
     "key": "E",
+    "bpm": 131,
     "artist": "Wild Cherry",
     "categories": [
       "Disco"
@@ -198,6 +216,7 @@ const initialSongs = [
     "id": "19",
     "title": "Det er Mig Der Står Herude Og Banker på",
     "key": "A",
+    "bpm": 83,
     "artist": "Thomas Helmig",
     "categories": [
       "Dansk",
@@ -209,6 +228,7 @@ const initialSongs = [
     "id": "20",
     "title": "For Evigt",
     "key": "C",
+    "bpm": 147,
     "artist": "Volbeat",
     "categories": [
       "Dansk",
@@ -220,6 +240,7 @@ const initialSongs = [
     "id": "21",
     "title": "Kiss",
     "key": "A",
+    "bpm": 115,
     "artist": "Prince",
     "categories": [
       "Pop",
@@ -231,6 +252,7 @@ const initialSongs = [
     "id": "22",
     "title": "Det Bedste til Mig og Mine Venner",
     "key": "F",
+    "bpm": 150,
     "artist": "Gasolin",
     "categories": [
       "Dansk",
@@ -242,6 +264,7 @@ const initialSongs = [
     "id": "23",
     "title": "Sweet Home Alabama",
     "key": "D",
+    "bpm": 98,
     "artist": "Lynyrd Skynyrd",
     "categories": [
       "Rock"
@@ -252,6 +275,7 @@ const initialSongs = [
     "id": "24",
     "title": "Midt Om Natten",
     "key": "Dm",
+    "bpm": 116,
     "artist": "Kim Larsen",
     "categories": [
       "Dansk",
@@ -263,6 +287,7 @@ const initialSongs = [
     "id": "25",
     "title": "Save Tonight",
     "key": "Am",
+    "bpm": 122,
     "artist": "Eagle Eye Cherry",
     "categories": [
       "Pop",
@@ -274,6 +299,7 @@ const initialSongs = [
     "id": "26",
     "title": "Kom Tilbage Nu",
     "key": "A",
+    "bpm": 110,
     "artist": "Danseorkestret",
     "categories": [
       "Dansk"
@@ -283,6 +309,7 @@ const initialSongs = [
     "id": "27",
     "title": "Proud Mary",
     "key": "D",
+    "bpm": 100,
     "artist": "Ike & Tina Turner",
     "categories": [
       "Rock",
@@ -294,6 +321,7 @@ const initialSongs = [
     "id": "28",
     "title": "Summer of 69",
     "key": "H",
+    "bpm": 139,
     "artist": "Bryan Adams",
     "categories": [
       "Rock",
@@ -305,6 +333,7 @@ const initialSongs = [
     "id": "29",
     "title": "Mona Mona",
     "key": "D",
+    "bpm": 120,
     "artist": "Søren Krag Jacobsen",
     "categories": [
       "Dansk",
@@ -315,6 +344,7 @@ const initialSongs = [
     "id": "30",
     "title": "Kvinde Min",
     "key": "Dm",
+    "bpm": 123,
     "artist": "Gasolin",
     "categories": [
       "Dansk",
@@ -326,6 +356,7 @@ const initialSongs = [
     "id": "31",
     "title": "Jutlandia",
     "key": "A",
+    "bpm": 125,
     "artist": "Kim Larsen",
     "categories": [
       "Dansk",
@@ -337,6 +368,7 @@ const initialSongs = [
     "id": "32",
     "title": "Nu Hvor Du har Brændt mig af",
     "key": "D",
+    "bpm": 159,
     "artist": "Thomas Helmig",
     "categories": [
       "Dansk",
@@ -347,6 +379,7 @@ const initialSongs = [
     "id": "33",
     "title": "Tarzan Mama Mia",
     "key": "C",
+    "bpm": 134,
     "artist": "Kim Larsen",
     "categories": [
       "Dansk",
@@ -358,6 +391,7 @@ const initialSongs = [
     "id": "34",
     "title": "All My Love",
     "key": "E",
+    "bpm": 129,
     "artist": "Rocazino",
     "categories": [
       "Dansk",
@@ -368,6 +402,7 @@ const initialSongs = [
     "id": "35",
     "title": "Du ligner Din Mor",
     "key": "E",
+    "bpm": 107,
     "artist": "Benjamin Hav",
     "categories": [
       "Dansk",
@@ -379,6 +414,7 @@ const initialSongs = [
     "id": "36",
     "title": "Blame It On The Boogie",
     "key": "Bb",
+    "bpm": 109,
     "artist": "The Jacksons",
     "categories": [
       "Disco",
@@ -390,6 +426,7 @@ const initialSongs = [
     "id": "37",
     "title": "Signed Sealed Delivered I am Yours",
     "key": "E",
+    "bpm": 115,
     "artist": "Stevie Wonder",
     "categories": [
       "Pop",
@@ -401,6 +438,7 @@ const initialSongs = [
     "id": "38",
     "title": "Flowers",
     "key": "Gm",
+    "bpm": 118,
     "artist": "Miley Cyrus",
     "categories": [
       "Pop"
@@ -411,6 +449,7 @@ const initialSongs = [
     "id": "39",
     "title": "Love Yourself",
     "key": "E",
+    "bpm": 100,
     "artist": "Justin Bieber",
     "categories": [
       "Pop"
@@ -421,6 +460,7 @@ const initialSongs = [
     "id": "40",
     "title": "Cant Feel My Face",
     "key": "Am",
+    "bpm": 171,
     "artist": "The Weeknd",
     "categories": [
       "Pop"
@@ -431,6 +471,7 @@ const initialSongs = [
     "id": "41",
     "title": "Crazy",
     "key": "Gm",
+    "bpm": 112,
     "artist": "Gnarls Barkley",
     "categories": [
       "Pop"
@@ -441,6 +482,7 @@ const initialSongs = [
     "id": "42",
     "title": "To Mennesker På En Strand",
     "key": "G",
+    "bpm": 155,
     "artist": "John Mogensen",
     "categories": [
       "Dansk"
@@ -451,6 +493,7 @@ const initialSongs = [
     "id": "43",
     "title": "Vilde Kaniner",
     "key": "Em",
+    "bpm": 88,
     "artist": "Gnags",
     "categories": [
       "Dansk",
@@ -461,6 +504,7 @@ const initialSongs = [
     "id": "44",
     "title": "Sultans Of Swing",
     "key": "Dm",
+    "bpm": 145,
     "artist": "Dire Straits",
     "categories": [
       "Rock"
@@ -471,6 +515,7 @@ const initialSongs = [
     "id": "45",
     "title": "September",
     "key": "A",
+    "bpm": 126,
     "artist": "Earth Wind & Fire",
     "categories": [
       "Disco"
@@ -481,6 +526,7 @@ const initialSongs = [
     "id": "46",
     "title": "Satisfaction",
     "key": "E",
+    "bpm": 133,
     "artist": "Rolling Stones",
     "categories": [
       "Rock",
@@ -492,6 +538,7 @@ const initialSongs = [
     "id": "47",
     "title": "Feel It Still",
     "key": "C#m",
+    "bpm": 90,
     "artist": "Portugal. The Man",
     "categories": [
       "Pop"
@@ -502,6 +549,7 @@ const initialSongs = [
     "id": "48",
     "title": "Saw her standing there",
     "key": "E",
+    "bpm": 180,
     "artist": "The Beatles",
     "categories": [
       "Rock"
@@ -511,6 +559,7 @@ const initialSongs = [
     "id": "49",
     "title": "Lets Dance",
     "key": "Bbm",
+    "bpm": 118,
     "artist": "David Bowie",
     "categories": [
       "Pop",
@@ -522,6 +571,7 @@ const initialSongs = [
     "id": "50",
     "title": "Money For Nothing",
     "key": "Gm",
+    "bpm": 132,
     "artist": "Dire Straits",
     "categories": [
       "Rock"
@@ -532,6 +582,7 @@ const initialSongs = [
     "id": "51",
     "title": "As It Was",
     "key": "A start D",
+    "bpm": 174,
     "artist": "Harry Styles",
     "categories": [
       "Pop"
@@ -542,6 +593,7 @@ const initialSongs = [
     "id": "52",
     "title": "Lay Down Sally",
     "key": "A",
+    "bpm": 127,
     "artist": "Eric Clapton",
     "categories": [
       "Rock"
@@ -552,6 +604,7 @@ const initialSongs = [
     "id": "53",
     "title": "Get Lucky",
     "key": "A",
+    "bpm": 116,
     "artist": "Daft Punk",
     "categories": [
       "Disco",
@@ -563,6 +616,7 @@ const initialSongs = [
     "id": "54",
     "title": "Muchi Bar",
     "key": "B",
+    "bpm": 137,
     "artist": "Tobias Rahim",
     "categories": [
       "Dansk",
@@ -573,6 +627,7 @@ const initialSongs = [
     "id": "55",
     "title": "Blurred Lines",
     "key": "G",
+    "bpm": 120,
     "artist": "Robin Thicke",
     "categories": [
       "Pop",
@@ -584,6 +639,7 @@ const initialSongs = [
     "id": "56",
     "title": "What a Wonderful World",
     "key": "F",
+    "bpm": 69,
     "artist": "Louis Armstrong",
     "categories": [
       "Pop"
@@ -593,6 +649,7 @@ const initialSongs = [
     "id": "57",
     "title": "Dont Know Why",
     "key": "C",
+    "bpm": 96,
     "artist": "Norah Jones",
     "categories": [
       "Pop"
@@ -602,6 +659,7 @@ const initialSongs = [
     "id": "58",
     "title": "Aint No Sunshine",
     "key": "Am",
+    "bpm": 97,
     "artist": "Bill Withers",
     "categories": [
       "Pop"
@@ -611,6 +669,7 @@ const initialSongs = [
     "id": "59",
     "title": "With Or Without You",
     "key": "D",
+    "bpm": 115,
     "artist": "U2",
     "categories": [
       "Rock"
@@ -620,6 +679,7 @@ const initialSongs = [
     "id": "60",
     "title": "Help The Poor",
     "key": "Dm",
+    "bpm": 100,
     "artist": "Eric Clapton & B.B. King",
     "categories": [
       "Rock"
@@ -629,6 +689,7 @@ const initialSongs = [
     "id": "61",
     "title": "I Shot The Sheriff",
     "key": "Gm",
+    "bpm": 100,
     "artist": "Bob Marley",
     "categories": [
       "Rock"
@@ -638,6 +699,7 @@ const initialSongs = [
     "id": "62",
     "title": "Lovely Day",
     "key": "E",
+    "bpm": 102,
     "artist": "Bill Withers",
     "categories": [
       "Pop"
@@ -647,6 +709,7 @@ const initialSongs = [
     "id": "63",
     "title": "Just The Way You Are",
     "key": "D",
+    "bpm": 134,
     "artist": "Billy Joel",
     "categories": [
       "Pop"
@@ -656,6 +719,7 @@ const initialSongs = [
     "id": "64",
     "title": "Lets Stay Together",
     "key": "F",
+    "bpm": 109,
     "artist": "Bill Withers",
     "categories": [
       "Pop"
@@ -665,6 +729,7 @@ const initialSongs = [
     "id": "65",
     "title": "I Cant Make You Love Me",
     "key": "G - start C",
+    "bpm": 96,
     "artist": "Bonnie Raitt",
     "categories": [
       "Pop"
@@ -674,6 +739,7 @@ const initialSongs = [
     "id": "66",
     "title": "Your Body Is A Wonderland",
     "key": "E",
+    "bpm": 77,
     "artist": "John Mayer",
     "categories": [
       "Pop"
@@ -683,6 +749,7 @@ const initialSongs = [
     "id": "67",
     "title": "Call Me The Breeze",
     "key": "F#",
+    "bpm": 110,
     "artist": "J.J. Cale",
     "categories": [
       "Rock"
@@ -693,6 +760,7 @@ const initialSongs = [
     "id": "68",
     "title": "On Broadway",
     "key": "G",
+    "bpm": 114,
     "artist": "George Benson",
     "categories": [
       "Pop",
@@ -703,6 +771,7 @@ const initialSongs = [
     "id": "69",
     "title": "Over my shoulder",
     "key": "D",
+    "bpm": 100,
     "artist": "Mike and The Mechanics",
     "categories": [
       "Pop"
@@ -712,6 +781,7 @@ const initialSongs = [
     "id": "70",
     "title": "Faith",
     "key": "H",
+    "bpm": 96,
     "artist": "George Michael",
     "categories": [
       "Pop",
@@ -722,6 +792,7 @@ const initialSongs = [
     "id": "71",
     "title": "Tip of my tongue",
     "key": "H",
+    "bpm": 105,
     "artist": "Diesel",
     "categories": [
       "Rock"
@@ -731,6 +802,7 @@ const initialSongs = [
     "id": "72",
     "title": "So lonely",
     "key": "E",
+    "bpm": 156,
     "artist": "Police",
     "categories": [
       "Rock"
@@ -740,6 +812,7 @@ const initialSongs = [
     "id": "73",
     "title": "Walking on sunshine",
     "key": "F",
+    "bpm": 110,
     "artist": "Katrina and the Waves",
     "categories": [
       "Pop",
@@ -751,6 +824,7 @@ const initialSongs = [
     "id": "74",
     "title": "Ahr der",
     "key": "E",
+    "bpm": 95,
     "artist": "Mc Einar",
     "categories": [
       "Dansk",
@@ -761,6 +835,7 @@ const initialSongs = [
     "id": "75",
     "title": "Den jeg elsker",
     "key": "D",
+    "bpm": 112,
     "artist": "Thomas Helmig og Søs Fenger",
     "categories": [
       "Dansk",
@@ -771,6 +846,7 @@ const initialSongs = [
     "id": "76",
     "title": "Long train running",
     "key": "Em",
+    "bpm": 102,
     "artist": "The Doobie Brothers",
     "categories": [
       "Rock"
@@ -780,6 +856,7 @@ const initialSongs = [
     "id": "77",
     "title": "Flying",
     "key": "D",
+    "bpm": 104,
     "artist": "Nice Little Penguins",
     "categories": [
       "Pop"
@@ -789,6 +866,7 @@ const initialSongs = [
     "id": "78",
     "title": "Breakfast at tiffanys",
     "key": "D",
+    "bpm": 96,
     "artist": "Deep Blue Something",
     "categories": [
       "Pop",
@@ -799,6 +877,7 @@ const initialSongs = [
     "id": "79",
     "title": "Stupid man",
     "key": "F",
+    "bpm": 125,
     "artist": "Thomas Helmig",
     "categories": [
       "Dansk",
@@ -809,6 +888,7 @@ const initialSongs = [
     "id": "80",
     "title": "Lady",
     "key": "Am",
+    "bpm": 109,
     "artist": "Modjo",
     "categories": [
       "Pop",
@@ -819,6 +899,7 @@ const initialSongs = [
     "id": "81",
     "title": "Help",
     "key": "A",
+    "bpm": 96,
     "artist": "The Beatles",
     "categories": [
       "Rock"
@@ -828,6 +909,7 @@ const initialSongs = [
     "id": "82",
     "title": "Lanternen",
     "key": "C/A",
+    "bpm": 122,
     "artist": "TV2",
     "categories": [
       "Dansk",
@@ -838,6 +920,7 @@ const initialSongs = [
     "id": "83",
     "title": "Sing it Back",
     "key": "Em",
+    "bpm": 123,
     "artist": "Moloko",
     "categories": [
       "Pop",
@@ -848,6 +931,7 @@ const initialSongs = [
     "id": "84",
     "title": "Sunny",
     "key": "Em",
+    "bpm": 110,
     "artist": "Bobby Hebb",
     "categories": [
       "Pop"
@@ -857,6 +941,7 @@ const initialSongs = [
     "id": "85",
     "title": "Take on me",
     "key": "A",
+    "bpm": 169,
     "artist": "Aha",
     "categories": [
       "Pop",
@@ -867,6 +952,7 @@ const initialSongs = [
     "id": "86",
     "title": "Gorgie Porgie",
     "key": "Em",
+    "bpm": 126,
     "artist": "Toto",
     "categories": [
       "Rock"
@@ -876,6 +962,7 @@ const initialSongs = [
     "id": "87",
     "title": "My girl",
     "key": "C",
+    "bpm": 115,
     "artist": "The Temptations",
     "categories": [
       "Pop",
@@ -886,6 +973,7 @@ const initialSongs = [
     "id": "88",
     "title": "Mrs Robinson",
     "key": "F#7/A",
+    "bpm": 99,
     "artist": "Simon and Garfunkel",
     "categories": [
       "Pop",
@@ -896,6 +984,7 @@ const initialSongs = [
     "id": "89",
     "title": "De første kærester på månen",
     "key": "G",
+    "bpm": 132,
     "artist": "TV2",
     "categories": [
       "Dansk",
@@ -906,6 +995,7 @@ const initialSongs = [
     "id": "90",
     "title": "Happy together",
     "key": "F#m",
+    "bpm": 120,
     "artist": "The Turtles",
     "categories": [
       "Pop",
@@ -916,6 +1006,7 @@ const initialSongs = [
     "id": "91",
     "title": "Walk on by",
     "key": "Em",
+    "bpm": 128,
     "artist": "Dione Warwick",
     "categories": [
       "Pop"
@@ -925,6 +1016,7 @@ const initialSongs = [
     "id": "92",
     "title": "Dont worry be happy",
     "key": "C",
+    "bpm": 100,
     "artist": "Bobby McFerrin",
     "categories": [
       "Pop"
@@ -934,6 +1026,7 @@ const initialSongs = [
     "id": "93",
     "title": "I feel for you",
     "key": "F#",
+    "bpm": 118,
     "artist": "Prince",
     "categories": [
       "Pop",
@@ -944,6 +1037,7 @@ const initialSongs = [
     "id": "94",
     "title": "It wont be long",
     "key": "E",
+    "bpm": 168,
     "artist": "The Beatles",
     "categories": [
       "Rock"
@@ -953,6 +1047,7 @@ const initialSongs = [
     "id": "95",
     "title": "Change the world",
     "key": "E",
+    "bpm": 100,
     "artist": "Eric Clapton",
     "categories": [
       "Rock"
@@ -962,6 +1057,7 @@ const initialSongs = [
     "id": "96",
     "title": "I will survive",
     "key": "Dm",
+    "bpm": 117,
     "artist": "Gloria Gaynor",
     "categories": [
       "Disco",
@@ -972,6 +1068,7 @@ const initialSongs = [
     "id": "97",
     "title": "Walk of life",
     "key": "E",
+    "bpm": 150,
     "artist": "Dire Straits",
     "categories": [
       "Rock"
@@ -981,6 +1078,7 @@ const initialSongs = [
     "id": "98",
     "title": "Midnight Hour",
     "key": "C",
+    "bpm": 109,
     "artist": "Wilson Picket",
     "categories": [
       "Disco"
@@ -990,6 +1088,7 @@ const initialSongs = [
     "id": "99",
     "title": "The joker",
     "key": "F",
+    "bpm": 104,
     "artist": "Steve Miller Band",
     "categories": [
       "Rock"
@@ -999,6 +1098,7 @@ const initialSongs = [
     "id": "100",
     "title": "I am still standing",
     "key": "A/Am",
+    "bpm": 117,
     "artist": "Elton John",
     "categories": [
       "Pop"
@@ -1008,6 +1108,7 @@ const initialSongs = [
     "id": "101",
     "title": "Ticket to ride",
     "key": "A",
+    "bpm": 113,
     "artist": "The Beatles",
     "categories": [
       "Rock"
@@ -1017,6 +1118,7 @@ const initialSongs = [
     "id": "102",
     "title": "It aint over till its over",
     "key": "C#",
+    "bpm": 88,
     "artist": "Lenny Kravitz",
     "categories": [
       "Rock",
@@ -1027,6 +1129,7 @@ const initialSongs = [
     "id": "103",
     "title": "1999",
     "key": "F",
+    "bpm": 159,
     "artist": "Prince",
     "categories": [
       "Pop",
@@ -1037,6 +1140,7 @@ const initialSongs = [
     "id": "104",
     "title": "I got a Woman",
     "key": "A",
+    "bpm": 112,
     "artist": "Ray Charles",
     "categories": [
       "Pop"
@@ -1046,6 +1150,7 @@ const initialSongs = [
     "id": "105",
     "title": "Start me up",
     "key": "F",
+    "bpm": 118,
     "artist": "Rolling Stones",
     "categories": [
       "Rock",
@@ -1056,6 +1161,7 @@ const initialSongs = [
     "id": "106",
     "title": "Master Blaster",
     "key": "Am",
+    "bpm": 107,
     "artist": "Stevie Wonder",
     "categories": [
       "Pop",
@@ -1066,6 +1172,7 @@ const initialSongs = [
     "id": "107",
     "title": "7 Years",
     "key": "Em",
+    "bpm": 120,
     "artist": "Lucas Graham",
     "categories": [
       "Pop"
@@ -1075,6 +1182,7 @@ const initialSongs = [
     "id": "108",
     "title": "Cake by the Ocean",
     "key": "Em",
+    "bpm": 119,
     "artist": "DNCE",
     "categories": [
       "Pop",
@@ -1085,6 +1193,7 @@ const initialSongs = [
     "id": "109",
     "title": "Shape of you",
     "key": "C#m",
+    "bpm": 96,
     "artist": "Ed Sheeran",
     "categories": [
       "Pop"
@@ -1095,6 +1204,7 @@ const initialSongs = [
     "id": "110",
     "title": "Cream",
     "key": "Bb",
+    "bpm": 102,
     "artist": "Prince",
     "categories": [
       "Rock"
@@ -1104,6 +1214,7 @@ const initialSongs = [
     "id": "111",
     "title": "Cant stop the feeling",
     "key": "C",
+    "bpm": 113,
     "artist": "Justin Timberlake",
     "categories": [
       "Pop"
@@ -1114,6 +1225,7 @@ const initialSongs = [
     "id": "112",
     "title": "Unchain my heart",
     "key": "Am",
+    "bpm": 150,
     "artist": "Ray Charles",
     "categories": [
       "Pop"
@@ -1123,6 +1235,7 @@ const initialSongs = [
     "id": "113",
     "title": "Rock with you",
     "key": "Dm",
+    "bpm": 116,
     "artist": "Michael Jackson",
     "categories": [
       "Disco",
@@ -1134,6 +1247,7 @@ const initialSongs = [
     "id": "114",
     "title": "The Girl From Ipanema",
     "key": "F",
+    "bpm": 130,
     "artist": "Jobim",
     "categories": [
       "Pop"
@@ -1143,6 +1257,7 @@ const initialSongs = [
     "id": "115",
     "title": "Corcovado",
     "key": "Am",
+    "bpm": 130,
     "artist": "Jobim",
     "categories": [
       "Pop"
@@ -1152,6 +1267,7 @@ const initialSongs = [
     "id": "116",
     "title": "Fields Of Gold",
     "key": "C",
+    "bpm": 104,
     "artist": "Sting",
     "categories": [
       "Pop"
@@ -1161,6 +1277,7 @@ const initialSongs = [
     "id": "117",
     "title": "Shape Of My Heart",
     "key": "F#m",
+    "bpm": 84,
     "artist": "Sting",
     "categories": [
       "Pop"
@@ -1170,6 +1287,7 @@ const initialSongs = [
     "id": "118",
     "title": "Vem Vet",
     "key": "Am",
+    "bpm": 95,
     "artist": "Lisa Ekdahl",
     "categories": [
       "Pop"
@@ -1179,6 +1297,7 @@ const initialSongs = [
     "id": "119",
     "title": "Calling You",
     "key": "G",
+    "bpm": 103,
     "artist": "Bagdad Cafe",
     "categories": [
       "Pop"
@@ -1188,6 +1307,7 @@ const initialSongs = [
     "id": "120",
     "title": "Its Probably Me",
     "key": "Em",
+    "bpm": 100,
     "artist": "Sting & Eric Clapton",
     "categories": [
       "Pop"
@@ -1197,6 +1317,7 @@ const initialSongs = [
     "id": "121",
     "title": "Cocain",
     "key": "Em",
+    "bpm": 100,
     "artist": "J.J. Cale",
     "categories": [
       "Rock"
@@ -1206,6 +1327,7 @@ const initialSongs = [
     "id": "122",
     "title": "Fever",
     "key": "Cm",
+    "bpm": 122,
     "artist": "Elvis",
     "categories": [
       "Rock"
@@ -1215,6 +1337,7 @@ const initialSongs = [
     "id": "123",
     "title": "Fallen",
     "key": "E",
+    "bpm": 112,
     "artist": "Lauren Wood",
     "categories": [
       "Pop"
@@ -1224,6 +1347,7 @@ const initialSongs = [
     "id": "124",
     "title": "50 Ways To Leave Your Lover",
     "key": "Em",
+    "bpm": 102,
     "artist": "Paul Simon",
     "categories": [
       "Pop"
@@ -1233,6 +1357,7 @@ const initialSongs = [
     "id": "125",
     "title": "Ebony And Ivory",
     "key": "G/start D11",
+    "bpm": 80,
     "artist": "Paul McCartney & Stevie Wonder",
     "categories": [
       "Pop"
@@ -1242,6 +1367,7 @@ const initialSongs = [
     "id": "126",
     "title": "Dont Be Cruel",
     "key": "C",
+    "bpm": 170,
     "artist": "Elvis",
     "categories": [
       "Rock"
@@ -1251,6 +1377,7 @@ const initialSongs = [
     "id": "127",
     "title": "Careless Whisper",
     "key": "Dm",
+    "bpm": 76,
     "artist": "Wham",
     "categories": [
       "Pop",
@@ -1261,6 +1388,7 @@ const initialSongs = [
     "id": "128",
     "title": "Father Figure",
     "key": "A",
+    "bpm": 112,
     "artist": "George Michael",
     "categories": [
       "Pop",
@@ -1271,6 +1399,7 @@ const initialSongs = [
     "id": "129",
     "title": "Tears In Heaven",
     "key": "A",
+    "bpm": 77,
     "artist": "Eric Clapton",
     "categories": [
       "Rock",
@@ -1281,6 +1410,7 @@ const initialSongs = [
     "id": "130",
     "title": "They Call Me The Breeze",
     "key": "F#",
+    "bpm": 110,
     "artist": "J.J. Cale",
     "categories": [
       "Rock"
@@ -1290,6 +1420,7 @@ const initialSongs = [
     "id": "131",
     "title": "Who Says",
     "key": "D",
+    "bpm": 90,
     "artist": "John Mayer",
     "categories": [
       "Pop"
@@ -1299,6 +1430,7 @@ const initialSongs = [
     "id": "132",
     "title": "You Can Call Me Al",
     "key": "F",
+    "bpm": 120,
     "artist": "Paul Simon",
     "categories": [
       "Pop"
@@ -1313,7 +1445,8 @@ const initialSongs = [
       "Dansk",
       "90'er"
     ],
-    "lyrics": "Sommersolen brænder på det tørre ørkensand\nIsabella ser mod himlen Isabella ser sit land\nLandet ligger tørt og stille venter på et tegn\nHvert et frø og hvert en plante venter kun på regn\n\n**Jeg tror du kan og vil og jeg ved**\n**Du kan danse jorden grøn til liv og kærlighed**\n**Dans dans så regnen falder ned**\n**Dans Isabella dans**\n\nBREAK\n\nFørst dråbe falder fra den første lille sky\nDu har danset længe nu du har danset for din by\nRegnen falder stille på din skulder og din kind\nJorden ligger tør i den varme ørkenvind\n\n**Jeg tror du kan og vil og jeg ved**\n**Du kan danse jorden grøn til liv og kærlighed**\n**Jeg tror du kan og vil og jeg ved**\n**Du kan danse regnen ned du kan danse fred**\n\n**Dans dans så regnen falder ned**\n**Dans Isabella dans BREAK**\n\nDans dans så regnen falder ned\nDans Isabella dans\nRegn...dans\nRegn...dans\nRegn...dans\n\nIsabella...Isabella,\nIsabella...Isabella,\nIsabella...Isabella,\nIsabella...Isabella,\nIsabella...Isabella,\n\nSe regnen falder\nSe regner falder (Isabella, Isabella)\n\nBREAK!"
+    "lyrics": "Sommersolen brænder på det tørre ørkensand\nIsabella ser mod himlen Isabella ser sit land\nLandet ligger tørt og stille venter på et tegn\nHvert et frø og hvert en plante venter kun på regn\n\n**Jeg tror du kan og vil og jeg ved**\n**Du kan danse jorden grøn til liv og kærlighed**\n**Dans dans så regnen falder ned**\n**Dans Isabella dans**\n\nBREAK\n\nFørst dråbe falder fra den første lille sky\nDu har danset længe nu du har danset for din by\nRegnen falder stille på din skulder og din kind\nJorden ligger tør i den varme ørkenvind\n\n**Jeg tror du kan og vil og jeg ved**\n**Du kan danse jorden grøn til liv og kærlighed**\n**Jeg tror du kan og vil og jeg ved**\n**Du kan danse regnen ned du kan danse fred**\n\n**Dans dans så regnen falder ned**\n**Dans Isabella dans BREAK**\n\nDans dans så regnen falder ned\nDans Isabella dans\nRegn...dans\nRegn...dans\nRegn...dans\n\nIsabella...Isabella,\nIsabella...Isabella,\nIsabella...Isabella,\nIsabella...Isabella,\nIsabella...Isabella,\n\nSe regnen falder\nSe regner falder (Isabella, Isabella)\n\nBREAK!",
+    "bpm": 99
   },
   {
     "id": "134",
@@ -1323,7 +1456,8 @@ const initialSongs = [
     "categories": [
       "Dansk"
     ],
-    "lyrics": "(Intro)\n\n(Uhh uhh uhh)\n\nJeg slukker for mit fjernsyn\nDet spærrer for mit udsyn\nDer´ aldrig noget godt på\nJeg trænger til noget der er tæt på\n\nOg hvad kunne være bedre\nEnd at vende mig i stolen og kigge på dig\nPå dig - som du står der foran mig\n\n**Og du har din røde kjole på**\n**Og mit hjerte går i stå**\n**Jeg ved vi ind imellem er lige lovlig Hr. og Fru**\n**Men du har aldrig været smukkere end nu**\n\nHvad siger du til at danse\nSe om du kan få mig til at standse\nGiv mig bare en grund\nTil ikke at rocke med din husbond\n\nJa hvad kunne være bedre\nEnd at tænde for musikken og tage fat om dig\nOm dig - som du står der foran mig\n\n**Du har din røde kjole på**\n**Og mit hjerte går i stå**\n**Jeg ved vi ind i mellem er lige lovlig Hr. og Fru**\n**Men du har aldrig været smukkere end nu**\n\n(Intro) x 2\n\n(Uhh uhh uhh)\n\n**Du har din røde kjole på**\n**Og mit hjerte går i stå**\n**Jeg ved vi ind i mellem er lige lovlig Hr. og Fru**\n**Men du har aldrig været smukkere end nu**\n\n**Ja ja ja ja ja ja ja!!!**"
+    "lyrics": "(Intro)\n\n(Uhh uhh uhh)\n\nJeg slukker for mit fjernsyn\nDet spærrer for mit udsyn\nDer´ aldrig noget godt på\nJeg trænger til noget der er tæt på\n\nOg hvad kunne være bedre\nEnd at vende mig i stolen og kigge på dig\nPå dig - som du står der foran mig\n\n**Og du har din røde kjole på**\n**Og mit hjerte går i stå**\n**Jeg ved vi ind imellem er lige lovlig Hr. og Fru**\n**Men du har aldrig været smukkere end nu**\n\nHvad siger du til at danse\nSe om du kan få mig til at standse\nGiv mig bare en grund\nTil ikke at rocke med din husbond\n\nJa hvad kunne være bedre\nEnd at tænde for musikken og tage fat om dig\nOm dig - som du står der foran mig\n\n**Du har din røde kjole på**\n**Og mit hjerte går i stå**\n**Jeg ved vi ind i mellem er lige lovlig Hr. og Fru**\n**Men du har aldrig været smukkere end nu**\n\n(Intro) x 2\n\n(Uhh uhh uhh)\n\n**Du har din røde kjole på**\n**Og mit hjerte går i stå**\n**Jeg ved vi ind i mellem er lige lovlig Hr. og Fru**\n**Men du har aldrig været smukkere end nu**\n\n**Ja ja ja ja ja ja ja!!!**",
+    "bpm": 125
   },
   {
     "id": "135",
@@ -1333,7 +1467,8 @@ const initialSongs = [
     "categories": [
       "Pop"
     ],
-    "lyrics": "Feeling my way through the darkness\nGuided by a beating heart\nI can't tell where the journey will end\nBut I know where to start\n\nThey tell me I'm too young to understand\nThey say I'm caught up in a dream\nWell life will pass me by if I don't open up my eyes\nWell that's fine by me\n\n[2x]\n\n**So wake me up when it's all over**\n**When I'm wiser and I'm older**\n**All this time I was finding myself**\n**And I didn't know I was lost**\n\nI tried carrying the weight of the world\nBut I only have two hands\nHope I get the chance to travel the world\nBut I don't have any plans\n\nWish that I could stay forever this young\nNot afraid to close my eyes\nLife's a game made for everyone\nAnd love is the prize\n\n[2x]\n\n**So wake me up when it's all over**\n**When I'm wiser and I'm older**\n**All this time I was finding myself**\n**And I didn't know I was lost**\n\nDidn't know I was lost\nI didn't know I was lost\nI didn't know I was lost\nI didn't know (didn't know, didn't know)"
+    "lyrics": "Feeling my way through the darkness\nGuided by a beating heart\nI can't tell where the journey will end\nBut I know where to start\n\nThey tell me I'm too young to understand\nThey say I'm caught up in a dream\nWell life will pass me by if I don't open up my eyes\nWell that's fine by me\n\n[2x]\n\n**So wake me up when it's all over**\n**When I'm wiser and I'm older**\n**All this time I was finding myself**\n**And I didn't know I was lost**\n\nI tried carrying the weight of the world\nBut I only have two hands\nHope I get the chance to travel the world\nBut I don't have any plans\n\nWish that I could stay forever this young\nNot afraid to close my eyes\nLife's a game made for everyone\nAnd love is the prize\n\n[2x]\n\n**So wake me up when it's all over**\n**When I'm wiser and I'm older**\n**All this time I was finding myself**\n**And I didn't know I was lost**\n\nDidn't know I was lost\nI didn't know I was lost\nI didn't know I was lost\nI didn't know (didn't know, didn't know)",
+    "bpm": 124
   },
   {
     "id": "136",
@@ -1344,7 +1479,8 @@ const initialSongs = [
       "Dansk",
       "Rock"
     ],
-    "lyrics": "Intro: || C7 | % | F | % | C7 | % | F | % ||\n\nC7 F\nNår solen den forsvinder fra de hjemlige himmelstrøg, ja så forsvinder jeg også\nC7 F\nSydpå til Spanien og mit luksus-eksil - For at te mig som en tosse\nBbmaj7 A(#5) A7 Dm C\nPå Costa del Sol hvor solen den danser - En inciterende flamenco i min swimming-pool\nBbmaj7 Asus A7 Dm 1.x A\nHar keep cool altid været mit motto - Mit navn Günther men folk hernede kalder mig Otto\n\nSå snart jeg så det hele gå ad helvede til - var jeg psst-væk over samtlige bjerge\nOg danderer den nu flittigt i dansker koloni - med pensionen hjemmefra i reserve\n\nPå Costa del Sol...(2.x C)\n\nBbmaj7 C F Bbmaj7\nFor øjeblikket har vi det herligt her på Costa del Sol\nGm7 A7sus A\nI vort ny-nazistiske og asociale sammenhold\nBbmaj7 C F Bbmaj7\nMen den dag røde russerne kommer og det gør de jo nok igen\nGm7 C F - C7 - F - C7 - F - C7 - F - C7 - F - C7 - F\nHar jeg solgt min hacienda og købt en ny i Californien - (mellemspil)\n\nEn sidste kommentar herfra sku' lige være den\nAt der Führer var en visionær af klasse\nDer såfremt han var til stede den dag i dag\nVille la' fattigrøve og skvadderhoveder gasse\n\nPå Costa del Sol..."
+    "lyrics": "Intro: || C7 | % | F | % | C7 | % | F | % ||\n\nC7 F\nNår solen den forsvinder fra de hjemlige himmelstrøg, ja så forsvinder jeg også\nC7 F\nSydpå til Spanien og mit luksus-eksil - For at te mig som en tosse\nBbmaj7 A(#5) A7 Dm C\nPå Costa del Sol hvor solen den danser - En inciterende flamenco i min swimming-pool\nBbmaj7 Asus A7 Dm 1.x A\nHar keep cool altid været mit motto - Mit navn Günther men folk hernede kalder mig Otto\n\nSå snart jeg så det hele gå ad helvede til - var jeg psst-væk over samtlige bjerge\nOg danderer den nu flittigt i dansker koloni - med pensionen hjemmefra i reserve\n\nPå Costa del Sol...(2.x C)\n\nBbmaj7 C F Bbmaj7\nFor øjeblikket har vi det herligt her på Costa del Sol\nGm7 A7sus A\nI vort ny-nazistiske og asociale sammenhold\nBbmaj7 C F Bbmaj7\nMen den dag røde russerne kommer og det gør de jo nok igen\nGm7 C F - C7 - F - C7 - F - C7 - F - C7 - F - C7 - F\nHar jeg solgt min hacienda og købt en ny i Californien - (mellemspil)\n\nEn sidste kommentar herfra sku' lige være den\nAt der Führer var en visionær af klasse\nDer såfremt han var til stede den dag i dag\nVille la' fattigrøve og skvadderhoveder gasse\n\nPå Costa del Sol...",
+    "bpm": 130
   },
   {
     "id": "137",
@@ -1355,7 +1491,8 @@ const initialSongs = [
       "Rock",
       "Pop"
     ],
-    "lyrics": "Been beat up and battered 'round\nBeen sent up, and I've been shot down\nYou're the best thing that I've ever found\nHandle me with care\n\nReputations changeable\nSituations tolerable\nBaby, you're adorable\nHandle me with care\n\n*I'm so tired of being lonely*\n*I still have some love to give*\n*Won't you show me that you really care?*\n\n**Everybody's got somebody to lean on**\n**Put your body next to mine, and dream on**\n\nI've been fobbed off, and I've been fooled\nI've been robbed and ridiculed\nIn daycare centers and night schools\nHandle me with care\n\nSOLO KORT\n\nBeen stuck in airports, terrorized\nSent to meetings, hypnotized\nOverexposed, commercialized\nHandle me with care\n\n*I'm so tired of being lonely*\n*I still have some love to give*\n*Won't you show me that you really care?*\n\n**Everybody's got somebody to lean on**\n**Put your body next to mine, and dream on**\n\nI've been uptight and made a mess\nBut I'll clean it up myself, I guess\nOh, the sweet smell of success\nHandle me with care\n\nSOLO Z FAVE"
+    "lyrics": "Been beat up and battered 'round\nBeen sent up, and I've been shot down\nYou're the best thing that I've ever found\nHandle me with care\n\nReputations changeable\nSituations tolerable\nBaby, you're adorable\nHandle me with care\n\n*I'm so tired of being lonely*\n*I still have some love to give*\n*Won't you show me that you really care?*\n\n**Everybody's got somebody to lean on**\n**Put your body next to mine, and dream on**\n\nI've been fobbed off, and I've been fooled\nI've been robbed and ridiculed\nIn daycare centers and night schools\nHandle me with care\n\nSOLO KORT\n\nBeen stuck in airports, terrorized\nSent to meetings, hypnotized\nOverexposed, commercialized\nHandle me with care\n\n*I'm so tired of being lonely*\n*I still have some love to give*\n*Won't you show me that you really care?*\n\n**Everybody's got somebody to lean on**\n**Put your body next to mine, and dream on**\n\nI've been uptight and made a mess\nBut I'll clean it up myself, I guess\nOh, the sweet smell of success\nHandle me with care\n\nSOLO Z FAVE",
+    "bpm": 115
   },
   {
     "id": "138",
@@ -1365,7 +1502,8 @@ const initialSongs = [
     "categories": [
       "Pop"
     ],
-    "lyrics": "White shirt now red, my bloody nose\nSleepin', you're on your tippy toes\nCreepin' around like no one knows\nThink you're so criminal\n\nBruises on both my knees for you\nDon't say thank you or please\nI do what I want when I'm wanting to\nMy soul? So cynical\n\n**So you're a tough guy**\n**Like it really rough guy**\n**Just can't get enough guy**\n**Chest always so puffed guy**\n**I'm that bad type**\n**Make your mama sad type**\n**Make your girlfriend mad tight**\n**Might seduce your dad type**\n**I'm the bad guy, duh**\n\nI like it when you take control\nEven if you know that you don't\nOwn me, I'll let you play the role\nI'll be your animal\n\nMy mommy likes to sing along with me\nBut she won't sing this song\nIf she reads all the lyrics\nShe'll pity the men I know\n\n**So you're a tough guy**\n**Like it really rough guy**\n**Just can't get enough guy**\n**Chest always so puffed guy**\n**I'm that bad type**\n**Make your mama sad type**\n**Make your girlfriend mad tight**\n**Might seduce your dad type**\n**I'm the bad guy, duh**"
+    "lyrics": "White shirt now red, my bloody nose\nSleepin', you're on your tippy toes\nCreepin' around like no one knows\nThink you're so criminal\n\nBruises on both my knees for you\nDon't say thank you or please\nI do what I want when I'm wanting to\nMy soul? So cynical\n\n**So you're a tough guy**\n**Like it really rough guy**\n**Just can't get enough guy**\n**Chest always so puffed guy**\n**I'm that bad type**\n**Make your mama sad type**\n**Make your girlfriend mad tight**\n**Might seduce your dad type**\n**I'm the bad guy, duh**\n\nI like it when you take control\nEven if you know that you don't\nOwn me, I'll let you play the role\nI'll be your animal\n\nMy mommy likes to sing along with me\nBut she won't sing this song\nIf she reads all the lyrics\nShe'll pity the men I know\n\n**So you're a tough guy**\n**Like it really rough guy**\n**Just can't get enough guy**\n**Chest always so puffed guy**\n**I'm that bad type**\n**Make your mama sad type**\n**Make your girlfriend mad tight**\n**Might seduce your dad type**\n**I'm the bad guy, duh**",
+    "bpm": 135
   },
   {
     "id": "139",
@@ -1375,7 +1513,8 @@ const initialSongs = [
     "categories": [
       "Pop"
     ],
-    "lyrics": "Well, she's all you'd ever want\nShe's the kind I like to flaunt and take to dinner\nBut she always knows her place\nShe's got style, she's got grace, she's a winner\n\n**She's a Lady**\n\n**Oh, whoa, whoa, she's a lady**\n**Talkin' about that little lady**\n**And the lady is mine**\n\nWell, she's never in the way\nAlways something nice to say, and what a blessin'\nI can leave her on her own\nKnowin' she's okay alone and there's no messin'\n\n**She's a Lady**\n\n**Oh, whoa, whoa, she's a lady**\n**Talkin' about that little lady**\n**And the lady is mine**\n\nWell, she never asks very much\nAnd I don't refuse her\nAlways treat her with respect\nI never would abuse her\nWhat she's got is hard to find\nAnd I don't want to lose her\nHelp me build a mountain\nFrom a little pile of clay, hey hey hey\n\nWell, she knows what I'm about\nShe can take what I dish out, and that's not easy\nBut she knows me through and through\nAnd she knows just what to do and how to please me\n\n**She's a Lady**\n\n**Oh, whoa, whoa, she's a lady**\n**Talkin' about that little lady**\n**And the lady is mine**\n**Yeah, yeah, yeah, she's a lady...**"
+    "lyrics": "Well, she's all you'd ever want\nShe's the kind I like to flaunt and take to dinner\nBut she always knows her place\nShe's got style, she's got grace, she's a winner\n\n**She's a Lady**\n\n**Oh, whoa, whoa, she's a lady**\n**Talkin' about that little lady**\n**And the lady is mine**\n\nWell, she's never in the way\nAlways something nice to say, and what a blessin'\nI can leave her on her own\nKnowin' she's okay alone and there's no messin'\n\n**She's a Lady**\n\n**Oh, whoa, whoa, she's a lady**\n**Talkin' about that little lady**\n**And the lady is mine**\n\nWell, she never asks very much\nAnd I don't refuse her\nAlways treat her with respect\nI never would abuse her\nWhat she's got is hard to find\nAnd I don't want to lose her\nHelp me build a mountain\nFrom a little pile of clay, hey hey hey\n\nWell, she knows what I'm about\nShe can take what I dish out, and that's not easy\nBut she knows me through and through\nAnd she knows just what to do and how to please me\n\n**She's a Lady**\n\n**Oh, whoa, whoa, she's a lady**\n**Talkin' about that little lady**\n**And the lady is mine**\n**Yeah, yeah, yeah, she's a lady...**",
+    "bpm": 120
   },
   {
     "id": "140",
@@ -1386,7 +1525,8 @@ const initialSongs = [
       "Disco",
       "Pop"
     ],
-    "lyrics": "I like to see you boogie\nRight across the floor\nI like to do it to you\nTill you holla for more\n\nI like to reggae\nBut you dance too fast for me\nI'd like to make love to you\nSo you can make me scream\n\n**Boogie on reggae woman**\n**What is wrong with me**\n**Boogie on reggae woman**\n**Baby can't you see**\n\nI'd like to see both of us\nFall deeply in love\nI'd like to see you na...\nUnder the stars above\n\nI'd like to see both of us\nFall deeply in love - yeah\nI'd like to see you in the raw\nUnder the stars above\n\n**So boogie on reggae woman**\n**What is wrong with you**\n**Boogie on reggae woman**\n**What you tryin' to do**\n\nCan i play? can i play? No!\n\n**Boogie on reggae woman**\n**What is wrong with me**\n**Boogie on reggae woman**\n**What you tryin' to do**\n**Boogie on reggae woman**\n**Let me do it to you**\n**Boogie on reggae woman**\n**What you tryin' to do**"
+    "lyrics": "I like to see you boogie\nRight across the floor\nI like to do it to you\nTill you holla for more\n\nI like to reggae\nBut you dance too fast for me\nI'd like to make love to you\nSo you can make me scream\n\n**Boogie on reggae woman**\n**What is wrong with me**\n**Boogie on reggae woman**\n**Baby can't you see**\n\nI'd like to see both of us\nFall deeply in love\nI'd like to see you na...\nUnder the stars above\n\nI'd like to see both of us\nFall deeply in love - yeah\nI'd like to see you in the raw\nUnder the stars above\n\n**So boogie on reggae woman**\n**What is wrong with you**\n**Boogie on reggae woman**\n**What you tryin' to do**\n\nCan i play? can i play? No!\n\n**Boogie on reggae woman**\n**What is wrong with me**\n**Boogie on reggae woman**\n**What you tryin' to do**\n**Boogie on reggae woman**\n**Let me do it to you**\n**Boogie on reggae woman**\n**What you tryin' to do**",
+    "bpm": 107
   },
   {
     "id": "141",
@@ -1397,7 +1537,8 @@ const initialSongs = [
       "Dansk",
       "Syng med"
     ],
-    "lyrics": "| Intro | n.c. | % | Hm7 | % | D – Hm | G – A | D | break |\n\nI den varme nat – fyldt med drømmen at\nLykken varer evigt\nLyser månen op – på en kvindekrop, ja\nHendes smukke ansigt\nHun er bare min store kærlighed\nDer bli'r større – der bli'r ved og ved\n\n**Smuk som et stjerneskud**\n**Som tiden går**\n**Smukkere ser hun ud**\n**År efter år**\n\nHendes hofters dans – I en strålekrans, ja\ngennem bølgebruset\nOg i måneskin – bli'r jeg lukket ind\nLyk'lig og beruset\nNatten den er fyldt med kærlighed\nDer bli'r større – der bli'r ved og ved\n\n**Smuk som et stjerneskud**\n**Som tiden går**\n**Smukkere ser hun ud**\n**År efter år**\n\nEt stjerneskud (stjerneskud)\nSmuk som et stjerneskud (år efter år)\nFlottere som tiden går (stjerneskud)\nÅr efter år\n\n**Smuk som et stjerneskud**\n**Som tiden går**\n**Smukkere ser hun ud**\n**År efter år**\n\n**Smuk som et stjerneskud (stjerneskud)**\n**Som tiden går (år efter år)**\n**Smukkere ser hun ud (stjerneskud)**\n**År efter år**\n\n| Coda |\nMit stjerneskud\nÅr efter år efter år efter år (stjerneskud)"
+    "lyrics": "| Intro | n.c. | % | Hm7 | % | D – Hm | G – A | D | break |\n\nI den varme nat – fyldt med drømmen at\nLykken varer evigt\nLyser månen op – på en kvindekrop, ja\nHendes smukke ansigt\nHun er bare min store kærlighed\nDer bli'r større – der bli'r ved og ved\n\n**Smuk som et stjerneskud**\n**Som tiden går**\n**Smukkere ser hun ud**\n**År efter år**\n\nHendes hofters dans – I en strålekrans, ja\ngennem bølgebruset\nOg i måneskin – bli'r jeg lukket ind\nLyk'lig og beruset\nNatten den er fyldt med kærlighed\nDer bli'r større – der bli'r ved og ved\n\n**Smuk som et stjerneskud**\n**Som tiden går**\n**Smukkere ser hun ud**\n**År efter år**\n\nEt stjerneskud (stjerneskud)\nSmuk som et stjerneskud (år efter år)\nFlottere som tiden går (stjerneskud)\nÅr efter år\n\n**Smuk som et stjerneskud**\n**Som tiden går**\n**Smukkere ser hun ud**\n**År efter år**\n\n**Smuk som et stjerneskud (stjerneskud)**\n**Som tiden går (år efter år)**\n**Smukkere ser hun ud (stjerneskud)**\n**År efter år**\n\n| Coda |\nMit stjerneskud\nÅr efter år efter år efter år (stjerneskud)",
+    "bpm": 104
   }
 ];
 const initialSets = [
