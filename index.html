@@ -318,7 +318,7 @@
     }
 
     .song-bpm {
-      background: #e67e22;
+      background: #7f8c8d;
       color: white;
       padding: 2px 6px;
       border-radius: 4px;
@@ -1583,8 +1583,8 @@ ${setSections}
             return `<div class="perf-song${hasLyrics ? '' : ' no-lyrics'}" onclick="${hasLyrics ? `showLyrics('${song.id}')` : ''}">
               <span class="num">${index + 1}.</span>
               <span class="title">${escapeHtml(song.title)}</span>
-              ${song.key ? `<span class="key">${escapeHtml(song.key)}</span>` : ''}
               ${song.bpm ? `<span class="key">${escapeHtml(String(song.bpm))} BPM</span>` : ''}
+              ${song.key ? `<span class="key">${escapeHtml(song.key)}</span>` : ''}
             </div>`;
           }).join('')}
         </div>
