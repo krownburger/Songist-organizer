@@ -2,14 +2,14 @@
 // Rediger sange og tekster her — eller brug 'Download songs.js' i appen efter redigering.
 const initialSongs = [
       // Første sæt - mappet til nye kategorier
-      { id: '1', title: 'Jeg Tager Imod', key: 'Dm', artist: 'Thomas Helmig', categories: ['Dansk', 'Pop'] },
-      { id: '2', title: 'Love Is In The Air', key: 'C', artist: 'John Paul Young', categories: ['Pop', '80\'er'] },
+      { id: '1', title: 'Jeg Tager Imod', key: 'Dm', bpm: 120, artist: 'Thomas Helmig', categories: ['Dansk', 'Pop'] },
+      { id: '2', title: 'Love Is In The Air', key: 'C', bpm: 118, artist: 'John Paul Young', categories: ['Pop', '80\'er'] },
       { id: '3', title: 'Pretty Woman', key: 'A', artist: 'Roy Orbison', categories: ['Rock', 'Pop'] },
       { id: '4', title: 'The Way You Make Me Feel', key: 'A', artist: 'Michael Jackson', categories: ['Pop', '80\'er'] },
       { id: '5', title: 'Øde Ø', key: 'G', artist: 'Rasmus Seebach', categories: ['Dansk', 'Pop'] },
       { id: '6', title: 'Mustang Sally', key: 'C', artist: 'Wilson Picket', categories: ['Rock', 'Disco'] },
       { id: '7', title: 'Can’t Take My Eyes Off Of You', key: 'D', artist: 'Frankie Valli', categories: ['Pop'] },
-      { id: '8', title: 'Johnny B. Goode', key: 'A', artist: 'Chuck Berry', categories: ['Rock', 'Hård Rock'], lyrics: `Deep down in Louisiana close to New Orleans
+      { id: '8', title: 'Johnny B. Goode', key: 'A', artist: 'Chuck Berry', categories: ['Rock', 'Hård Rock'], bpm: 168, lyrics: `Deep down in Louisiana close to New Orleans
 Way back up in the woods among the evergreens
 There stood a log cabin made of earth and wood
 Where lived a country boy named Johnny B. Goode
