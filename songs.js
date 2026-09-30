@@ -191,13 +191,13 @@ Det en kold werden, jeg' bare en dreng mommy
       { id: '122', title: 'Fever', key: 'Cm', bpm: 122, artist: 'Elvis', categories: ['Rock'] },
       { id: '123', title: 'Fallen', key: 'E', bpm: 112, artist: 'Lauren Wood', categories: ['Pop'] },
       { id: '124', title: '50 Ways To Leave Your Lover', key: 'Em', bpm: 102, artist: 'Paul Simon', categories: ['Pop'] },
-      { id: '125', title: 'Ebony And Ivory', key: 'G/start D11', bpm: 110, artist: 'Paul McCartney & Stevie Wonder', categories: ['Pop'] },
-      { id: '126', title: 'Dont Be Cruel', key: 'C', bpm: 110, artist: 'Elvis', categories: ['Rock'] },
+      { id: '125', title: 'Ebony And Ivory', key: 'G/start D11', bpm: 80, artist: 'Paul McCartney & Stevie Wonder', categories: ['Pop'] },
+      { id: '126', title: 'Dont Be Cruel', key: 'C', bpm: 170, artist: 'Elvis', categories: ['Rock'] },
       { id: '127', title: 'Careless Whisper', key: 'Dm', bpm: 76, artist: 'Wham', categories: ['Pop', '80\'er'] },
       { id: '128', title: 'Father Figure', key: 'A', bpm: 112, artist: 'George Michael', categories: ['Pop', '80\'er'] },
       { id: '129', title: 'Tears In Heaven', key: 'A', bpm: 77, artist: 'Eric Clapton', categories: ['Rock', 'Pop'] },
       { id: '130', title: 'They Call Me The Breeze', key: 'F#', bpm: 110, artist: 'J.J. Cale', categories: ['Rock'] },
-      { id: '131', title: 'Who Says', key: 'D', bpm: 74, artist: 'John Mayer', categories: ['Pop'] },
+      { id: '131', title: 'Who Says', key: 'D', bpm: 90, artist: 'John Mayer', categories: ['Pop'] },
       { id: '132', title: 'You Can Call Me Al', key: 'F', bpm: 120, artist: 'Paul Simon', categories: ['Pop'] }
     ];
 
