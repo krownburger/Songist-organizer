@@ -1014,10 +1014,20 @@
       return false;
     }
 
+    const EXTRA_SET_ID = 'extraSet';
+    const EXTRA_SET_MAX = 3;
+
+    function ensureExtraSet() {
+      if (!sets.some(s => s.id === EXTRA_SET_ID)) {
+        sets.push({ id: EXTRA_SET_ID, name: 'Ekstra numre', songIds: [] });
+      }
+    }
+
     function loadFromSongsJs() {
       songs = JSON.parse(JSON.stringify(initialSongs));
       sets = JSON.parse(JSON.stringify(initialSets));
       jobTitle = localStorage.getItem('setlistJobTitle') || 'Sætliste';
+      ensureExtraSet();
     }
 
     function init() {
@@ -1028,6 +1038,7 @@
         songs = JSON.parse(localStorage.getItem('setlistSongs'));
         sets = JSON.parse(localStorage.getItem('setlistSets'));
       }
+      ensureExtraSet();
       
       if (sets.length > 0) {
         currentSetId = sets[0].id;
@@ -1096,7 +1107,7 @@ ${song.bpm ? `<span class="song-bpm">${escapeHtml(String(song.bpm))} BPM</span>`
       tabsEl.innerHTML = sets.map(set => `
         <div class="set-tab ${set.id === currentSetId ? 'active' : ''}" onclick="switchSet('${set.id}')">
           ${escapeHtml(set.name)} <span class="song-count">(${set.songIds.length})</span>
-          <span class="close-btn" onclick="event.stopPropagation(); deleteSet('${set.id}')">×</span>
+          ${set.id === EXTRA_SET_ID ? '' : `<span class="close-btn" onclick="event.stopPropagation(); deleteSet('${set.id}')">×</span>`}
         </div>
       `).join('');
     }
@@ -1367,6 +1378,12 @@ function editJobTitle() {
         const currentSet = sets.find(s => s.id === currentSetId);
         if (!currentSet) return;
         
+        if (currentSet.id === EXTRA_SET_ID && currentSet.songIds.length >= EXTRA_SET_MAX) {
+          if (!currentSet.songIds.includes(songId)) {
+            showToast('Ekstra numre kan højest indeholde ' + EXTRA_SET_MAX + ' sange', 'error');
+            return;
+          }
+        }
         if (fromSetId && fromSetId !== currentSetId) {
           const fromSet = sets.find(s => s.id === fromSetId);
           if (fromSet) {
@@ -1398,6 +1415,22 @@ function editJobTitle() {
       items.forEach(item => {
         item.style.borderTop = '';
       });
+    }
+
+    function deleteSet(setId) {
+      if (setId === EXTRA_SET_ID) {
+        showToast('Ekstra numre kan ikke slettes', 'error');
+        return;
+      }
+      const set = sets.find(s => s.id === setId);
+      if (!set) return;
+      if (!confirm('Slet sættet "' + set.name + '"?')) return;
+      sets = sets.filter(s => s.id !== setId);
+      if (currentSetId === setId) {
+        currentSetId = sets.length > 0 ? sets[0].id : null;
+      }
+      renderAll();
+      showToast('Sæt slettet');
     }
 
     function reorderInSet(songId, targetId) {
