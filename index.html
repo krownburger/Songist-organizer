@@ -975,6 +975,7 @@
     </div>
   </div>
 
+  <script src="NoSleep.min.js"></script>
   <script src="songs.js"></script>
   <script>
     // ========== DATA STRUCTURE ==========
@@ -1318,45 +1319,60 @@ function editJobTitle() {
     }
     // ========== KEEP SCREEN AWAKE ==========
     let wakeLock = null;
+    let noSleep = null;
     let keepAwakeWanted = false;
+    function keepAwakeActive() {
+      return !!wakeLock || !!(noSleep && noSleep.isEnabled);
+    }
     async function requestKeepAwake() {
-      if (wakeLock || !('wakeLock' in navigator)) return;
-      try {
-        wakeLock = await navigator.wakeLock.request('screen');
-        wakeLock.addEventListener('release', () => { wakeLock = null; updateKeepAwakeButton(); });
-      } catch (err) {
-        wakeLock = null;
-        showToast('Kunne ikke holde skærmen tændt: ' + err.message, 'error');
+      if (keepAwakeActive()) return;
+      if ('wakeLock' in navigator) {
+        try {
+          wakeLock = await navigator.wakeLock.request('screen');
+          wakeLock.addEventListener('release', () => { wakeLock = null; updateKeepAwakeButton(); });
+        } catch (err) {
+          wakeLock = null;
+        }
+      }
+      if (!wakeLock) {
+        try {
+          noSleep = new NoSleep();
+          await noSleep.enable();
+        } catch (err) {
+          noSleep = null;
+          showToast('Kunne ikke holde skærmen tændt: ' + err.message, 'error');
+        }
       }
       updateKeepAwakeButton();
     }
     async function toggleKeepAwake() {
       keepAwakeWanted = !keepAwakeWanted;
       if (keepAwakeWanted) {
-        if (!('wakeLock' in navigator)) {
-          showToast('Skærm-tænding understøttes ikke i denne browser', 'error');
-          keepAwakeWanted = false;
-          updateKeepAwakeButton();
-          return;
-        }
         await requestKeepAwake();
-        if (wakeLock) showToast('Skærmen holdes tændt');
-      } else if (wakeLock) {
-        await wakeLock.release().catch(() => {});
-        wakeLock = null;
+        if (keepAwakeActive()) showToast('Skærmen holdes tændt');
+        else keepAwakeWanted = false;
+      } else {
+        if (wakeLock) {
+          await wakeLock.release().catch(() => {});
+          wakeLock = null;
+        }
+        if (noSleep && noSleep.isEnabled) {
+          noSleep.disable();
+          noSleep = null;
+        }
         showToast('Skærm må slukke igen');
       }
       updateKeepAwakeButton();
     }
     document.addEventListener('visibilitychange', () => {
-      if (keepAwakeWanted && document.visibilityState === 'visible' && !wakeLock) {
+      if (keepAwakeWanted && document.visibilityState === 'visible' && !keepAwakeActive()) {
         requestKeepAwake();
       }
     });
     function updateKeepAwakeButton() {
       const btn = document.getElementById('keepAwakeBtn');
       if (!btn) return;
-      if (wakeLock) {
+      if (keepAwakeActive()) {
         btn.textContent = 'Skærm tændt';
         btn.classList.add('success');
       } else {
@@ -1590,6 +1606,10 @@ ${setSections}
       if (wakeLock) {
         wakeLock.release().catch(() => {});
         wakeLock = null;
+      }
+      if (noSleep && noSleep.isEnabled) {
+        noSleep.disable();
+        noSleep = null;
       }
       keepAwakeWanted = false;
       updateKeepAwakeButton();
