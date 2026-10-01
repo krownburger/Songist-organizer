@@ -277,12 +277,10 @@
       padding: 12px 15px;
       margin-bottom: 8px;
       border-radius: 6px;
-      cursor: grab;
       transition: all 0.3s;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      draggable: true;
       border: 1px solid var(--border);
     }
 
@@ -290,13 +288,6 @@
       background: white;
       transform: translateX(2px);
       box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    }
-
-    .song-item.dragging {
-      opacity: 0.7;
-      background: var(--secondary);
-      color: white;
-      border-color: var(--secondary);
     }
 
     .song-info {
@@ -467,29 +458,13 @@
       border-radius: 6px;
       display: flex;
       justify-content: space-between;
-      align-items: center;
-      cursor: grab;
-      transition: all 0.3s;
-      draggable: true;
+      align-items: center;      transition: all 0.3s;
       border: 1px solid var(--border);
     }
 
     .set-song-item:hover {
       background: white;
       box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    }
-
-    .set-song-item.dragging {
-      opacity: 0.7;
-      background: var(--secondary);
-      color: white;
-      border-color: var(--secondary);
-    }
-
-    .set-song-grip {
-      cursor: move;
-      opacity: 0.5;
-      padding: 5px;
     }
 
     .set-song-number {
@@ -833,6 +808,7 @@
         <span class="job-title" id="jobTitleDisplay">Sætliste</span>
         <button onclick="editJobTitle()" class="secondary" style="margin-left: 10px;">Rediger</button>
         <button onclick="toggleTheme()" class="secondary" style="margin-left: 10px;">Tema</button>
+        <button onclick="toggleKeepAwake()" id="keepAwakeBtn" class="secondary" style="margin-left: 10px;">☀️ Hold skærm tændt</button>
       </div>
       <div class="header-controls">
         <button onclick="newSong()">Ny Sang</button>
@@ -1008,9 +984,6 @@
     let jobTitle = 'Sætliste';
     let currentSetId = null;
     let activeFilter = 'all';
-    let currentDragOverTarget = null;
-    let draggedSongId = null;
-    let draggedFromSetId = null;
 
     // ========== CATEGORIES ==========
     const allCategories = ['Rock', 'Pop', 'Dansk', 'Syng med', 'Røvballe', 'Disco', 'Hård Rock', '80\'er', '90\'er'];
@@ -1058,8 +1031,8 @@
       }
       
       renderAll();
-      setupDragAndDrop();
       setupImportDragAndDrop();
+      updateKeepAwakeButton();
     }
 
     // ========== RENDERING ==========
@@ -1093,7 +1066,7 @@
       }
       
       songListEl.innerHTML = filteredSongs.map(song => `
-        <div class="song-item" draggable="true" data-id="${song.id}" ondblclick="editSong('${song.id}')">
+        <div class="song-item" data-id="${song.id}" ondblclick="editSong('${song.id}')">
           <div class="song-info">
             <div class="song-title">${escapeHtml(song.title)}</div>
             <div class="song-meta">
@@ -1108,6 +1081,7 @@ ${song.bpm ? `<span class="song-bpm">${escapeHtml(String(song.bpm))} BPM</span>`
             ` : ''}
           </div>
           <div class="song-actions">
+            <button class="icon-btn add-to-set-btn" title="Tilføj til sættet" onclick="event.stopPropagation(); addSongToSet('${song.id}')">➕</button>
             <button class="icon-btn" onclick="event.stopPropagation(); editSong('${song.id}')">✏️</button>
             <button class="icon-btn" onclick="event.stopPropagation(); deleteSong('${song.id}')">🗑️</button>
           </div>
@@ -1152,8 +1126,7 @@ ${song.bpm ? `<span class="song-bpm">${escapeHtml(String(song.bpm))} BPM</span>`
         const song = songs.find(s => s.id === songId);
         if (!song) return '';
         return `
-          <div class="set-song-item" draggable="true" data-id="${song.id}" data-set-id="${set.id}">
-            <div class="set-song-grip">☰</div>
+          <div class="set-song-item" data-id="${song.id}" data-set-id="${set.id}">
             <div class="set-song-number">${index + 1}.</div>
             <div class="set-song-info">
               <div class="song-title">${escapeHtml(song.title)}</div>
@@ -1164,6 +1137,8 @@ ${song.bpm ? `<span class="song-bpm">${escapeHtml(String(song.bpm))} BPM</span>`
               </div>
             </div>
             <div class="song-actions">
+              <button class="icon-btn" title="Flyt op" onclick="event.stopPropagation(); moveInSet('${set.id}', '${song.id}', -1)">▲</button>
+              <button class="icon-btn" title="Flyt ned" onclick="event.stopPropagation(); moveInSet('${set.id}', '${song.id}', 1)">▼</button>
               <button class="icon-btn" onclick="event.stopPropagation(); removeFromSet('${set.id}', '${song.id}')">X</button>
             </div>
           </div>
@@ -1323,113 +1298,65 @@ function editJobTitle() {
       renderSongList();
     }
 
-    // ========== DRAG AND DROP ==========
-    function setupDragAndDrop() {
-      document.addEventListener('dragstart', (e) => {
-        if (e.target.classList.contains('song-item')) {
-          e.target.classList.add('dragging');
-          e.dataTransfer.setData('text/plain', e.target.dataset.id);
-          e.dataTransfer.setData('fromSet', '');
-          e.dataTransfer.effectAllowed = 'copy';
-          draggedSongId = e.target.dataset.id;
-          draggedFromSetId = '';
-        }
-        if (e.target.classList.contains('set-song-item')) {
-          e.target.classList.add('dragging');
-          e.dataTransfer.setData('text/plain', e.target.dataset.id);
-          e.dataTransfer.setData('fromSet', e.target.dataset.setId);
-          e.dataTransfer.effectAllowed = 'move';
-          draggedSongId = e.target.dataset.id;
-          draggedFromSetId = e.target.dataset.setId;
-        }
-      });
-
-      document.addEventListener('dragend', (e) => {
-        if (e.target.classList.contains('song-item') || e.target.classList.contains('set-song-item')) {
-          e.target.classList.remove('dragging');
-        }
-        currentDragOverTarget = null;
-        draggedSongId = null;
-        draggedFromSetId = null;
-        clearAllDragOverBorders();
-      });
-
-      const setSongsContainer = document.getElementById('currentSetSongs');
-
-      setSongsContainer.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        e.dataTransfer.dropEffect = draggedFromSetId === currentSetId ? 'move' : 'copy';
-        
-        const target = e.target.closest('.set-song-item');
-        
-        clearAllDragOverBorders();
-        
-        if (target && target.dataset.id !== draggedSongId) {
-          currentDragOverTarget = target.dataset.id;
-          target.style.borderTop = '2px dashed var(--secondary)';
-        } else if (!target && e.target === setSongsContainer) {
-          currentDragOverTarget = null;
-        }
-      });
-
-      setSongsContainer.addEventListener('dragleave', (e) => {
-        if (e.relatedTarget === null || !setSongsContainer.contains(e.relatedTarget)) {
-          clearAllDragOverBorders();
-          currentDragOverTarget = null;
-        }
-      });
-
-      setSongsContainer.addEventListener('drop', (e) => {
-        e.preventDefault();
-        clearAllDragOverBorders();
-        
-        const songId = e.dataTransfer.getData('text/plain');
-        const fromSetId = e.dataTransfer.getData('fromSet');
-        
-        if (!currentSetId) return;
-        
-        const currentSet = sets.find(s => s.id === currentSetId);
-        if (!currentSet) return;
-        
-        if (currentSet.id === EXTRA_SET_ID && currentSet.songIds.length >= EXTRA_SET_MAX) {
-          if (!currentSet.songIds.includes(songId)) {
-            showToast('Ekstra numre kan højest indeholde ' + EXTRA_SET_MAX + ' sange', 'error');
-            return;
-          }
-        }
-        if (fromSetId && fromSetId !== currentSetId) {
-          const fromSet = sets.find(s => s.id === fromSetId);
-          if (fromSet) {
-            fromSet.songIds = fromSet.songIds.filter(id => id !== songId);
-            if (!currentSet.songIds.includes(songId)) {
-              currentSet.songIds.push(songId);
-            }
-            renderAll();
-            showToast('Sang flyttet');
-          }
-        } else if (fromSetId && fromSetId === currentSetId) {
-          reorderInSet(songId, currentDragOverTarget);
-        } else {
-          if (!currentSet.songIds.includes(songId)) {
-            currentSet.songIds.push(songId);
-            renderCurrentSet();
-            showToast('Sang tilfojet');
-          }
-        }
-        
-        currentDragOverTarget = null;
-        draggedSongId = null;
-        draggedFromSetId = null;
-      });
+    // ========== ADD TO SET ==========
+    function addSongToSet(songId) {
+      if (!currentSetId) {
+        showToast('Vaelg et saet først', 'error');
+        return;
+      }
+      const currentSet = sets.find(s => s.id === currentSetId);
+      if (!currentSet) return;
+      if (currentSet.id === EXTRA_SET_ID && currentSet.songIds.length >= EXTRA_SET_MAX && !currentSet.songIds.includes(songId)) {
+        showToast('Ekstra numre kan højest indeholde ' + EXTRA_SET_MAX + ' sange', 'error');
+        return;
+      }
+      if (currentSet.songIds.includes(songId)) {
+        showToast('Sangen er allerede i sættet', 'error');
+        return;
+      }
+      currentSet.songIds.push(songId);
+      renderCurrentSet();
+      showToast('Sang tilfojet');
     }
-
-    function clearAllDragOverBorders() {
-      const items = document.querySelectorAll('.set-song-item');
-      items.forEach(item => {
-        item.style.borderTop = '';
-      });
+    function moveInSet(setId, songId, direction) {
+      const set = sets.find(s => s.id === setId);
+      if (!set) return;
+      const index = set.songIds.indexOf(songId);
+      const newIndex = index + direction;
+      if (index === -1 || newIndex < 0 || newIndex >= set.songIds.length) return;
+      set.songIds.splice(index, 1);
+      set.songIds.splice(newIndex, 0, songId);
+      renderCurrentSet();
     }
-
+    // ========== KEEP SCREEN AWAKE ==========
+    let wakeLock = null;
+    async function toggleKeepAwake() {
+      if (wakeLock) {
+        await wakeLock.release();
+        wakeLock = null;
+        showToast('Skærm må slukke igen');
+      } else {
+        if (!('wakeLock' in navigator)) {
+          showToast('Skærm-tænding understøttes ikke i denne browser', 'error');
+          return;
+        }
+        wakeLock = await navigator.wakeLock.request('screen');
+        wakeLock.addEventListener('release', () => { wakeLock = null; updateKeepAwakeButton(); });
+        showToast('Skærmen holdes tændt');
+      }
+      updateKeepAwakeButton();
+    }
+    function updateKeepAwakeButton() {
+      const btn = document.getElementById('keepAwakeBtn');
+      if (!btn) return;
+      if (wakeLock) {
+        btn.textContent = '☀️ Skærm tændt';
+        btn.classList.add('success');
+      } else {
+        btn.textContent = '☀️ Hold skærm tændt';
+        btn.classList.remove('success');
+      }
+    }
     function deleteSet(setId) {
       if (setId === EXTRA_SET_ID) {
         showToast('Ekstra numre kan ikke slettes', 'error');
@@ -1446,21 +1373,6 @@ function editJobTitle() {
       showToast('Sæt slettet');
     }
 
-    function reorderInSet(songId, targetId) {
-      if (!targetId || !currentSetId || songId === targetId) return;
-      
-      const set = sets.find(s => s.id === currentSetId);
-      if (!set) return;
-      
-      const songIndex = set.songIds.indexOf(songId);
-      const targetIndex = set.songIds.indexOf(targetId);
-      
-      if (songIndex !== -1 && targetIndex !== -1 && songIndex !== targetIndex) {
-        set.songIds.splice(songIndex, 1);
-        set.songIds.splice(targetIndex, 0, songId);
-        renderCurrentSet();
-      }
-    }
 
     // ========== EXPORT ==========
     function exportData() {
