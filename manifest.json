@@ -1,6 +1,6 @@
 {
-  "name": "Sætliste Organizer",
-  "short_name": "Sætliste",
+  "name": "Songlist Organizer",
+  "short_name": "Songlist",
   "description": "Organisér dine sange og byg sætlister til koncerter.",
   "start_url": "./index.html",
   "scope": "./",
