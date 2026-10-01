@@ -805,7 +805,6 @@
         <span class="job-title" id="jobTitleDisplay">Sætliste</span>
         <button onclick="editJobTitle()" class="secondary" style="margin-left: 10px;">Rediger</button>
         <button onclick="toggleTheme()" class="secondary" style="margin-left: 10px;">Tema</button>
-        <button onclick="toggleKeepAwake()" id="keepAwakeBtn" class="secondary" style="margin-left: 10px;">☀️ Hold skærm tændt</button>
       </div>
       <div class="header-controls">
         <button onclick="newSong()">Ny Sang</button>
@@ -956,7 +955,10 @@
   <div id="performanceMode" style="display: none;">
     <div class="perf-header">
       <span id="perfJobTitle"></span>
-      <button onclick="exitPerformanceMode()" class="success">Tilbage til redigering</button>
+      <div style="display: flex; gap: 10px;">
+        <button onclick="toggleKeepAwake()" id="keepAwakeBtn" class="secondary">☀️ Hold skærm tændt</button>
+        <button onclick="exitPerformanceMode()" class="success">Tilbage til redigering</button>
+      </div>
     </div>
     <div id="perfSets"></div>
   </div>
@@ -1316,22 +1318,41 @@ function editJobTitle() {
     }
     // ========== KEEP SCREEN AWAKE ==========
     let wakeLock = null;
-    async function toggleKeepAwake() {
-      if (wakeLock) {
-        await wakeLock.release();
-        wakeLock = null;
-        showToast('Skærm må slukke igen');
-      } else {
-        if (!('wakeLock' in navigator)) {
-          showToast('Skærm-tænding understøttes ikke i denne browser', 'error');
-          return;
-        }
+    let keepAwakeWanted = false;
+    async function requestKeepAwake() {
+      if (wakeLock || !('wakeLock' in navigator)) return;
+      try {
         wakeLock = await navigator.wakeLock.request('screen');
         wakeLock.addEventListener('release', () => { wakeLock = null; updateKeepAwakeButton(); });
-        showToast('Skærmen holdes tændt');
+      } catch (err) {
+        wakeLock = null;
+        showToast('Kunne ikke holde skærmen tændt: ' + err.message, 'error');
       }
       updateKeepAwakeButton();
     }
+    async function toggleKeepAwake() {
+      keepAwakeWanted = !keepAwakeWanted;
+      if (keepAwakeWanted) {
+        if (!('wakeLock' in navigator)) {
+          showToast('Skærm-tænding understøttes ikke i denne browser', 'error');
+          keepAwakeWanted = false;
+          updateKeepAwakeButton();
+          return;
+        }
+        await requestKeepAwake();
+        if (wakeLock) showToast('Skærmen holdes tændt');
+      } else if (wakeLock) {
+        await wakeLock.release().catch(() => {});
+        wakeLock = null;
+        showToast('Skærm må slukke igen');
+      }
+      updateKeepAwakeButton();
+    }
+    document.addEventListener('visibilitychange', () => {
+      if (keepAwakeWanted && document.visibilityState === 'visible' && !wakeLock) {
+        requestKeepAwake();
+      }
+    });
     function updateKeepAwakeButton() {
       const btn = document.getElementById('keepAwakeBtn');
       if (!btn) return;
@@ -1566,6 +1587,12 @@ ${setSections}
       document.getElementById('performanceMode').style.display = 'none';
       document.getElementById('lyricsOverlay').style.display = 'none';
       document.body.style.overflow = '';
+      if (wakeLock) {
+        wakeLock.release().catch(() => {});
+        wakeLock = null;
+      }
+      keepAwakeWanted = false;
+      updateKeepAwakeButton();
     }
 
     function showLyrics(songId, fromPerf = false) {
