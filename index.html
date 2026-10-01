@@ -757,6 +757,10 @@
       color: var(--text-primary);
       z-index: 1100;
       overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
     }
     .lyrics-close {
       position: fixed;
@@ -783,11 +787,7 @@
       opacity: 0.25;
       font-family: serif;
     }
-    .lyrics-content {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 60px 24px 80px;
-    }
+    .lyrics-content {      max-width: 800px;      margin: 0 auto;      padding: 60px 24px 40px;      width: 100%;      box-sizing: border-box;    }
     .lyrics-content h2 { margin-bottom: 4px; }
     .lyrics-artist { color: var(--text-secondary); margin-bottom: 28px; font-size: 16px; }
     .lyrics-content pre {
@@ -1606,6 +1606,17 @@ ${setSections}
       document.getElementById('lyricsBody').innerHTML = formatLyrics(song.lyrics || '');
       document.getElementById('lyricsOverlay').style.display = 'block';
       document.getElementById('lyricsOverlay').scrollTop = 0;
+      if (fromPerf) fitLyricsToScreen();
+    }
+    function fitLyricsToScreen() {
+      const overlay = document.getElementById('lyricsOverlay');
+      const content = overlay.querySelector('.lyrics-content');
+      if (!content) return;
+      overlay.scrollTop = 0;
+      content.style.transform = 'none';
+      content.style.transformOrigin = 'top center';
+      const scale = Math.min(1, overlay.clientHeight / content.scrollHeight);
+      content.style.transform = 'scale(' + scale + ')';
     }
     function perfNextSong(event) {
       if (event) event.stopPropagation();
