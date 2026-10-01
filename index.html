@@ -721,7 +721,6 @@
       .lyrics-content h2 { font-size: 24px; }
       .lyrics-close { top: 10px; right: 10px; }
     }
-    .keep-awake-toggle {      display: flex;      align-items: center;      gap: 8px;      cursor: pointer;      user-select: none;      -webkit-user-select: none;    }    .keep-awake-toggle input {      display: none;    }    .keep-awake-track {      width: 51px;      height: 31px;      background: var(--border);      border-radius: 31px;      position: relative;      transition: background 0.3s;      flex-shrink: 0;    }    .keep-awake-track::before {      content: '';      position: absolute;      top: 2px;      left: 2px;      width: 27px;      height: 27px;      background: white;      border-radius: 50%;      transition: transform 0.3s;      box-shadow: 0 2px 4px rgba(0,0,0,0.2);    }    .keep-awake-toggle input:checked + .keep-awake-track {      background: #34c759;    }    .keep-awake-toggle input:checked + .keep-awake-track::before {      transform: translateX(20px);    }    .keep-awake-label {      font-size: 0.85em;      color: var(--text-secondary);      white-space: nowrap;    }    .keep-awake-toggle input:checked ~ .keep-awake-label {      color: #34c759;      font-weight: 600;    }
     .perf-set h3 {
       margin-bottom: 10px;
       font-size: 18px;
@@ -957,7 +956,7 @@
     <div class="perf-header">
       <span id="perfJobTitle"></span>
       <div style="display: flex; gap: 10px;">
-        <label class="keep-awake-toggle">          <input type="checkbox" id="keepAwakeToggle" onchange="toggleKeepAwake()">          <span class="keep-awake-track"></span>          <span class="keep-awake-label" id="keepAwakeLabel">Hold skærm tændt</span>        </label>
+        <button onclick="toggleKeepAwake()" id="keepAwakeBtn" class="secondary">Hold skærm tændt</button>
         <button onclick="exitPerformanceMode()" class="success">Tilbage til redigering</button>
       </div>
     </div>
@@ -1332,13 +1331,11 @@ function editJobTitle() {
       updateKeepAwakeButton();
     }
     async function toggleKeepAwake() {
-      const cb = document.getElementById('keepAwakeToggle');
-      keepAwakeWanted = cb ? cb.checked : !keepAwakeWanted;
+      keepAwakeWanted = !keepAwakeWanted;
       if (keepAwakeWanted) {
         if (!('wakeLock' in navigator)) {
           showToast('Skærm-tænding understøttes ikke i denne browser', 'error');
           keepAwakeWanted = false;
-          if (cb) cb.checked = false;
           updateKeepAwakeButton();
           return;
         }
@@ -1357,10 +1354,15 @@ function editJobTitle() {
       }
     });
     function updateKeepAwakeButton() {
-      const cb = document.getElementById('keepAwakeToggle');
-      const label = document.getElementById('keepAwakeLabel');
-      if (cb) cb.checked = !!wakeLock;
-      if (label) label.textContent = wakeLock ? 'Skærm tændt' : 'Hold skærm tændt';
+      const btn = document.getElementById('keepAwakeBtn');
+      if (!btn) return;
+      if (wakeLock) {
+        btn.textContent = 'Skærm tændt';
+        btn.classList.add('success');
+      } else {
+        btn.textContent = 'Hold skærm tændt';
+        btn.classList.remove('success');
+      }
     }
     function deleteSet(setId) {
       if (setId === EXTRA_SET_ID) {
