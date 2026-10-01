@@ -783,7 +783,7 @@
       opacity: 0.25;
       font-family: serif;
     }
-    .lyrics-content {      max-width: 1000px;      margin: 0 auto;      padding: 60px 32px 80px;    }
+    .lyrics-content {      max-width: 800px;      margin: 0 auto;      padding: 60px 24px 80px;    }
     .lyrics-content h2 { margin-bottom: 4px; }
     .lyrics-artist { color: var(--text-secondary); margin-bottom: 28px; font-size: 16px; }
     .lyrics-content pre {
@@ -963,6 +963,12 @@
     <button class="lyrics-close" onclick="closeLyrics()">✕ Luk</button>
     <div id="perfNextZone" class="lyrics-next-zone" style="display: none;" onclick="perfNextSong(event)" title="Næste sang">
       <span class="lyrics-next-hint">›</span>
+    </div>
+    <div id="perfScrollUpZone" class="lyrics-scroll-zones up" onclick="perfScrollUp(event)" title="Scroll op">
+      <span class="hint">‹</span>
+    </div>
+    <div id="perfScrollDownZone" class="lyrics-scroll-zones down" onclick="perfScrollDown(event)" title="Scroll ned">
+      <span class="hint">›</span>
     </div>
     <div class="lyrics-content">
       <h2 id="lyricsTitle"></h2>
@@ -1617,30 +1623,26 @@ ${setSections}
       if (!song) return;
       currentPerfIndex = fromPerf ? perfSongOrder.indexOf(songId) : -1;
       document.getElementById('perfNextZone').style.display = fromPerf ? 'block' : 'none';
+      document.getElementById('perfScrollUpZone').style.display = fromPerf ? 'block' : 'none';
+      document.getElementById('perfScrollDownZone').style.display = fromPerf ? 'block' : 'none';
       document.getElementById('lyricsTitle').textContent = song.title;
       document.getElementById('lyricsArtist').textContent = song.artist || '';
       document.getElementById('lyricsBody').innerHTML = formatLyrics(song.lyrics || '');
       document.getElementById('lyricsOverlay').style.display = 'block';
       document.getElementById('lyricsOverlay').scrollTop = 0;
-      if (fromPerf) layoutLyricsColumns(); else resetLyricsColumns();
     }
-    function resetLyricsColumns() {
-      const pre = document.getElementById('lyricsBody');
-      pre.style.columnCount = 'auto';
-      pre.style.height = 'auto';
-    }
-    function layoutLyricsColumns() {
+    function perfScrollStep(fraction) {
       const overlay = document.getElementById('lyricsOverlay');
-      const pre = document.getElementById('lyricsBody');
-      resetLyricsColumns();
-      overlay.scrollTop = 0;
-      const available = overlay.clientHeight - pre.getBoundingClientRect().top - 40;
-      if (available <= 0 || pre.scrollHeight <= available) return;
-      for (let cols = 2; cols <= 4; cols++) {
-        pre.style.columnCount = cols;
-        pre.style.height = available + 'px';
-        if (pre.scrollHeight <= available) return;
-      }
+      if (overlay.style.display === 'none') return;
+      overlay.scrollBy({ top: Math.round(overlay.clientHeight * fraction), behavior: 'smooth' });
+    }
+    function perfScrollUp(event) {
+      if (event) event.stopPropagation();
+      perfScrollStep(-0.8);
+    }
+    function perfScrollDown(event) {
+      if (event) event.stopPropagation();
+      perfScrollStep(0.8);
     }
     function perfNextSong(event) {
       if (event) event.stopPropagation();
