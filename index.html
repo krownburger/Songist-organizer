@@ -338,17 +338,14 @@
       font-size: 0.7em;
     }
 
-    .song-actions {
-      display: flex;
-      gap: 5px;
-    }
+    .song-actions {      display: flex;      gap: 12px;    }
 
     .icon-btn {
       background: none;
       border: none;
       cursor: pointer;
-      padding: 3px;
-      font-size: 0.8em;
+      padding: 5px;
+      font-size: 1.2em;
       opacity: 0.6;
       transition: opacity 0.3s;
     }
@@ -1083,7 +1080,6 @@ ${song.bpm ? `<span class="song-bpm">${escapeHtml(String(song.bpm))} BPM</span>`
           <div class="song-actions">
             <button class="icon-btn add-to-set-btn" title="Tilføj til sættet" onclick="event.stopPropagation(); addSongToSet('${song.id}')">➕</button>
             <button class="icon-btn" onclick="event.stopPropagation(); editSong('${song.id}')">✏️</button>
-            <button class="icon-btn" onclick="event.stopPropagation(); deleteSong('${song.id}')">🗑️</button>
           </div>
         </div>
       `).join('');
@@ -1266,16 +1262,6 @@ function editJobTitle() {
       showToast('Sang gemt');
     }
 
-    function deleteSong(songId) {
-      if (confirm('Er du sikker på du vil slette denne sang?')) {
-        sets.forEach(set => {
-          set.songIds = set.songIds.filter(id => id !== songId);
-        });
-        songs = songs.filter(s => s.id !== songId);
-        renderAll();
-        showToast('Sang slettet');
-      }
-    }
 
     function removeFromSet(setId, songId) {
       const set = sets.find(s => s.id === setId);
