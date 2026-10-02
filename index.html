@@ -1519,9 +1519,11 @@ function editJobTitle() {
           const song = songs.find(s => s.id === songId);
           if (!song) return;
           lines.push({
-            text: `${index + 1}.  ${song.title}${song.artist ? ' - ' + song.artist : ''}${song.key ? '   [' + song.key + (song.bpm ? ' ' + song.bpm : '') + ']' : ''}`,
+            text: `${index + 1}.  ${song.title}${song.artist ? ' - ' + song.artist : ''}`,
             size: 12
           });
+          if (song.key) lines.push({ text: `Toneart: ${song.key}`, size: 10, color: '0.3 0.3 0.3 rg', right: true });
+          if (song.bpm) lines.push({ text: `BPM: ${song.bpm}`, size: 10, color: '0.3 0.3 0.3 rg', right: true });
         });
         lines.push({ rule: true }, { spacer: 10 });
       });
