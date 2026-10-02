@@ -1512,22 +1512,25 @@ function editJobTitle() {
         showToast('Ingen saet at eksportere', 'error');
         return;
       }
+      const pageWidth = 595.28, margin = 34;
+      const bpmCol = pageWidth - margin - 30;
+      const keyCol = bpmCol - 55;
       const lines = [{ text: jobTitle, size: 22, bold: true }, { text: new Date().toLocaleDateString('da-DK'), size: 11, color: '0.4 0.4 0.4 rg' }, { spacer: 10 }];
       sets.forEach(set => {
         lines.push({ text: set.name.toUpperCase(), size: 14, bold: true, color: '0.2 0.2 0.2 rg' }, { spacer: 2 });
         set.songIds.forEach((songId, index) => {
           const song = songs.find(s => s.id === songId);
           if (!song) return;
-          lines.push({
-            text: `${index + 1}.  ${song.title}${song.artist ? ' - ' + song.artist : ''}`,
-            size: 12
-          });
-          if (song.key) lines.push({ text: `Toneart: ${song.key}`, size: 10, color: '0.3 0.3 0.3 rg', right: true });
-          if (song.bpm) lines.push({ text: `BPM: ${song.bpm}`, size: 10, color: '0.3 0.3 0.3 rg', right: true });
+          const cells = [
+            { text: `${index + 1}.  ${song.title}${song.artist ? ' - ' + song.artist : ''}`, x: margin, size: 12 }
+          ];
+          if (song.key) cells.push({ text: String(song.key), x: keyCol, size: 12, align: 'right', bold: true });
+          if (song.bpm) cells.push({ text: String(song.bpm), x: bpmCol, size: 12, align: 'right', color: '0.3 0.3 0.3 rg' });
+          lines.push({ cells, size: 12 });
         });
         lines.push({ rule: true }, { spacer: 10 });
       });
-      const pdf = makePdf(lines);
+      const pdf = makePdf(lines, { fitOnePage: true });
       const bytes = new Uint8Array(pdf.length);
       for (let i = 0; i < pdf.length; i++) bytes[i] = pdf.charCodeAt(i) & 0xff;
       const blob = new Blob([bytes], { type: 'application/pdf' });
