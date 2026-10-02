@@ -917,18 +917,6 @@
           <h3>&#128190; songs.js</h3>
           <p>Download opdateret songs.js til din server</p>
         </div>
-        <div class="export-option" onclick="exportToForScore()">
-          <h3>📁 forScore (.4SS)</h3>
-          <p>Importer direkte til forScore appen på din iPad</p>
-        </div>
-        <div class="export-option" onclick="exportToJSON()">
-          <h3>📋 JSON Fil</h3>
-          <p>Gem alle data (sange + sæt) som JSON til deling</p>
-        </div>
-        <div class="export-option" onclick="exportSetAsText()">
-          <h3>📝 Tekstfil</h3>
-          <p>Simpel tekstliste af det aktuelle sæt</p>
-        </div>
         <div class="export-option" onclick="exportToPDF()">
           <h3>PDF</h3>
           <p>Download PDF med alle sæt</p>
@@ -1413,38 +1401,7 @@ function editJobTitle() {
       document.getElementById('exportModal').style.display = 'flex';
     }
 
-    function exportToForScore() {
-      closeModal('exportModal');
-      if (!currentSetId) {
-        showToast('Vaelg et saet først', 'error');
-        return;
-      }
-      const set = sets.find(s => s.id === currentSetId);
-      if (!set) return;
-      let xml = `<?xml version="1.0" encoding="UTF-8" ?>
-<forScore kind="setlist" version="1.0" title="${escapeXml(set.name)}">
-`;
-      set.songIds.forEach(songId => {
-        const song = songs.find(s => s.id === songId);
-        if (song) {
-          const title = `${song.title} - ${song.artist}`;
-          const path = `${escapeXml(song.title)}.pdf`;
-          xml += `  <score title="${escapeXml(title)}" path="${path}" />
-`;
-        }
-      });
-      xml += `</forScore>`;
-      const blob = new Blob([xml], { type: 'application/xml' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `${sanitizeFilename(set.name)}.4ss`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-      showToast('forScore fil downloadet!');
-    }
+
 
     function exportSongsJs() {
       closeModal('exportModal');
@@ -1466,52 +1423,7 @@ function editJobTitle() {
       showToast('songs.js downloadet! Erstat filen på din server og ryd browserens gemte data (localStorage) for at se ændringerne.');
     }
 
-    function exportToJSON() {
-      closeModal('exportModal');
-      const data = { songs, sets, version: '1.0', exported: new Date().toISOString() };
-      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'saetliste-eksport.json';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-      showToast('JSON fil downloadet!');
-    }
 
-    function exportSetAsText() {
-      closeModal('exportModal');
-      if (!currentSetId) {
-        showToast('Vaelg et saet først', 'error');
-        return;
-      }
-      const set = sets.find(s => s.id === currentSetId);
-      if (!set) return;
-      let text = `${set.name}\n`;
-      text += '='.repeat(set.name.length) + '\n\n';
-      set.songIds.forEach((songId, index) => {
-        const song = songs.find(s => s.id === songId);
-        if (song) {
-          text += `${index + 1}. ${song.title}`;
-          if (song.artist) text += ` - ${song.artist}`;
-          if (song.key) text += ` (${song.key})`;
-          if (song.bpm) text += ` [${song.bpm} BPM]`;
-          text += '\n';
-        }
-      });
-      const blob = new Blob([text], { type: 'text/plain' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `${sanitizeFilename(set.name)}.txt`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-      showToast('Tekstfil downloadet!');
-    }
 
     function exportToPDF() {
       closeModal('exportModal');
@@ -1736,12 +1648,17 @@ function editJobTitle() {
 
     function reloadFromSongsJs() {
       localStorage.removeItem('setlistSongs');
-      localStorage.removeItem('setlistSets');
       localStorage.removeItem('setlistSavedAt');
+      const savedSets = localStorage.getItem('setlistSets');
       init();
+      if (savedSets) {
+        sets = JSON.parse(savedSets);
+        ensureExtraSet();
+        if (!sets.some(s => s.id === currentSetId)) currentSetId = sets[0] ? sets[0].id : null;
+        renderAll();
+      }
       document.getElementById('jobTitleDisplay').textContent = jobTitle;
-      renderAll();
-      showToast('Data indlæst fra songs.js');
+      showToast('Sange indlæst fra songs.js — sætlister bevaret');
     }
 
 
@@ -1766,14 +1683,9 @@ function editJobTitle() {
       return div.innerHTML;
     }
 
-    function escapeXml(text) {
-      if (!text) return '';
-      return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;');
-    }
 
-    function sanitizeFilename(name) {
-      return name.replace(/[^a-zA-Z0-9_\-\s\.]/g, '_').replace(/\s+/g, '_').substring(0, 50);
-    }
+
+
 
     // ========== START ==========
     window.onload = init;
