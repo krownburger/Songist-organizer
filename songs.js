@@ -305,7 +305,8 @@ const initialSongs = [
     "artist": "Danseorkestret",
     "categories": [
       "Dansk"
-    ]
+    ],
+    "lyrics": "Det kom som et chok, da hun forlod mig\nDen nat hun blev væk, den dag hun sendte brevet til mig\nI brevet der stod, hmm, at hun var blevet træt af mig\nUh-ja, træt af at vente og hele tiden skændes med mig\n\n[Bro]\nNu’ jeg helt alene, går søvnløs rundt\nJeg føler mig så ensom, åh, mit hjerte gør ondt\nSket er sket, og jeg fortryder nu\nMh-ja, gjort er gjort, jeg må ha’ hende igen\nDe ting hun gør, de ting hun si’r\nJeg elsker ingen andre piger\n\n[Omkvæd]\n**Kom tilbage til mig, jeg elsker kun dig**\n**(Kom tilbage nu, kom tilbage nu)**\n**Kom tilbage til mig, jeg elsker kun dig**\n**(Tilbage nu)**\n\n[Vers 2]\nVi ku’ prøve igen\nTejse langt, langt bort, åh, sig du vil\nSig du vil gi’ mig\nGi’ mig en chance til\n\n[Bro]\nFor jeg’ helt alene, går søvnløs rundt\nMh-ja, jeg føler mig så ensom, oh, mit hjerte gør ondt\nSket er sket, åh, men jeg fortryder nu, nu, nu\nGjort er gjort, jeg må ha’ hende igen\nDe ting hun gør, de ting hun si’r\nJeg elsker ingen andre piger\n\n[Omkvæd]\n**Kom tilbage til mig, jeg elsker kun dig**"
   },
   {
     "id": "27",
