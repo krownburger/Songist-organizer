@@ -1542,6 +1542,18 @@ const initialSongs = [
     ],
     "lyrics": "| Intro | n.c. | % | Hm7 | % | D – Hm | G – A | D | break |\n\nI den varme nat – fyldt med drømmen at\nLykken varer evigt\nLyser månen op – på en kvindekrop, ja\nHendes smukke ansigt\nHun er bare min store kærlighed\nDer bli'r større – der bli'r ved og ved\n\n**Smuk som et stjerneskud**\n**Som tiden går**\n**Smukkere ser hun ud**\n**År efter år**\n\nHendes hofters dans – I en strålekrans, ja\ngennem bølgebruset\nOg i måneskin – bli'r jeg lukket ind\nLyk'lig og beruset\nNatten den er fyldt med kærlighed\nDer bli'r større – der bli'r ved og ved\n\n**Smuk som et stjerneskud**\n**Som tiden går**\n**Smukkere ser hun ud**\n**År efter år**\n\nEt stjerneskud (stjerneskud)\nSmuk som et stjerneskud (år efter år)\nFlottere som tiden går (stjerneskud)\nÅr efter år\n\n**Smuk som et stjerneskud**\n**Som tiden går**\n**Smukkere ser hun ud**\n**År efter år**\n\n**Smuk som et stjerneskud (stjerneskud)**\n**Som tiden går (år efter år)**\n**Smukkere ser hun ud (stjerneskud)**\n**År efter år**\n\n| Coda |\nMit stjerneskud\nÅr efter år efter år efter år (stjerneskud)",
     "bpm": 104
+  },
+  {
+    "id": "142",
+    "title": "Susan Himmelbl\u00e5",
+    "key": "D",
+    "bpm": 120,
+    "artist": "Kim Larsen",
+    "categories": [
+      "Dansk",
+      "Syng med"
+    ],
+    "lyrics": "K\u00e6re Susan med de himmelbl\u00e5\nTillykke\nM\u00e5ske jeg bli'r en smule sentimental\nN\u00e5, men tillykke\n\nEnglene de kyssede dig\nDen dag da du kom hertil\nDet er jeg ganske sikker p\u00e5\nS\u00e5 ka' du tro, hva' du vil\n\n**\u00c5h, Susan Himmelbl\u00e5**\n**Ved du, hva' jeg t\u00e6nker p\u00e5?**\n**Hvis jeg ku'**\n**S\u00e5 loved' jeg dig et langt og lykkeligt liv**\n**Men jeg kan ikke sp\u00e5**\n\nHvis nogen si'r det hele g\u00e5r ad helvede til\nS\u00e5 tro dem ikke\nDet har altid v\u00e6ret s\u00e5dan, og det bli'r det nok ved med\nTror du ikke?\n\nMen lov mig, at du aldrig bli'r tr\u00e6t\nAf livet en sk\u00f8nne dag\nFor du er Susan Himmelbl\u00e5\nOg det er dit fra nu af\n\n**\u00c5h, Susan Himmelbl\u00e5**\n**Ved du, hva' jeg t\u00e6nker p\u00e5?**\n**Hvis jeg ku'**\n**S\u00e5 loved' jeg dig et langt og lykkeligt liv**\n**Men jeg kan ikke sp\u00e5** (Susan)\n\nJeg ved da godt, du synes, at jeg er en gammel nar\nOg hva' s\u00e5?\nJeg har pr\u00f8vet mit, nu ska' du pr\u00f8ve dit\nKom s\u00e5\n\nHimmelen og stjernerne\nOg fanden, det store kvaj\nDe st\u00e5r p\u00e5 hver sin side af dig\nLige nu, sig ja eller nej\n\n**\u00c5h, Susan Himmelbl\u00e5**\n**Ved du, hva' jeg t\u00e6nker p\u00e5?**\n**Hvis jeg ku'**\n**S\u00e5 loved' jeg dig et langt og lykkeligt liv**\n**Men jeg kan ikke sp\u00e5**\n\n**\u00c5h, Susan Himmelbl\u00e5**\n**Ved du, hva' jeg t\u00e6nker p\u00e5?**\n**Hvis jeg ku'**\n**S\u00e5 loved' jeg dig et langt og lykkeligt liv**\n**Men jeg kan ikke sp\u00e5**\nNej, nej\nSusan Himmelbl\u00e5"
   }
 ];
 
