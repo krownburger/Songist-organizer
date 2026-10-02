@@ -797,8 +797,9 @@
       padding: 10px 14px;
       margin: 0 -14px;
       border-radius: 8px;
-      background: color-mix(in srgb, var(--secondary) calc(4% + var(--sec-frac) * 16%), transparent);
     }
+    .lyrics-section.sec-alt-0 { background: color-mix(in srgb, var(--secondary) 16%, transparent); }
+    .lyrics-section.sec-alt-1 { background: color-mix(in srgb, var(--secondary) 6%, transparent); }
   </style>
 </head>
 <body>
@@ -1650,8 +1651,7 @@ function editJobTitle() {
       const blocks = formatted.split(/\n\s*\n/);
       if (blocks.length < 2) return formatted;
       return blocks.map((block, i) => {
-        const frac = (blocks.length === 1) ? 0 : i / (blocks.length - 1);
-        return `<div class="lyrics-section" style="--sec-frac: ${frac.toFixed(3)}">${block}</div>`;
+        return `<div class="lyrics-section sec-alt-${i % 2}">${block}</div>`;
       }).join('');
     }
 
