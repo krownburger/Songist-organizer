@@ -1542,6 +1542,18 @@ const initialSongs = [
     ],
     "lyrics": "| Intro | n.c. | % | Hm7 | % | D – Hm | G – A | D | break |\n\nI den varme nat – fyldt med drømmen at\nLykken varer evigt\nLyser månen op – på en kvindekrop, ja\nHendes smukke ansigt\nHun er bare min store kærlighed\nDer bli'r større – der bli'r ved og ved\n\n**Smuk som et stjerneskud**\n**Som tiden går**\n**Smukkere ser hun ud**\n**År efter år**\n\nHendes hofters dans – I en strålekrans, ja\ngennem bølgebruset\nOg i måneskin – bli'r jeg lukket ind\nLyk'lig og beruset\nNatten den er fyldt med kærlighed\nDer bli'r større – der bli'r ved og ved\n\n**Smuk som et stjerneskud**\n**Som tiden går**\n**Smukkere ser hun ud**\n**År efter år**\n\nEt stjerneskud (stjerneskud)\nSmuk som et stjerneskud (år efter år)\nFlottere som tiden går (stjerneskud)\nÅr efter år\n\n**Smuk som et stjerneskud**\n**Som tiden går**\n**Smukkere ser hun ud**\n**År efter år**\n\n**Smuk som et stjerneskud (stjerneskud)**\n**Som tiden går (år efter år)**\n**Smukkere ser hun ud (stjerneskud)**\n**År efter år**\n\n| Coda |\nMit stjerneskud\nÅr efter år efter år efter år (stjerneskud)",
     "bpm": 104
+  },
+  {
+    "id": "142",
+    "title": "Susan Himmelbl\u00e5",
+    "key": "D",
+    "bpm": 120,
+    "artist": "Kim Larsen",
+    "categories": [
+      "Dansk",
+      "Syng med"
+    ],
+    "lyrics": "[Vers 1]\n(Inds\u00e6t vers 1 her)\n\n[Omkv\u00e6d]\n**(Inds\u00e6t omkv\u00e6d her)**\n\n[Vers 2]\n(Inds\u00e6t vers 2 her)\n\n[Omkv\u00e6d]\n**(Inds\u00e6t omkv\u00e6d her)**\n\n[Bridge]\n(Inds\u00e6t bridge her)\n\n[Omkv\u00e6d]\n**(Inds\u00e6t omkv\u00e6d her)**\n\n[Outro]\n(Inds\u00e6t outro her)"
   }
 ];
 
