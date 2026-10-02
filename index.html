@@ -1294,12 +1294,13 @@ function editJobTitle() {
       }
       const currentSet = sets.find(s => s.id === currentSetId);
       if (!currentSet) return;
-      if (currentSet.id === EXTRA_SET_ID && currentSet.songIds.length >= EXTRA_SET_MAX && !currentSet.songIds.includes(songId)) {
-        showToast('Ekstra numre kan højest indeholde ' + EXTRA_SET_MAX + ' sange', 'error');
+      const existingSet = sets.find(s => s.songIds.includes(songId));
+      if (existingSet) {
+        showToast(existingSet.id === EXTRA_SET_ID ? 'Sangen er allerede tilføjet som ekstranummer' : 'Sangen er allerede i sættet "' + existingSet.name + '"', 'error');
         return;
       }
-      if (currentSet.songIds.includes(songId)) {
-        showToast('Sangen er allerede i sættet', 'error');
+      if (currentSet.id === EXTRA_SET_ID && currentSet.songIds.length >= EXTRA_SET_MAX && !currentSet.songIds.includes(songId)) {
+        showToast('Ekstra numre kan højest indeholde ' + EXTRA_SET_MAX + ' sange', 'error');
         return;
       }
       currentSet.songIds.push(songId);
