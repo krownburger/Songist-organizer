@@ -51,13 +51,13 @@ function makePdf(lines) {
     current.push(`BT /${bold ? 'F2' : 'F1'} ${size} Tf ${color || '0 0 0 rg'} 1 0 0 1 ${x.toFixed(2)} ${y.toFixed(2)} Tm (${makePdfEscape(encodePdfText(text))}) Tj ET`);
   };
   const addRule = () => {
-    y -= 3;
+    y -= 8;
     if (y < margin + 10) {
       pages.push(current);
       current = [];
       y = pageHeight - margin;
     }
-    current.push(`0.8 w ${margin} ${(y + 6).toFixed(2)} m ${(pageWidth - margin).toFixed(2)} ${(y + 6).toFixed(2)} l S`);
+    current.push(`0.8 w ${margin} ${y.toFixed(2)} m ${(pageWidth - margin).toFixed(2)} ${y.toFixed(2)} l S`);
   };
 
   for (const line of lines) {
