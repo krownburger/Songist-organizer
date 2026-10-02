@@ -29,8 +29,12 @@ def draw_icon(size, scale=1.0, path=None):
         bbox = d.textbbox((0, 0), ch, font=font)
         tw, th = bbox[2] - bbox[0], bbox[3] - bbox[1]
         pos = (W / 2 - tw / 2 - bbox[0], cy - th / 2 - bbox[1])
-        d.text(pos, ch, font=font, fill=col + (255,))
-        gd.text(pos, ch, font=font, fill=col + (160,))
+        w = max(2, int(font_size * 0.045))
+        for dx in range(-w, w + 1, max(1, w // 2)):
+            for dy in range(-w, w + 1, max(1, w // 2)):
+                if dx * dx + dy * dy <= w * w:
+                    d.text((pos[0] + dx, pos[1] + dy), ch, font=font, fill=col + (255,))
+                    gd.text((pos[0] + dx, pos[1] + dy), ch, font=font, fill=col + (160,))
 
     glow = glow.filter(ImageFilter.GaussianBlur(W // 40))
     out = Image.alpha_composite(base, glow)
