@@ -924,7 +924,7 @@
         </div>
         <div class="export-option" onclick="exportToPDF()">
           <h3>PDF</h3>
-          <p>Printvenlig PDF med alle sæt</p>
+          <p>Download PDF med alle sæt</p>
         </div>
       </div>
       <div class="modal-actions">
@@ -978,6 +978,7 @@
     </div>
   </div>
 
+  <script src="pdf.js"></script>
   <script src="NoSleep.min.js"></script>
   <script src="songs.js"></script>
   <script>
@@ -1511,60 +1512,32 @@ function editJobTitle() {
         showToast('Ingen saet at eksportere', 'error');
         return;
       }
-      const setSections = sets.map(set => {
-        const rows = set.songIds.map((songId, index) => {
+      const lines = [{ text: jobTitle, size: 22, bold: true }, { text: new Date().toLocaleDateString('da-DK'), size: 11, color: '0.4 0.4 0.4 rg' }, { spacer: 10 }];
+      sets.forEach(set => {
+        lines.push({ text: set.name.toUpperCase(), size: 14, bold: true, color: '0.2 0.2 0.2 rg' }, { spacer: 2 });
+        set.songIds.forEach((songId, index) => {
           const song = songs.find(s => s.id === songId);
-          if (!song) return '';
-          const key = song.key ? escapeHtml(song.key) : '';
-          const bpm = song.bpm ? escapeHtml(String(song.bpm)) : '';
-          return `<tr><td class="num">${index + 1}.</td><td>${escapeHtml(song.title)}</td><td>${escapeHtml(song.artist || '')}</td><td class="key">${key}</td><td class="key">${bpm}</td></tr>`;
-        }).join('');
-        return `<section><h2>${escapeHtml(set.name)}</h2><table>${rows}</table></section>`;
-      }).join('');
-      const today = new Date().toLocaleDateString('da-DK');
-      const html = `<!DOCTYPE html>
-<html lang="da" class="dark-mode">
-<head>
-<meta charset="UTF-8">
-<title>${escapeHtml(jobTitle)}</title>
-<style>
-  @page { size: A4; margin: 12mm; }
-  body { font-family: Arial, Helvetica, sans-serif; color: #000; margin: 0; padding: 16px; }
-  h1 { font-size: 22px; margin: 0 0 2px; }
-  h2 { font-size: 14px; margin: 0 0 4px; color: #333; text-transform: uppercase; letter-spacing: 0.5px; }
-  .date { font-size: 11px; color: #666; margin-bottom: 12px; }
-  section { page-break-inside: avoid; margin-bottom: 14px; }
-  table { width: 100%; border-collapse: collapse; }
-  td { padding: 3px 6px; border-bottom: 1px solid #ccc; font-size: 12px; }
-  td.num { width: 28px; color: #666; }
-  td.key { width: 40px; text-align: right; color: #333; }
-</style>
-</head>
-<body>
-<h1>${escapeHtml(jobTitle)}</h1>
-<div class="date">${today}</div>
-${setSections}
-<script>window.onload = function() { window.focus(); window.print(); };<\/script>
-</body>
-</html>`;
-      const iframe = document.createElement('iframe');
-      iframe.style.position = 'fixed';
-      iframe.style.right = '0';
-      iframe.style.bottom = '0';
-      iframe.style.width = '0';
-      iframe.style.height = '0';
-      iframe.style.border = '0';
-      document.body.appendChild(iframe);
-      const doc = iframe.contentWindow.document;
-      doc.open();
-      doc.write(html);
-      doc.close();
-      setTimeout(() => {
-        iframe.contentWindow.focus();
-        iframe.contentWindow.print();
-        setTimeout(() => document.body.removeChild(iframe), 1000);
-      }, 250);
-      showToast('PDF-eksport klar - vaelg "Gem som PDF" i udskriftsdialogen');
+          if (!song) return;
+          lines.push({
+            text: `${index + 1}.  ${song.title}${song.artist ? ' - ' + song.artist : ''}${song.key ? '   [' + song.key + (song.bpm ? ' ' + song.bpm : '') + ']' : ''}`,
+            size: 12
+          });
+        });
+        lines.push({ rule: true }, { spacer: 10 });
+      });
+      const pdf = makePdf(lines);
+      const bytes = new Uint8Array(pdf.length);
+      for (let i = 0; i < pdf.length; i++) bytes[i] = pdf.charCodeAt(i) & 0xff;
+      const blob = new Blob([bytes], { type: 'application/pdf' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'saetliste.pdf';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast('PDF downloaded!');
     }
 
     function escapeHtml(str) {

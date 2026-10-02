@@ -1,9 +1,10 @@
-const CACHE_NAME = 'saetliste-organizer-v2';
+const CACHE_NAME = 'saetliste-organizer-v3';
 const ASSETS = [
   './',
   './index.html',
   './tjekliste.html',
   './songs.js',
+  './pdf.js',
   './NoSleep.min.js',
   './manifest.json',
   './icons/icon-192.png',
