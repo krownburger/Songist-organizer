@@ -1695,7 +1695,7 @@ function editJobTitle() {
         searchInput.value = '';
         document.getElementById('perfSearchResults').innerHTML = '';
         searchInput.blur();
-        showLyrics(songId, false);
+        showLyrics(songId, true);
       } else {
         showToast('Ingen tekst på: ' + song.title, 'error');
       }
