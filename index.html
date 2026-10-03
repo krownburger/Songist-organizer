@@ -726,6 +726,40 @@
       font-size: 18px;
       color: var(--text-secondary);
     }
+    .perf-search {
+      max-width: 900px;
+      margin: 0 auto 12px;
+      position: relative;
+      z-index: 10;
+    }
+    .perf-search input {
+      width: 100%;
+      box-sizing: border-box;
+      font-size: 18px;
+      padding: 14px 16px;
+      border-radius: 10px;
+      background: var(--bg-secondary);
+      border: 2px solid var(--border);
+      color: var(--text-primary);
+    }
+    .perf-search input:focus {
+      outline: none;
+      border-color: var(--accent, #4a9eff);
+    }
+    #perfSearchResults {
+      max-width: 900px;
+      margin: 0 auto 20px;
+    }
+    #perfSearchResults:empty {
+      margin: 0;
+    }
+    #perfSearchResults .perf-song {
+      font-size: 17px;
+      padding: 14px 16px;
+      margin-bottom: 8px;
+      background: var(--bg-primary);
+      border-width: 2px;
+    }
     .perf-song {
       display: flex;
       gap: 12px;
@@ -952,6 +986,11 @@
         <button onclick="exitPerformanceMode()" class="success">Tilbage til redigering</button>
       </div>
     </div>
+    <div class="perf-search">
+      <input type="search" id="perfSearchInput" placeholder="Søg sang eller kunstner…" autocomplete="off"
+        oninput="perfSearchUpdate()" onkeydown="perfSearchKeydown(event)">
+    </div>
+    <div id="perfSearchResults"></div>
     <div id="perfSets"></div>
   </div>
 
@@ -1498,11 +1537,94 @@ function editJobTitle() {
       `).join('');
       document.getElementById('performanceMode').style.display = 'block';
       document.body.style.overflow = 'hidden';
+      const searchInput = document.getElementById('perfSearchInput');
+      searchInput.value = '';
+      document.getElementById('perfSearchResults').innerHTML = '';
+      if (window.matchMedia('(min-width: 900px)').matches) searchInput.focus();
+    }
+
+    function normalizeSearch(str) {
+      return (str || '').toLowerCase().replace(/æ/g, 'ae').replace(/ø/g, 'o').replace(/å/g, 'a').replace(/[^a-z0-9 ]/g, ' ').replace(/\s+/g, ' ').trim();
+    }
+
+    function fuzzyMatch(pattern, text) {
+      const p = normalizeSearch(pattern);
+      if (!p) return true;
+      const t = normalizeSearch(text);
+      if (t.includes(p)) return true;
+      let ti = 0;
+      for (const ch of p) {
+        if (ch === ' ') continue;
+        ti = t.indexOf(ch, ti);
+        if (ti === -1) return false;
+        ti++;
+      }
+      return true;
+    }
+
+    function perfSearchMatches() {
+      const q = document.getElementById('perfSearchInput').value.trim();
+      if (!q) return [];
+      const inSet = new Set(perfSongOrder);
+      return songs
+        .filter(s => fuzzyMatch(q, s.title + ' ' + (s.artist || '') + ' ' + (s.category || '')))
+        .sort((a, b) => {
+          const aIn = inSet.has(a.id), bIn = inSet.has(b.id);
+          if (aIn !== bIn) return aIn ? -1 : 1;
+          return (a.title || '').localeCompare(b.title || '', 'da');
+        })
+        .slice(0, 30);
+    }
+
+    function perfSearchUpdate() {
+      const results = document.getElementById('perfSearchResults');
+      const matches = perfSearchMatches();
+      if (!matches.length) {
+        results.innerHTML = '';
+        return;
+      }
+      const inSet = new Set(perfSongOrder);
+      results.innerHTML = matches.map(song => {
+        const hasLyrics = !!song.lyrics;
+        return `<div class="perf-song${hasLyrics ? '' : ' no-lyrics'}" onclick="perfOpenSearchResult('${song.id}')">
+          <span class="title">${escapeHtml(song.title)}</span>
+          ${song.artist ? `<span class="bpm">${escapeHtml(song.artist)}</span>` : ''}
+          ${inSet.has(song.id) ? '<span class="key">✓</span>' : ''}
+        </div>`;
+      }).join('');
+    }
+
+    function perfSearchKeydown(event) {
+      if (event.key === 'Enter') {
+        const matches = perfSearchMatches();
+        if (matches.length) perfOpenSearchResult(matches[0].id);
+      } else if (event.key === 'Escape') {
+        document.getElementById('perfSearchInput').value = '';
+        perfSearchUpdate();
+        document.getElementById('perfSearchInput').blur();
+      }
+    }
+
+    function perfOpenSearchResult(songId) {
+      const song = songs.find(s => s.id === songId);
+      if (!song) return;
+      if (song.lyrics && song.lyrics.trim()) {
+        const searchInput = document.getElementById('perfSearchInput');
+        searchInput.value = '';
+        document.getElementById('perfSearchResults').innerHTML = '';
+        searchInput.blur();
+        showLyrics(songId, false);
+      } else {
+        showToast('Ingen tekst på: ' + song.title, 'error');
+      }
     }
 
     function exitPerformanceMode() {
       document.getElementById('performanceMode').style.display = 'none';
       document.getElementById('lyricsOverlay').style.display = 'none';
+      const searchInput = document.getElementById('perfSearchInput');
+      searchInput.value = '';
+      document.getElementById('perfSearchResults').innerHTML = '';
       document.body.style.overflow = '';
       if (wakeLock) {
         wakeLock.release().catch(() => {});
