@@ -67,6 +67,13 @@
     .dark-mode .set-song-item:hover {
       background: var(--bg-secondary);
     }
+    .dark-mode .set-song-number {
+      background: var(--bg-secondary);
+    }
+    .dark-mode .set-song-number:hover {
+      background: var(--primary);
+      color: white;
+    }
 
     .dark-mode .search-box {
       background: var(--bg-primary);
@@ -467,12 +474,28 @@
     .set-song-number {
       font-weight: 600;
       color: var(--primary);
+      background: var(--border);
+      border-radius: 6px;
+      padding: 2px 7px;
+      margin-right: 14px;
       min-width: 25px;
       text-align: center;
       cursor: pointer;
+      user-select: none;
+      transition: background 0.2s, color 0.2s;
+    }
+    .set-song-number::after {
+      content: '✎';
+      font-size: 10px;
+      margin-left: 3px;
+      opacity: 0.55;
     }
     .set-song-number:hover {
-      text-decoration: underline;
+      background: var(--primary);
+      color: white;
+    }
+    .set-song-number:hover::after {
+      opacity: 1;
     }
     .set-song-number-input {
       width: 42px;
@@ -1175,6 +1198,10 @@ ${song.bpm ? `<span class="song-bpm">${escapeHtml(String(song.bpm))} BPM</span>`
       }
       
       emptyEl.style.display = 'none';
+      if (!localStorage.getItem('positionHintShown')) {
+        localStorage.setItem('positionHintShown', '1');
+        setTimeout(() => showToast('Tip: Tryk på nummeret for at flytte sangen til en ny plads'), 600);
+      }
       songsEl.innerHTML = set.songIds.map((songId, index) => {
         const song = songs.find(s => s.id === songId);
         if (!song) return '';
