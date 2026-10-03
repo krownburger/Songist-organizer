@@ -1395,7 +1395,9 @@ function editJobTitle() {
       const oldIndex = set.songIds.indexOf(songId);
       if (oldIndex === -1) return;
       const input = document.createElement('input');
-      input.type = 'number';
+      input.type = 'text';
+      input.inputMode = 'numeric';
+      input.pattern = '[0-9]*';
       input.className = 'set-song-number-input';
       input.min = '1';
       input.max = String(set.songIds.length);
