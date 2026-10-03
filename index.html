@@ -469,6 +469,22 @@
       color: var(--primary);
       min-width: 25px;
       text-align: center;
+      cursor: pointer;
+    }
+    .set-song-number:hover {
+      text-decoration: underline;
+    }
+    .set-song-number-input {
+      width: 42px;
+      font-weight: 600;
+      font-size: 14px;
+      text-align: center;
+      padding: 2px 4px;
+      border: 2px solid var(--primary);
+      border-radius: 4px;
+    }
+    .set-song-number-input:focus {
+      outline: none;
     }
 
     .set-song-info {
@@ -1164,7 +1180,7 @@ ${song.bpm ? `<span class="song-bpm">${escapeHtml(String(song.bpm))} BPM</span>`
         if (!song) return '';
         return `
           <div class="set-song-item" data-id="${song.id}" data-set-id="${set.id}">
-            <div class="set-song-number">${index + 1}.</div>
+            <div class="set-song-number" title="Flyt til position" onclick="editSongPosition('${set.id}', '${song.id}', this)">${index + 1}.</div>
             <div class="set-song-info">
               <div class="song-title">${escapeHtml(song.title)}</div>
               <div class="song-meta">
@@ -1346,6 +1362,43 @@ function editJobTitle() {
       renderCurrentSet();
       showToast('Sang tilfojet');
     }
+    function editSongPosition(setId, songId, numEl) {
+      const set = sets.find(s => s.id === setId);
+      if (!set) return;
+      const oldIndex = set.songIds.indexOf(songId);
+      if (oldIndex === -1) return;
+      const input = document.createElement('input');
+      input.type = 'number';
+      input.className = 'set-song-number-input';
+      input.min = '1';
+      input.max = String(set.songIds.length);
+      input.value = String(oldIndex + 1);
+      numEl.textContent = '';
+      numEl.appendChild(input);
+      input.focus();
+      input.select();
+      const cancel = () => renderCurrentSet();
+      const apply = () => {
+        const pos = parseInt(input.value, 10);
+        if (isNaN(pos) || pos < 1 || pos > set.songIds.length) { renderCurrentSet(); return; }
+        const newIndex = pos - 1;
+        if (newIndex === oldIndex) { renderCurrentSet(); return; }
+        set.songIds.splice(oldIndex, 1);
+        set.songIds.splice(newIndex, 0, songId);
+        saveToLocalStorage();
+        renderCurrentSet();
+        const song = songs.find(s => s.id === songId);
+        showToast(song ? `"${song.title}" flyttet til plads ${pos}` : 'Sang flyttet');
+      };
+      input.addEventListener('keydown', (e) => {
+        e.stopPropagation();
+        if (e.key === 'Enter') apply();
+        else if (e.key === 'Escape') cancel();
+      });
+      input.addEventListener('blur', apply);
+      input.addEventListener('click', (e) => e.stopPropagation());
+    }
+
     function moveInSet(setId, songId, direction) {
       const set = sets.find(s => s.id === setId);
       if (!set) return;
