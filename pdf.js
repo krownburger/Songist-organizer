@@ -5,11 +5,17 @@ function makePdfEscape(str) {
   return String(str).replace(/\\/g, '\\\\').replace(/\(/g, '\\(').replace(/\)/g, '\\)');
 }
 
+const pdfSpecialCharMap = {
+  '\u2018': '\x91', '\u2019': '\x92', '\u201c': '\x93', '\u201d': '\x94',
+  '\u2013': '\x96', '\u2014': '\x97', '\u2026': '\x85', '\u2022': '\x95',
+  '\u00a0': ' ', '\u2039': '\x8b', '\u203a': '\x9b', '\u00ab': '\xab', '\u00bb': '\xbb'
+};
 function encodePdfText(str) {
   let out = '';
   for (const ch of String(str)) {
     const code = ch.codePointAt(0);
-    if (ch === 'æ') out += '\xe6';
+    if (Object.prototype.hasOwnProperty.call(pdfSpecialCharMap, ch)) out += pdfSpecialCharMap[ch];
+    else if (ch === 'æ') out += '\xe6';
     else if (ch === 'Æ') out += '\xc6';
     else if (ch === 'ø') out += '\xf8';
     else if (ch === 'Ø') out += '\xd8';
