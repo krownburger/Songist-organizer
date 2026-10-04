@@ -1851,7 +1851,20 @@ function editJobTitle() {
       localStorage.setItem('setlistSavedAt', new Date().toISOString());
     }
 
-    function reloadFromSongsJs() {
+    async function reloadFromSongsJs() {
+      showToast('Henter nyeste songs.js fra serveren...');
+      let fetchedFresh = false;
+      try {
+        const response = await fetch('songs.js?v=' + Date.now(), { cache: 'no-store' });
+        if (!response.ok) throw new Error('HTTP ' + response.status);
+        const text = await response.text();
+        const match = text.match(/const\s+initialSongs\s*=\s*([\[\{][\s\S]*?\]);?\s*(?:const\s+initialSets|$)/);
+        if (!match) throw new Error('Fandt ikke initialSongs i songs.js');
+        initialSongs = JSON.parse(match[1]);
+        fetchedFresh = true;
+      } catch (e) {
+        console.warn('Kunne ikke hente songs.js fra serveren:', e);
+      }
       localStorage.removeItem('setlistSongs');
       localStorage.removeItem('setlistSavedAt');
       const savedSets = localStorage.getItem('setlistSets');
@@ -1863,7 +1876,9 @@ function editJobTitle() {
         renderAll();
       }
       document.getElementById('jobTitleDisplay').textContent = jobTitle;
-      showToast('Sange indlæst fra songs.js — sætlister bevaret');
+      showToast(fetchedFresh
+        ? 'Nyeste songs.js hentet fra serveren — sætlister bevaret'
+        : 'Kunne ikke kontakte serveren — bruger cachet/offline-version');
     }
 
 
